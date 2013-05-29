@@ -88,4 +88,6 @@ package Circuit is
       bucket : String_Vector.Vector;
    end event_bucket;
 
+   -- TODO event_handler task
+
 end Circuit;
