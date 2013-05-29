@@ -19,8 +19,11 @@ procedure Main is
 
 begin
    ref_array(3) := new Referee(3,null,null);
+   ref_array(3).setSegment(null);
    ref_array(2) := new Referee(2,null,ref_array(3));
+   ref_array(2).setSegment(null);
    ref_array(1) := new Referee(1,null,ref_array(2));
+   ref_array(1).setSegment(null);
 
    ref_array(3).setNext(ref_array(1)); -- chiude il ciclo
 
@@ -29,7 +32,7 @@ begin
 
 
 
-   Ada.Text_IO.Put_Line ("--> " & Positive'image(test_towait));
+   Ada.Text_IO.Put_Line ("--> " & Positive'image(test_next.id));
 
    Ada.Text_IO.Put_Line ("Hello World!");
    --delay until Poll_Time + Period;
