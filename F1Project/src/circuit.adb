@@ -27,7 +27,26 @@ package body Circuit is
          toWait := 1000;
          nextReferee := next;
       end enterSegment;
+      procedure setNext (nextReferee : in Referee_Access) is
+      begin
+         next := nextReferee;
+      end setNext;
    end Referee;
+
+   protected body Car_Status is
+      function get_tires_state return Positive is
+      begin
+         return tires_status;
+      end get_tires_state;
+   end Car_Status;
+
+   task body Car is
+      toWait : Positive;
+      nextReferee : Referee_Access;
+      speed : Positive;
+   begin
+      toWait := 1;
+   end Car;
 
    task body weather_forecast is
 
