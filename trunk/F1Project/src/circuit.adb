@@ -74,15 +74,17 @@ package body Circuit is
       Period    :          Ada.Real_Time.Time_Span;
       Sveglia   :          Ada.Real_Time.Time := Poll_Time;
    begin
-      speed := status.get_currentSpeed;
-      Ada.Text_IO.Put_Line ("entro nel segmento " & Positive'Image(nextReferee.id));
-      nextReferee.enterSegment(id, status.get_currentBehaviour, speed, 1, toWait, nextReferee);
-      -- set new speed on status
-      Period := Ada.Real_Time.Milliseconds (toWait);
-      Sveglia := Sveglia + Period;
+      loop
+      	speed := status.get_currentSpeed;
+      	Ada.Text_IO.Put_Line ("entro nel segmento " & Positive'Image(nextReferee.id));
+      	nextReferee.enterSegment(id, status.get_currentBehaviour, speed, 1, toWait, nextReferee);
+      	-- set new speed on status
+      	Period := Ada.Real_Time.Milliseconds (toWait);
+      	Sveglia := Sveglia + Period;
 
-      delay until Sveglia;
-      Ada.Text_IO.Put_Line ("--> ToWait " & Positive'Image(toWait));
+      	delay until Sveglia;
+         --Ada.Text_IO.Put_Line ("--> ToWait " & Positive'Image(toWait));
+      end loop;
    end Car;
 
    -----------------------------------------------------------------------
