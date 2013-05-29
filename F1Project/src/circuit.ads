@@ -24,12 +24,25 @@ package Circuit is
                           acceleration : in Positive;
                           toWait : out Positive;
                           nextReferee : out Referee_Access);
-
+      -- TODO add setNext procedure
    private
       segmentOverridden : Boolean := false;
       seg : Segment_Access := C_seg;
    end Referee;
 
+   protected type Car_Status (name : String) is
+      procedure Take_Fuel (order : in Boolean);
+      procedure Change_Tires (order : in Boolean);
+      procedure Change_Behaviour (bv : in Positive);
+   private
+      tires_status : Positive;
+   end Car_Status;
+
+
+   task type Car (id : Positive;
+                  initialreferee : Referee_Access);
+
+   type Car_Access is access Car;
 
    task weather_forecast;
 
