@@ -21,6 +21,7 @@ package body Circuit is
                           toWait : out Positive;
                           nextReferee : out Referee_Access) when segmentOverridden is
       begin
+         -- TEST
          Ada.Text_IO.Put_Line ("Initial speed = " & Positive'Image(speed));
          speed := speed + 1;
          toWait := 1000;
