@@ -4,6 +4,10 @@ with Ada.Text_IO;
 
 package body Circuit is
 
+   -----------------------------------------------------------------------
+   --------------------------- REFEREE -----------------------------------
+   -----------------------------------------------------------------------
+
    protected body Referee is
       function getSegment return Segment_Access is
       begin
@@ -33,6 +37,10 @@ package body Circuit is
       end setNext;
    end Referee;
 
+   -----------------------------------------------------------------------
+   --------------------------- CAR STATUS --------------------------------
+   -----------------------------------------------------------------------
+
    protected body Car_Status is
       function get_tires_state return Positive is
       begin
@@ -52,6 +60,10 @@ package body Circuit is
       end get_currentBehaviour;
    end Car_Status;
 
+   -----------------------------------------------------------------------
+   --------------------------- TASK CAR ----------------------------------
+   -----------------------------------------------------------------------
+
    task body Car is
       toWait : Positive;
       nextReferee : Referee_Access := initialReferee;
@@ -70,6 +82,10 @@ package body Circuit is
       Sveglia := Sveglia + Period;
       delay until Sveglia;
    end Car;
+
+   -----------------------------------------------------------------------
+   --------------------------- TASK WEATHER ------------------------------
+   -----------------------------------------------------------------------
 
    task body weather_forecast is
 
