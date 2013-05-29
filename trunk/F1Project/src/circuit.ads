@@ -41,7 +41,7 @@ package Circuit is
       procedure Change_Behaviour (bv : in Positive);
 
       -- setter procedure
-      procedure set_tires_state (newState : in Positive);
+      procedure set_tires_status (newState : in Positive);
       procedure set_currentSegment (currentSeg : in Segment_Access);
       procedure set_currentSpeed (newSpeed : in Positive);
       procedure set_currentFuelLevel (newLevel : in Positive);
