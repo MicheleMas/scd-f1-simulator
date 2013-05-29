@@ -15,7 +15,7 @@ package Circuit is
 
    protected type Referee (id : Positive;
                            C_seg : Segment_Access;
-                           next : Referee_Access ) is
+                           C_next : Referee_Access ) is
       function getSegment return Segment_Access;
       procedure setSegment (new_seg : in Segment_Access);
       entry enterSegment (car_ID : in Positive;
@@ -24,23 +24,30 @@ package Circuit is
                           acceleration : in Positive;
                           toWait : out Positive;
                           nextReferee : out Referee_Access);
-      -- TODO add setNext procedure
+      procedure setNext (nextReferee : in Referee_Access);
    private
+      next : Referee_Access := C_next;
       segmentOverridden : Boolean := false;
       seg : Segment_Access := C_seg;
    end Referee;
 
-   protected type Car_Status (name : String) is
-      procedure Take_Fuel (order : in Boolean);
-      procedure Change_Tires (order : in Boolean);
-      procedure Change_Behaviour (bv : in Positive);
+   protected type Car_Status (name : Positive;
+                              C_behaviour : Positive) is
+      --procedure Take_Fuel (order : in Boolean);
+      --procedure Change_Tires (order : in Boolean);
+      --procedure Change_Behaviour (bv : in Positive);
+      function get_tires_state return Positive;
    private
-      tires_status : Positive;
+      tires_status : Positive := 100;
+      fuel_level : Positive := 100;
+      behaviour : Positive := C_behaviour;
    end Car_Status;
 
+   type Car_Status_Access is access Car_Status;
 
    task type Car (id : Positive;
-                  initialreferee : Referee_Access);
+                  initialreferee : Referee_Access;
+                  status : Car_Status_Access);
 
    type Car_Access is access Car;
 
