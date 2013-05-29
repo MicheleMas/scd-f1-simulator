@@ -59,12 +59,16 @@ package body Circuit is
 
       use type Ada.Real_Time.Time_Span;
       Poll_Time :          Ada.Real_Time.Time := Ada.Real_Time.Clock; -- time to start polling
-      Period    : constant Ada.Real_Time.Time_Span := Ada.Real_Time.Milliseconds (51000);
+      Period    :          Ada.Real_Time.Time_Span;
       Sveglia   :          Ada.Real_Time.Time := Poll_Time;
    begin
       speed := status.get_currentSpeed;
+      Ada.Text_IO.Put_Line ("entro nel segmento " & Positive'Image(nextReferee.id));
       nextReferee.enterSegment(id, status.get_currentBehaviour, speed, 1, toWait, nextReferee);
       -- set new speed on status
+      Period := Ada.Real_Time.Milliseconds (toWait);
+      Sveglia := Sveglia + Period;
+      delay until Sveglia;
    end Car;
 
    task body weather_forecast is
