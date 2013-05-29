@@ -1,4 +1,8 @@
+with Ada.Containers.Indefinite_Vectors;
+
 package Circuit is
+
+   package String_Vector is new Ada.Containers.Indefinite_Vectors(Natural, String);
 
    type Segment (id : Positive;
                  length : Positive;
@@ -75,5 +79,13 @@ package Circuit is
    type Car_Access is access Car;
 
    task weather_forecast;
+
+   protected type event_bucket (capacity : Positive) is
+      -- entry get_event (event : out String);
+      procedure insert_event (event : in String);
+   private
+      bucket_not_empty : Boolean := false;
+      bucket : String_Vector.Vector;
+   end event_bucket;
 
 end Circuit;
