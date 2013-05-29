@@ -42,6 +42,7 @@ package body Circuit is
    -----------------------------------------------------------------------
 
    protected body Car_Status is
+      -- override procedure
       procedure Take_Fuel (order : in Boolean) is
       begin
          refuel_required := order;
@@ -54,6 +55,30 @@ package body Circuit is
       begin
          behaviour := bv;
       end Change_Behaviour;
+
+      -- setter procedure
+      procedure set_tires_status (newState : in Positive) is
+      begin
+         tires_status := newState;
+      end set_tires_status;
+      procedure set_currentSegment (currentSeg : in Segment_Access) is
+      begin
+         currentSegment := currentSeg;
+      end set_currentSegment;
+      procedure set_currentSpeed (newSpeed : in Positive) is
+      begin
+         currentSpeed := newSpeed;
+      end set_currentSpeed;
+      procedure set_currentFuelLevel (newLevel : in Positive) is
+      begin
+         fuel_level := newLevel;
+      end set_currentFuelLevel;
+      procedure set_damage (status : in Boolean) is
+      begin
+         damaged := status;
+      end set_damage;
+
+      -- getter function
       function get_tires_state return Positive is
       begin
          return tires_status;
