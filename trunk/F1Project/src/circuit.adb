@@ -1,8 +1,11 @@
 with Ada; use Ada;
 with Ada.Real_Time;
 with Ada.Text_IO;
+with Ada.Containers.Indefinite_Vectors;
 
 package body Circuit is
+
+   -- place for global variables
 
    -----------------------------------------------------------------------
    --------------------------- REFEREE -----------------------------------
@@ -160,4 +163,19 @@ package body Circuit is
 
    end weather_forecast;
 
+   -----------------------------------------------------------------------
+   --------------------------- EVENT BUCKET ------------------------------
+   -----------------------------------------------------------------------
+
+   protected body event_bucket is
+      -- entry get_event (event : out String);
+      procedure insert_event (event : in String) is
+      begin
+         if not bucket_not_empty
+         then
+            bucket_not_empty := true;
+         end if;
+         -- TODO use bucket
+      end insert_event;
+   end event_bucket;
 end Circuit;
