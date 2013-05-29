@@ -12,6 +12,7 @@ procedure Main is
    test_speed : Positive := 1;
    test_towait : Positive := 1;
    test_next : Referee_Access := null;
+   test_car : Car_Access := null;
 
    use type Ada.Real_Time.Time_Span;
    Poll_Time :          Ada.Real_Time.Time := Ada.Real_Time.Clock; -- time to start polling
@@ -27,8 +28,10 @@ begin
 
    ref_array(3).setNext(ref_array(1)); -- chiude il ciclo
 
+   --   ref_array(1).enterSegment(1,1, test_speed, 1, test_towait, test_next);
    test_status := new Car_Status(1,1);
-   ref_array(1).enterSegment(1,1, test_speed, 1, test_towait, test_next);
+   test_car := new Car(1,ref_array(1),test_status);
+
 
 
 

@@ -80,7 +80,9 @@ package body Circuit is
       -- set new speed on status
       Period := Ada.Real_Time.Milliseconds (toWait);
       Sveglia := Sveglia + Period;
+
       delay until Sveglia;
+      Ada.Text_IO.Put_Line ("--> ToWait " & Positive'Image(toWait));
    end Car;
 
    -----------------------------------------------------------------------
