@@ -168,14 +168,21 @@ package body Circuit is
    -----------------------------------------------------------------------
 
    protected body event_bucket is
-      -- entry get_event (event : out String);
+      entry get_event (event : out String) when bucket_size > 0 is
+      begin
+         event := bucket.First_Element;
+         bucket.Delete_First;
+         bucket_size := bucket_size - 1;
+      end get_event;
       procedure insert_event (event : in String) is
       begin
-         if not bucket_not_empty
+         if bucket_size >= capacity
          then
-            bucket_not_empty := true;
+            bucket.Delete_First;
+         else
+            bucket_size := bucket_size + 1;
          end if;
-         -- TODO use bucket
+         bucket.Append(event);
       end insert_event;
    end event_bucket;
 end Circuit;
