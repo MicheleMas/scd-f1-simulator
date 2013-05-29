@@ -37,16 +37,22 @@ package Circuit is
       --procedure Change_Tires (order : in Boolean);
       --procedure Change_Behaviour (bv : in Positive);
       function get_tires_state return Positive;
+      function get_currentSegment return Positive;
+      function get_currentSpeed return Positive;
+      function get_currentBehaviour return Positive;
    private
       tires_status : Positive := 100;
       fuel_level : Positive := 100;
       behaviour : Positive := C_behaviour;
+      currentSegment : Positive := 1;
+      currentSpeed : Positive := 100; -- to change
+      toWait : Positive;
    end Car_Status;
 
    type Car_Status_Access is access Car_Status;
 
    task type Car (id : Positive;
-                  initialreferee : Referee_Access;
+                  initialReferee : Referee_Access;
                   status : Car_Status_Access);
 
    type Car_Access is access Car;

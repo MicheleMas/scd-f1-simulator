@@ -38,14 +38,33 @@ package body Circuit is
       begin
          return tires_status;
       end get_tires_state;
+      function get_currentSegment return Positive is
+      begin
+         return currentSegment;
+      end get_currentSegment;
+      function get_currentSpeed return Positive is
+      begin
+         return currentSpeed;
+      end get_currentSpeed;
+      function get_currentBehaviour return Positive is
+      begin
+         return behaviour;
+      end get_currentBehaviour;
    end Car_Status;
 
    task body Car is
       toWait : Positive;
-      nextReferee : Referee_Access;
+      nextReferee : Referee_Access := initialReferee;
       speed : Positive;
+
+      use type Ada.Real_Time.Time_Span;
+      Poll_Time :          Ada.Real_Time.Time := Ada.Real_Time.Clock; -- time to start polling
+      Period    : constant Ada.Real_Time.Time_Span := Ada.Real_Time.Milliseconds (51000);
+      Sveglia   :          Ada.Real_Time.Time := Poll_Time;
    begin
-      toWait := 1;
+      speed := status.get_currentSpeed;
+      nextReferee.enterSegment(id, status.get_currentBehaviour, speed, 1, toWait, nextReferee);
+      -- set new speed on status
    end Car;
 
    task body weather_forecast is
