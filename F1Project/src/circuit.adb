@@ -76,7 +76,7 @@ package body Circuit is
    begin
       loop
       	speed := status.get_currentSpeed;
-      	Ada.Text_IO.Put_Line ("entro nel segmento " & Positive'Image(nextReferee.id));
+      	Ada.Text_IO.Put_Line ("sono la macchina " & Positive'Image(id) & " ed entro nel segmento " & Positive'Image(nextReferee.id));
       	nextReferee.enterSegment(id, status.get_currentBehaviour, speed, 1, toWait, nextReferee);
       	-- set new speed on status
       	Period := Ada.Real_Time.Milliseconds (toWait);
