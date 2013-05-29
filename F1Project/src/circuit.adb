@@ -42,11 +42,23 @@ package body Circuit is
    -----------------------------------------------------------------------
 
    protected body Car_Status is
+      procedure Take_Fuel (order : in Boolean) is
+      begin
+         refuel_required := order;
+      end Take_Fuel;
+      procedure Change_Tires (order : in Boolean) is
+      begin
+         change_tires_required := order;
+      end Change_Tires;
+      procedure Change_Behaviour (bv : in Positive) is
+      begin
+         behaviour := bv;
+      end Change_Behaviour;
       function get_tires_state return Positive is
       begin
          return tires_status;
       end get_tires_state;
-      function get_currentSegment return Positive is
+      function get_currentSegment return Segment_Access is
       begin
          return currentSegment;
       end get_currentSegment;
@@ -58,6 +70,14 @@ package body Circuit is
       begin
          return behaviour;
       end get_currentBehaviour;
+      function get_currentFuelLevel return Positive is
+      begin
+         return fuel_level;
+      end get_currentFuelLevel;
+      function is_damaged return Boolean is
+      begin
+         return damaged;
+      end is_damaged;
    end Car_Status;
 
    -----------------------------------------------------------------------
