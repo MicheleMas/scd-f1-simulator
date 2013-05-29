@@ -7,32 +7,32 @@ with Circuit;
 use Circuit;
 
 procedure Main is
-   lag : constant Duration := 5.0;
-   --nome : array(0 .. 5) of Segment;
-   -- arbitro : array(1 .. 3) of Referee;
-   culo : Segment_Access;
-   --camicia : Referee;
-
    ref_array : array(1 .. 3) of Referee_Access;
-   speed : Positive := 230;
-   toWait : Positive;
-   nextR : Referee_Access;
+   test_status : Car_Status_Access;
+   test_speed : Positive := 1;
+   test_towait : Positive := 1;
+   test_next : Referee_Access := null;
 
    use type Ada.Real_Time.Time_Span;
    Poll_Time :          Ada.Real_Time.Time := Ada.Real_Time.Clock; -- time to start polling
    Period    : constant Ada.Real_Time.Time_Span := Ada.Real_Time.Milliseconds (1000);
 
 begin
-   -- override
-   culo := new Segment(1,2,3,4,false);
-   ref_array(1) := new Referee(1,null,null);
-   ref_array(1).setSegment(culo);
+   ref_array(3) := new Referee(3,null,null);
+   ref_array(2) := new Referee(2,null,ref_array(3));
+   ref_array(1) := new Referee(1,null,ref_array(2));
 
-   ref_array(1).enterSegment(1, 1, speed, 1, toWait, nextR);
+   ref_array(3).setNext(ref_array(1)); -- chiude il ciclo
 
+   test_status := new Car_Status(1,1);
+   ref_array(1).enterSegment(1,1, test_speed, 1, test_towait, test_next);
+
+
+
+   Ada.Text_IO.Put_Line ("--> " & Positive'image(test_towait));
 
    Ada.Text_IO.Put_Line ("Hello World!");
-   delay until Poll_Time + Period;
-   Ada.Text_IO.Put_Line ("new speed: " & Positive'image(speed) & ", after: " & Positive'Image(toWait));
+   --delay until Poll_Time + Period;
+   --Ada.Text_IO.Put_Line ("new speed: " & Positive'image(speed) & ", after: " & Positive'Image(toWait));
    -- Segment.leave;
 end Main;
