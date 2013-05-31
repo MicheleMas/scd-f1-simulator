@@ -1,0 +1,246 @@
+V "GNAT Lib v2012"
+A -gnatA
+P SS ZX
+R vnnnnnnnnvnnnnnnnnvvnvnnnvnnvnnvnnnnvnnnnvnnvnnnnnnvnnnnnnvnnnnvnnnvnnvnv1nnnnnv1nnnv1+nn
+
+U circuit%b		circuit.adb		127605fc OO PK
+W ada%s			ada.ads			ada.ali
+W ada.containers%s	a-contai.ads		a-contai.ali
+W ada.containers.indefinite_vectors%s
+W ada.real_time%s	a-reatim.adb		a-reatim.ali
+W ada.real_time.delays%s  a-retide.adb		a-retide.ali
+W ada.tags%s		a-tags.adb		a-tags.ali
+W ada.text_io%s		a-textio.adb		a-textio.ali
+W system%s		system.ads		system.ali
+W system.concat_2%s	s-conca2.adb		s-conca2.ali
+W system.concat_4%s	s-conca4.adb		s-conca4.ali
+W system.img_int%s	s-imgint.adb		s-imgint.ali
+W system.secondary_stack%s  s-secsta.adb	s-secsta.ali
+W system.soft_links%s	s-soflin.adb		s-soflin.ali
+W system.tasking%s	s-taskin.adb		s-taskin.ali
+W system.tasking.protected_objects%s  s-taprob.adb  s-taprob.ali
+W system.tasking.protected_objects.entries%s  s-tpoben.adb  s-tpoben.ali
+W system.tasking.protected_objects.operations%s  s-tpobop.adb  s-tpobop.ali
+W system.tasking.stages%s  s-tassta.adb		s-tassta.ali
+
+U circuit%s		circuit.ads		835a98dc EE OO PF PK
+W ada%s			ada.ads			ada.ali
+W ada.containers%s	a-contai.ads		a-contai.ali
+Z ada.containers.generic_array_sort%s
+W ada.containers.indefinite_vectors%s
+W ada.exceptions%s	a-except.adb		a-except.ali
+Z ada.finalization%s	a-finali.adb		a-finali.ali
+Z ada.iterator_interfaces%s
+W ada.real_time%s	a-reatim.adb		a-reatim.ali
+W ada.streams%s		a-stream.ads		a-stream.ali
+W ada.tags%s		a-tags.adb		a-tags.ali
+Z ada.unchecked_deallocation%s
+W system%s		system.ads		system.ali
+W system.finalization_masters%s  s-finmas.adb	s-finmas.ali
+W system.parameters%s	s-parame.adb		s-parame.ali
+W system.pool_global%s	s-pooglo.adb		s-pooglo.ali
+W system.secondary_stack%s  s-secsta.adb	s-secsta.ali
+W system.soft_links%s	s-soflin.adb		s-soflin.ali
+W system.standard_library%s  s-stalib.adb	s-stalib.ali
+W system.storage_elements%s  s-stoele.adb	s-stoele.ali
+W system.storage_pools%s  s-stopoo.adb		s-stopoo.ali
+W system.storage_pools.subpools%s  s-stposu.adb	s-stposu.ali
+W system.stream_attributes%s  s-stratt.adb	s-stratt.ali
+W system.strings.stream_ops%s  s-ststop.adb	s-ststop.ali
+W system.task_info%s	s-tasinf.adb		s-tasinf.ali
+W system.tasking%s	s-taskin.adb		s-taskin.ali
+W system.tasking.protected_objects%s  s-taprob.adb  s-taprob.ali
+W system.tasking.protected_objects.entries%s  s-tpoben.adb  s-tpoben.ali
+W system.tasking.stages%s  s-tassta.adb		s-tassta.ali
+
+D ada.ads		20120510125803 3ffc8e18
+D a-contai.ads		20120510125751 61e5e089
+D a-cgarso.ads		20120510125749 9129bfa8
+D a-coinve.ads		20120510125750 a66bf662
+D a-coinve.adb		20120510125750 96123392
+D a-except.ads		20120510125752 ec1b44c1
+D a-finali.ads		20120510125753 52ecdc1b
+D a-ioexce.ads		20120510125753 8b9de6cd
+D a-iteint.ads		20120510125754 7c7305e9
+D a-reatim.ads		20120510125755 63f07669
+D a-retide.ads		20120510125755 081cdaa4
+D a-stream.ads		20120510125756 2ca4ee37
+D a-tags.ads		20120510125759 6c0509d0
+D a-textio.ads		20120510125800 386df5d4
+D a-unccon.ads		20120510125801 f9eb8f06
+D a-uncdea.ads		20120510125801 f15a5ed1
+D circuit.ads		20130529211402 25316ebe
+D circuit.adb		20130529211534 f54d9085
+D interfac.ads		20120510125815 129923ea
+D i-c.ads		20120510125814 5421119b
+D i-cstrea.ads		20120510125814 1bd72c32
+D system.ads		20120510125846 eb6e42ba
+D s-atacco.ads		20120510125819 4c36d12f
+D s-conca2.ads		20120510125823 fbd0f2fc
+D s-conca4.ads		20120510125823 025fe3be
+D s-crtl.ads		20120510125824 ac77b159
+D s-exctab.ads		20120510125824 66e51330
+D s-ficobl.ads		20120510125825 443b9d66
+D s-finmas.ads		20120510125825 b95bb341
+D s-finroo.ads		20120510125825 4ff27390
+D s-imgint.ads		20120510125826 02dbe0c2
+D s-linux.ads		20120510125827 70c7cb45
+D s-multip.ads		20120510125828 38ac9f73
+D s-oscons.ads		20120511153426 9012934c
+D s-osinte.ads		20120510125829 938b6b03
+D s-parame.ads		20120510125832 b6e20cc0
+D s-pooglo.ads		20120510125832 542f33d0
+D s-secsta.ads		20120510125833 eea35a36
+D s-soflin.ads		20120510125833 24c8153c
+D s-stache.ads		20120510125834 596fc1b4
+D s-stausa.ads		20120510125834 017a0a05
+D s-stalib.ads		20120510125834 f78bcf95
+D s-stoele.ads		20120510125834 facd7d98
+D s-stoele.adb		20120510125834 afc5dc80
+D s-stopoo.ads		20120510125834 7b8fbeee
+D s-stposu.ads		20120510125834 197be7e5
+D s-stratt.ads		20120510125834 aedef97e
+D s-string.ads		20120510125834 46b01415
+D s-ststop.ads		20120510125834 ee472be4
+D s-tasinf.ads		20120510125835 21316953
+D s-taspri.ads		20120510125836 15f617a8
+D s-taprop.ads		20120510125835 1dd2e1b6
+D s-taskin.ads		20120510125836 5e24fb30
+D s-taprob.ads		20120510125835 502249e3
+D s-tpoben.ads		20120510125837 20b7a89e
+D s-tpobop.ads		20120510125837 5f548bb3
+D s-tassta.ads		20120510125836 3a253871
+D s-traent.ads		20120510125838 5221ee41
+D s-unstyp.ads		20120510125838 6ae15c76
+D s-wchcon.ads		20120510125840 bfeb2e3d
+X 1 ada.ads
+16K9*Ada 19e8 17|1r6 5r33 18|1w6 1r15 2r6 3r6 4r6 32r10 120r16 121r28 121r50
+. 122r28 123r28 127r9 130r19 146r16 147r28 147r50 148r28 148r55 149r28 155r13
+. 157r13
+X 2 a-contai.ads
+16K13*Containers 24e19 17|1r10 5r37 18|4r10
+X 4 a-coinve.ads
+45k24*Indefinite_Vectors 466e38 17|1w21 5r48 18|4w21
+55R9*Vector 17|88r30[5]
+232U14*Append 18|185s17[17|5]
+258U14*Delete_First 18|174s17[17|5] 181s20[17|5]
+276V13*First_Element{string} 18|173s26[17|5]
+X 9 a-iteint.ads
+24h9 Forward_Iterator
+32h9 Reversible_Iterator<24R9[4|73]>
+X 10 a-reatim.ads
+39K13*Real_Time 139e18 18|2w10 120r20 121r32 121r54 122r32 123r32 130r23
+. 146r20 147r32 147r54 148r32 148r59 149r32
+41O9*Time 18|121r42 123r42 147r42 149r42
+46O9*Time_Span 18|120r30 122r42 146r30 148r42
+53V13*Clock{41O9} 18|121s64 147s64
+55V14*"+"{41O9} 18|131s28 159s29
+85V13*Milliseconds{46O9} 18|130s33 148s69
+X 14 a-textio.ads
+49K13*Text_IO 471e16 18|3w10 32r14 127r13 155r17 157r17
+263U14*Put_Line 18|32s22 127s21 155s25 157s25
+X 17 circuit.ads
+3K9*Circuit 91l5 91e12 18|6b14 188l5 188t12
+5K12*String_Vector[4|45] 88r16
+7R9*Segment 7d18 8d18 9d18 10d18 11d18 13e14 15r34
+7i18*id{positive}
+8i18*length{positive}
+9i18*multiplicity{positive}
+10i18*difficulty{positive}
+11b18*isBoxEntrance{boolean}
+12i7*test{positive}
+15P9*Segment_Access(7R9) 21r36 23r34 24r42 35r13 49r53 56r42 67r24 18|15r34
+. 19r42 67r53 89r42
+17W9*Referee 18r34
+18P9*Referee_Access(17W9) 22r37 30r45 31r43 33r14 76r36 18|29r45 37r43 117r21
+20W19*Referee 20d28 21d28 22d28 36l8 36e15 18|14b19 41l8 41t15
+20i28 id{positive} 18|127r129
+21p28 C_seg{15P9} 35r31
+22p28 C_next{18P9} 33r32
+23V16 getSegment{15P9} 18|15b16 18l11 18t21
+24U17 setSegment 24>29 18|19b17 23l11 23t21
+24p29 new_seg{15P9} 18|19b29 21r17
+25Y13 enterSegment 25>27 26>27 27=27 28>27 29<27 30<27 18|24b13 36l11 36t23
+. 128s21
+25i27 car_ID{positive}
+26i27 car_behaviour{positive}
+27i27 speed{positive} 18|32r68 33m10 33r19
+28i27 acceleration{positive}
+29i27 toWait{positive} 18|34m10
+30p27 nextReferee{18P9} 18|35m10
+31U17 setNext 31>26 18|37b17 40l11 40t18
+31p26 nextReferee{18P9} 18|37b26 39r18
+33p7 next{18P9} 18|35r25 39r10
+34b7 segmentOverridden{boolean} 18|22r10 29r66
+35p7 seg{15P9} 18|17r17 21r10
+38W19*Car_Status 38d31 39d31 40d31 41d31 71l8 71e18 73r37 18|47b19 109l8
+. 109t18
+38i31 name{positive}
+39i31 C_behaviour{positive} 66r31
+40i31 max_speed{positive}
+41i31 acceleration{positive}
+43U17 Take_Fuel 43>28 18|49b17 52l11 52t20
+43b28 order{boolean} 18|49b28 51r29
+44U17 Change_Tires 44>31 18|53b17 56l11 56t23
+44b31 order{boolean} 18|53b31 55r35
+45U17 Change_Behaviour 45>35 18|57b17 60l11 60t27
+45i35 bv{positive} 18|57b35 59r23
+48U17 set_tires_status 48>35 18|63b17 66l11 66t27
+48i35 newState{positive} 18|63b35 65r26
+49U17 set_currentSegment 49>37 18|67b17 70l11 70t29
+49p37 currentSeg{15P9} 18|67b37 69r28
+50U17 set_currentSpeed 50>35 18|71b17 74l11 74t27
+50i35 newSpeed{positive} 18|71b35 73r26
+51U17 set_currentFuelLevel 51>39 18|75b17 78l11 78t31
+51i39 newLevel{positive} 18|75b39 77r24
+52U17 set_damage 52>29 18|79b17 82l11 82t21
+52b29 status{boolean} 18|79b29 81r21
+55V16 get_tires_state{positive} 18|85b16 88l11 88t26
+56V16 get_currentSegment{15P9} 18|89b16 92l11 92t29
+57V16 get_currentSpeed{positive} 18|93b16 96l11 96t27 126s25
+58V16 get_currentBehaviour{positive} 18|97b16 100l11 100t31 128s45
+59V16 get_currentFuelLevel{positive} 18|101b16 104l11 104t31
+60V16 is_damaged{boolean} 18|105b16 108l11 108t21
+62b7 change_tires_required{boolean} 18|55r10
+63b7 refuel_required{boolean} 18|51r10
+64i7 tires_status{positive} 18|65r10 87r17
+65i7 fuel_level{positive} 18|77r10 103r17
+66i7 behaviour{positive} 18|59r10 99r17
+67p7 currentSegment{15P9} 18|69r10 91r17
+68i7 currentSpeed{positive} 18|73r10 95r17
+69i7 toWait{positive}
+70b7 damaged{boolean} 18|81r10 107r17
+73P9*Car_Status_Access(38W19) 77r28
+75T14*Car 75d19 76d19 77d19 79r30 18|115b14 136l8 136t11
+75i19 id{positive} 18|127r68 128r34
+76p19 initialReferee{18P9} 18|117r39
+77p19 status{73P9} 18|126r18 128r38
+79P9*Car_Access(75T14)
+81t9*weather_forecast 18|142b14 164l8 164t24
+83W19*event_bucket 83d33 89l8 89e20 18|170b19 187l8 187t20
+83i33 capacity{positive} 18|179r28
+84Y13 get_event 84<24 18|171b13 176l11 176t20
+84s24 event{string} 18|173m10
+85U17 insert_event 85>31 18|177b17 186l11 186t23
+85s31 event{string} 18|177b31 185r24
+87i7 bucket_size{integer} 18|171r49 175r10 175r25 179r13 183r13 183r28
+88r7 bucket{4|55R9[5]} 18|173r19 174r10 181r13 185r10
+X 18 circuit.adb
+24i27 car_ID{positive}
+25i27 car_behaviour{positive}
+26i27 speed{positive}
+27i27 acceleration{positive}
+28i27 toWait{positive}
+29p27 nextReferee{17|18P9}
+116i7 toWait{positive} 128m77 128r77 130r47
+117p7 nextReferee{17|18P9} 127r117 128r9 128m85 128r85
+118i7 speed{positive} 126m9 128m67 128r67
+121o7 Poll_Time{10|41O9} 123r50
+122o7 Period{10|46O9} 130m9 131r30
+123o7 Sveglia{10|41O9} 131m9 131r20 133r21
+144b7 isRaining{boolean} 154r13 161m10 161r27
+147o7 Poll_Time{10|41O9} 149r50
+148o7 Period{10|46O9} 159r31
+149o7 Sveglia{10|41O9} 159m10 159r21 160r22
+171s24 event{string}
+
