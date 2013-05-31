@@ -18,7 +18,7 @@ package Circuit is
    type Referee_Access is access Referee;
 
    protected type Referee (id : Positive;
-                           C_seg : Segment_Access;
+                           C_seg : Segment_Access; -- pretty stupid, need to change
                            C_next : Referee_Access ) is
       function getSegment return Segment_Access;
       procedure setSegment (new_seg : in Segment_Access);
@@ -90,7 +90,6 @@ package Circuit is
 
    type Event_Bucket_Access is access Event_Bucket;
 
-   -- TODO event_handler task
    task type Event_Handler (bucket : Event_Bucket_Access);
 
 end Circuit;

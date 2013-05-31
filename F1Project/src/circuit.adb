@@ -30,9 +30,9 @@ package body Circuit is
                           nextReferee : out Referee_Access) when segmentOverridden is
       begin
          -- TEST
-         Ada.Text_IO.Put_Line ("Initial speed = " & Positive'Image(speed));
+         -- Ada.Text_IO.Put_Line ("Initial speed = " & Positive'Image(speed));
          speed := speed + 1;
-         toWait := 1000;
+         toWait := 1000; -- TODO calculate toWait
          nextReferee := next;
       end enterSegment;
       procedure setNext (nextReferee : in Referee_Access) is
@@ -123,14 +123,13 @@ package body Circuit is
       Period    :          Ada.Real_Time.Time_Span;
       Sveglia   :          Ada.Real_Time.Time := Poll_Time;
    begin
+      speed := status.get_currentSpeed; -- the initial speed should be zero?
       loop
-      	speed := status.get_currentSpeed;
       	Ada.Text_IO.Put_Line ("sono la macchina " & Positive'Image(id) & " ed entro nel segmento " & Positive'Image(nextReferee.id));
       	nextReferee.enterSegment(id, status.get_currentBehaviour, speed, 1, toWait, nextReferee);
-      	-- set new speed on status
+      	status.set_currentSpeed(speed); -- set new speed on status
       	Period := Ada.Real_Time.Milliseconds (toWait);
-      	Sveglia := Sveglia + Period;
-
+      	Sveglia := Sveglia + Period; -- the entire variable should be decided by the referee
       	delay until Sveglia;
          --Ada.Text_IO.Put_Line ("--> ToWait " & Positive'Image(toWait));
       end loop;
@@ -187,6 +186,10 @@ package body Circuit is
       end insert_event;
    end event_bucket;
 
+   -----------------------------------------------------------------------
+   --------------------------- TASK EVENT HANDLER ------------------------
+   -----------------------------------------------------------------------
+
    task body Event_Handler is
 
       -- timer to simulate a remote communication with an high latency (300ms)
@@ -200,10 +203,11 @@ package body Circuit is
    begin
       loop
 
+         bucket.get_event(event);
          Poll_Time := Ada.Real_Time.Clock;
          Sveglia := Poll_Time + Period;
          delay until Sveglia;
-         bucket.get_event(event);
+         Ada.Text_IO.Put_Line ("Processed event " & event);
 
       end loop;
    end Event_Handler;
