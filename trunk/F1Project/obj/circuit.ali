@@ -3,7 +3,7 @@ A -gnatA
 P SS ZX
 R vnnnnnnnnvnnnnnnnnvvnvnnnvnnvnnvnnnnvnnnnvnnvnnnnnnvnnnnnnvnnnnvnnnvnnvnv1nnnnnv1nnnv1+nn
 
-U circuit%b		circuit.adb		641746ff OO PK
+U circuit%b		circuit.adb		4f29385f OO PK
 W ada%s			ada.ads			ada.ali
 W ada.containers%s	a-contai.ads		a-contai.ali
 W ada.containers.indefinite_vectors%s
@@ -76,8 +76,8 @@ D a-tags.ads		20120510125759 6c0509d0
 D a-textio.ads		20120510125800 386df5d4
 D a-unccon.ads		20120510125801 f9eb8f06
 D a-uncdea.ads		20120510125801 f15a5ed1
-D circuit.ads		20130531165342 24ddfb7c
-D circuit.adb		20130531165343 bd519281
+D circuit.ads		20130531172423 24ddfb7c
+D circuit.adb		20130531172340 966fec21
 D interfac.ads		20120510125815 129923ea
 D i-c.ads		20120510125814 5421119b
 D i-cstrea.ads		20120510125814 1bd72c32
@@ -123,38 +123,38 @@ D s-traent.ads		20120510125838 5221ee41
 D s-unstyp.ads		20120510125838 6ae15c76
 D s-wchcon.ads		20120510125840 bfeb2e3d
 X 1 ada.ads
-16K9*Ada 19e8 22|1r6 5r33 23|1w6 1r15 2r6 3r6 4r6 5r6 5r33 33r10 121r16 122r28
-. 122r50 123r28 124r28 128r9 131r19 147r16 148r28 148r50 149r28 149r55 150r28
-. 156r13 158r13 193r16 194r28 194r50 195r28 195r55 196r28 203r23
+16K9*Ada 19e8 22|1r6 5r33 23|1w6 1r15 2r6 3r6 4r6 5r6 5r33 121r16 122r28
+. 122r50 123r28 124r28 128r9 131r19 146r16 147r28 147r50 148r28 148r55 149r28
+. 155r13 157r13 196r16 197r28 197r50 198r28 198r55 199r28 207r23 210r10
 X 4 a-contai.ads
 16K13*Containers 24e19 22|1r10 5r37 23|4r10
 X 6 a-coinve.ads
 45k24*Indefinite_Vectors 466e38 22|1w21 5r48 23|4w21
 55R9*Vector 22|88r30[5]
-232U14*Append 23|186s17[22|5]
-258U14*Delete_First 23|175s17[22|5] 182s20[22|5]
-276V13*First_Element{string} 23|174s26[22|5]
+232U14*Append 23|185s17[22|5]
+258U14*Delete_First 23|174s17[22|5] 181s20[22|5]
+276V13*First_Element{string} 23|173s26[22|5]
 X 11 a-iteint.ads
 24h9 Forward_Iterator
 32h9 Reversible_Iterator<24R9[6|73]>
 X 12 a-reatim.ads
 39K13*Real_Time 139e18 23|2w10 121r20 122r32 122r54 123r32 124r32 131r23
-. 147r20 148r32 148r54 149r32 149r59 150r32 193r20 194r32 194r54 195r32 195r59
-. 196r32 203r27
-41O9*Time 23|122r42 124r42 148r42 150r42 194r42 196r42
-46O9*Time_Span 23|121r30 123r42 147r30 149r42 193r30 195r42
-53V13*Clock{41O9} 23|122s64 148s64 194s64 203s37
-55V14*"+"{41O9} 23|132s28 160s29 204s31
-85V13*Milliseconds{46O9} 23|131s33 149s69 195s69
+. 146r20 147r32 147r54 148r32 148r59 149r32 196r20 197r32 197r54 198r32 198r59
+. 199r32 207r27
+41O9*Time 23|122r42 124r42 147r42 149r42 197r42 199r42
+46O9*Time_Span 23|121r30 123r42 146r30 148r42 196r30 198r42
+53V13*Clock{41O9} 23|122s64 147s64 197s64 207s37
+55V14*"+"{41O9} 23|132s28 159s29 208s31
+85V13*Milliseconds{46O9} 23|131s33 148s69 198s69
 X 15 a-string.ads
 16K13*Strings 35e16 23|5r10 5r37
 X 17 a-strunb.ads
 76K21*Unbounded 489e26 23|5w18 5r45
 X 19 a-textio.ads
-49K13*Text_IO 471e16 23|3w10 33r14 128r13 156r17 158r17
-263U14*Put_Line 23|33s22 128s21 156s25 158s25
+49K13*Text_IO 471e16 23|3w10 128r13 155r17 157r17 210r14
+263U14*Put_Line 23|128s21 155s25 157s25 210s22
 X 22 circuit.ads
-3K9*Circuit 96l5 96e12 23|7b14 211l5 211t12
+3K9*Circuit 95l5 95e12 23|7b14 215l5 215t12
 5K12*String_Vector[6|45] 88r16
 7R9*Segment 7d18 8d18 9d18 10d18 11d18 13e14 15r34
 7i18*id{positive}
@@ -178,7 +178,7 @@ X 22 circuit.ads
 . 129s21
 25i27 car_ID{positive}
 26i27 car_behaviour{positive}
-27i27 speed{positive} 23|33r68 34m10 34r19
+27i27 speed{positive} 23|34m10 34r19
 28i27 acceleration{positive}
 29i27 toWait{positive} 23|35m10
 30p27 nextReferee{18P9} 23|36m10
@@ -203,7 +203,7 @@ X 22 circuit.ads
 48i35 newState{positive} 23|64b35 66r26
 49U17 set_currentSegment 49>37 23|68b17 71l11 71t29
 49p37 currentSeg{15P9} 23|68b37 70r28
-50U17 set_currentSpeed 50>35 23|72b17 75l11 75t27
+50U17 set_currentSpeed 50>35 23|72b17 75l11 75t27 130s16
 50i35 newSpeed{positive} 23|72b35 74r26
 51U17 set_currentFuelLevel 51>39 23|76b17 79l11 79t31
 51i39 newLevel{positive} 23|76b39 78r24
@@ -211,7 +211,7 @@ X 22 circuit.ads
 52b29 status{boolean} 23|80b29 82r21
 55V16 get_tires_state{positive} 23|86b16 89l11 89t26
 56V16 get_currentSegment{15P9} 23|90b16 93l11 93t29
-57V16 get_currentSpeed{positive} 23|94b16 97l11 97t27 127s25
+57V16 get_currentSpeed{positive} 23|94b16 97l11 97t27 126s23
 58V16 get_currentBehaviour{positive} 23|98b16 101l11 101t31 129s45
 59V16 get_currentFuelLevel{positive} 23|102b16 105l11 105t31
 60V16 is_damaged{boolean} 23|106b16 109l11 109t21
@@ -225,23 +225,23 @@ X 22 circuit.ads
 69i7 toWait{positive}
 70b7 damaged{boolean} 23|82r10 108r17
 73P9*Car_Status_Access(38W19) 77r28
-75T14*Car 75d19 76d19 77d19 79r30 23|116b14 137l8 137t11
+75T14*Car 75d19 76d19 77d19 79r30 23|116b14 136l8 136t11
 75i19 id{positive} 23|128r68 129r34
 76p19 initialReferee{18P9} 23|118r39
-77p19 status{73P9} 23|127r18 129r38
+77p19 status{73P9} 23|126r16 129r38 130r9
 79P9*Car_Access(75T14)
-81t9*weather_forecast 23|143b14 165l8 165t24
-83W19*Event_Bucket 83d33 89l8 89e20 91r39 23|171b19 188l8 188t20
-83i33 capacity{positive} 23|180r28
-84Y13 get_event 84<24 23|172b13 177l11 177t20 206s17
-84s24 event{string} 23|174m10
-85U17 insert_event 85>31 23|178b17 187l11 187t23
-85s31 event{string} 23|178b31 186r24
-87i7 bucket_size{integer} 23|172r49 176r10 176r25 180r13 184r13 184r28
-88r7 bucket{6|55R9[5]} 23|174r19 175r10 182r13 186r10
-91P9*Event_Bucket_Access(83W19) 94r38
-94T14*Event_Handler 94d29 23|190b14 209l8 209t21
-94p29 bucket{91P9} 23|206r10
+81t9*weather_forecast 23|142b14 164l8 164t24
+83W19*Event_Bucket 83d33 89l8 89e20 91r39 23|170b19 187l8 187t20
+83i33 capacity{positive} 23|179r28
+84Y13 get_event 84<24 23|171b13 176l11 176t20 206s17
+84s24 event{string} 23|173m10
+85U17 insert_event 85>31 23|177b17 186l11 186t23
+85s31 event{string} 23|177b31 185r24
+87i7 bucket_size{integer} 23|171r49 175r10 175r25 179r13 183r13 183r28
+88r7 bucket{6|55R9[5]} 23|173r19 174r10 181r13 185r10
+91P9*Event_Bucket_Access(83W19) 93r38
+93T14*Event_Handler 93d29 23|193b14 213l8 213t21
+93p29 bucket{91P9} 23|206r10
 X 23 circuit.adb
 25i27 car_ID{positive}
 26i27 car_behaviour{positive}
@@ -251,17 +251,17 @@ X 23 circuit.adb
 30p27 nextReferee{22|18P9}
 117i7 toWait{positive} 129m77 129r77 131r47
 118p7 nextReferee{22|18P9} 128r117 129r9 129m85 129r85
-119i7 speed{positive} 127m9 129m67 129r67
+119i7 speed{positive} 126m7 129m67 129r67 130r33
 122o7 Poll_Time{12|41O9} 124r50
 123o7 Period{12|46O9} 131m9 132r30
-124o7 Sveglia{12|41O9} 132m9 132r20 134r21
-145b7 isRaining{boolean} 155r13 162m10 162r27
-148o7 Poll_Time{12|41O9} 150r50
-149o7 Period{12|46O9} 160r31
-150o7 Sveglia{12|41O9} 160m10 160r21 161r22
-172s24 event{string}
-194o7 Poll_Time{12|41O9} 203m10 204r21
-195o7 Period{12|46O9} 204r33
-196o7 Sveglia{12|41O9} 204m10 205r22
-198a7 event{string} 206m27 206r27
+124o7 Sveglia{12|41O9} 132m9 132r20 133r21
+144b7 isRaining{boolean} 154r13 161m10 161r27
+147o7 Poll_Time{12|41O9} 149r50
+148o7 Period{12|46O9} 159r31
+149o7 Sveglia{12|41O9} 159m10 159r21 160r22
+171s24 event{string}
+197o7 Poll_Time{12|41O9} 207m10 208r21
+198o7 Period{12|46O9} 208r33
+199o7 Sveglia{12|41O9} 208m10 209r22
+201a7 event{string} 206m27 206r27 210r53
 
