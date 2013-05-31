@@ -80,14 +80,17 @@ package Circuit is
 
    task weather_forecast;
 
-   protected type event_bucket (capacity : Positive) is
+   protected type Event_Bucket (capacity : Positive) is
       entry get_event (event : out String);
       procedure insert_event (event : in String);
    private
       bucket_size : Integer := 0;
       bucket : String_Vector.Vector;
-   end event_bucket;
+   end Event_Bucket;
+
+   type Event_Bucket_Access is access Event_Bucket;
 
    -- TODO event_handler task
+   task type Event_Handler (bucket : Event_Bucket_Access);
 
 end Circuit;

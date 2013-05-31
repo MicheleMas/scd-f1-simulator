@@ -4,7 +4,7 @@ A -gnatA
 P SS ZX
 R nnnvnnnvnvnnnnnnnnnnnnnnnvnnnvnvnvvvnnnnnnnnvnnvnnnvnnnnnnvnnnnvnnnnnnvnnnnnnnv1+nnnv1+nn
 
-U main%b		main.adb		4cbf0327 NE OO SU
+U main%b		main.adb		4d5396e5 NE OO SU
 W ada%s			ada.ads			ada.ali
 W ada.calendar%s	a-calend.adb		a-calend.ali
 W ada.real_time%s	a-reatim.adb		a-reatim.ali
@@ -34,7 +34,7 @@ D a-stream.ads		20120510125756 2ca4ee37
 D a-tags.ads		20120510125759 6c0509d0
 D a-textio.ads		20120510125800 386df5d4
 D a-unccon.ads		20120510125801 f9eb8f06
-D circuit.ads		20130529211402 25316ebe
+D circuit.ads		20130531165342 24ddfb7c
 D interfac.ads		20120510125815 129923ea
 D i-c.ads		20120510125814 5421119b
 D i-cstrea.ads		20120510125814 1bd72c32
@@ -88,7 +88,7 @@ X 12 a-textio.ads
 49K13*Text_IO 471e16 18|2w10 43r8 45r8
 263U14*Put_Line 18|43s16 45s16
 X 14 circuit.ads
-3K9*Circuit 91e12 18|6w6 7r5
+3K9*Circuit 96e12 18|6w6 7r5
 17W9*Referee 18|24r24 26r24 28r24
 18P9*Referee_Access(17W9) 18|10r33 14r16
 20i28 id{positive} 18|43r60
