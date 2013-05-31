@@ -121,16 +121,18 @@ package body Circuit is
       use type Ada.Real_Time.Time_Span;
       Poll_Time :          Ada.Real_Time.Time := Ada.Real_Time.Clock; -- time to start polling
       Period    :          Ada.Real_Time.Time_Span;
-      Sveglia   :          Ada.Real_Time.Time := Poll_Time;
+      toSleep   :          Ada.Real_Time.Time := Poll_Time;
    begin
       speed := status.get_currentSpeed; -- the initial speed should be zero?
       loop
-      	Ada.Text_IO.Put_Line ("sono la macchina " & Positive'Image(id) & " ed entro nel segmento " & Positive'Image(nextReferee.id));
-      	nextReferee.enterSegment(id, status.get_currentBehaviour, speed, 1, toWait, nextReferee);
-      	status.set_currentSpeed(speed); -- set new speed on status
-      	Period := Ada.Real_Time.Milliseconds (toWait);
-      	Sveglia := Sveglia + Period; -- the entire variable should be decided by the referee
-      	delay until Sveglia;
+         Ada.Text_IO.Put_Line ("sono la macchina " & Positive'Image(id) & " ed entro nel segmento " & Positive'Image(nextReferee.id));
+         -- enterSegment need to be done as first thing, in order to compensate lag
+      	 nextReferee.enterSegment(id, status.get_currentBehaviour, speed, 1, toWait, nextReferee);
+
+      	 status.set_currentSpeed(speed); -- set new speed on status
+      	 Period := Ada.Real_Time.Milliseconds (toWait);
+      	 toSleep := toSleep + Period;
+      	 delay until toSleep;
          --Ada.Text_IO.Put_Line ("--> ToWait " & Positive'Image(toWait));
       end loop;
    end Car;
