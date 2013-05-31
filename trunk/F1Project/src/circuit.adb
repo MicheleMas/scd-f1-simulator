@@ -2,6 +2,7 @@ with Ada; use Ada;
 with Ada.Real_Time;
 with Ada.Text_IO;
 with Ada.Containers.Indefinite_Vectors;
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 package body Circuit is
 
@@ -185,4 +186,26 @@ package body Circuit is
          bucket.Append(event);
       end insert_event;
    end event_bucket;
+
+   task body Event_Handler is
+
+      -- timer to simulate a remote communication with an high latency (300ms)
+      use type Ada.Real_Time.Time_Span;
+      Poll_Time :          Ada.Real_Time.Time := Ada.Real_Time.Clock; -- time to start polling
+      Period    : constant Ada.Real_Time.Time_Span := Ada.Real_Time.Milliseconds (600);
+      Sveglia   :          Ada.Real_Time.Time;
+
+      event : String := "";
+
+   begin
+      loop
+
+         Poll_Time := Ada.Real_Time.Clock;
+         Sveglia := Poll_Time + Period;
+         delay until Sveglia;
+         bucket.get_event(event);
+
+      end loop;
+   end Event_Handler;
+
 end Circuit;
