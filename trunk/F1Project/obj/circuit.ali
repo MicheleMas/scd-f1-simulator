@@ -3,7 +3,7 @@ A -gnatA
 P SS ZX
 R vnnnnnnnnvnnnnnnnnvvnvnnnvnnvnnvnnnnvnnnnvnnvnnnnnnvnnnnnnvnnnnvnnnvnnvnv1nnnnnv1nnnv1+nn
 
-U circuit%b		circuit.adb		4f29385f OO PK
+U circuit%b		circuit.adb		1ce43cb0 OO PK
 W ada%s			ada.ads			ada.ali
 W ada.containers%s	a-contai.ads		a-contai.ali
 W ada.containers.indefinite_vectors%s
@@ -77,7 +77,7 @@ D a-textio.ads		20120510125800 386df5d4
 D a-unccon.ads		20120510125801 f9eb8f06
 D a-uncdea.ads		20120510125801 f15a5ed1
 D circuit.ads		20130531172423 24ddfb7c
-D circuit.adb		20130531172340 966fec21
+D circuit.adb		20130531172700 c5a2e8ce
 D interfac.ads		20120510125815 129923ea
 D i-c.ads		20120510125814 5421119b
 D i-cstrea.ads		20120510125814 1bd72c32
@@ -254,7 +254,7 @@ X 23 circuit.adb
 119i7 speed{positive} 126m7 129m67 129r67 130r33
 122o7 Poll_Time{12|41O9} 124r50
 123o7 Period{12|46O9} 131m9 132r30
-124o7 Sveglia{12|41O9} 132m9 132r20 133r21
+124o7 toSleep{12|41O9} 132m9 132r20 133r21
 144b7 isRaining{boolean} 154r13 161m10 161r27
 147o7 Poll_Time{12|41O9} 149r50
 148o7 Period{12|46O9} 159r31
