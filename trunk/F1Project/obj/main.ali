@@ -1,0 +1,116 @@
+V "GNAT Lib v2012"
+M P AB W=b
+A -gnatA
+P SS ZX
+R nnnvnnnvnvnnnnnnnnnnnnnnnvnnnvnvnvvvnnnnnnnnvnnvnnnvnnnnnnvnnnnvnnnnnnvnnnnnnnv1+nnnv1+nn
+
+U main%b		main.adb		4cbf0327 NE OO SU
+W ada%s			ada.ads			ada.ali
+W ada.calendar%s	a-calend.adb		a-calend.ali
+W ada.real_time%s	a-reatim.adb		a-reatim.ali
+W ada.tags%s		a-tags.adb		a-tags.ali
+W ada.text_io%s		a-textio.adb		a-textio.ali
+W circuit%s		circuit.adb		circuit.ali
+W system%s		system.ads		system.ali
+W system.concat_2%s	s-conca2.adb		s-conca2.ali
+W system.finalization_masters%s  s-finmas.adb	s-finmas.ali
+W system.img_int%s	s-imgint.adb		s-imgint.ali
+W system.storage_elements%s  s-stoele.adb	s-stoele.ali
+W system.storage_pools%s  s-stopoo.adb		s-stopoo.ali
+W system.storage_pools.subpools%s  s-stposu.adb	s-stposu.ali
+W system.tasking%s	s-taskin.adb		s-taskin.ali
+W system.tasking.stages%s  s-tassta.adb		s-tassta.ali
+
+D ada.ads		20120510125803 3ffc8e18
+D a-calend.ads		20120510125748 d86d6c8c
+D a-contai.ads		20120510125751 61e5e089
+D a-coinve.ads		20120510125750 a66bf662
+D a-except.ads		20120510125752 ec1b44c1
+D a-finali.ads		20120510125753 52ecdc1b
+D a-ioexce.ads		20120510125753 8b9de6cd
+D a-iteint.ads		20120510125754 7c7305e9
+D a-reatim.ads		20120510125755 63f07669
+D a-stream.ads		20120510125756 2ca4ee37
+D a-tags.ads		20120510125759 6c0509d0
+D a-textio.ads		20120510125800 386df5d4
+D a-unccon.ads		20120510125801 f9eb8f06
+D circuit.ads		20130529211402 25316ebe
+D interfac.ads		20120510125815 129923ea
+D i-c.ads		20120510125814 5421119b
+D i-cstrea.ads		20120510125814 1bd72c32
+D main.adb		20130529202345 0110c012
+D system.ads		20120510125846 eb6e42ba
+D s-atacco.ads		20120510125819 4c36d12f
+D s-conca2.ads		20120510125823 fbd0f2fc
+D s-crtl.ads		20120510125824 ac77b159
+D s-exctab.ads		20120510125824 66e51330
+D s-ficobl.ads		20120510125825 443b9d66
+D s-finmas.ads		20120510125825 b95bb341
+D s-finroo.ads		20120510125825 4ff27390
+D s-imgint.ads		20120510125826 02dbe0c2
+D s-linux.ads		20120510125827 70c7cb45
+D s-multip.ads		20120510125828 38ac9f73
+D s-oscons.ads		20120511153426 9012934c
+D s-osinte.ads		20120510125829 938b6b03
+D s-parame.ads		20120510125832 b6e20cc0
+D s-pooglo.ads		20120510125832 542f33d0
+D s-secsta.ads		20120510125833 eea35a36
+D s-soflin.ads		20120510125833 24c8153c
+D s-stache.ads		20120510125834 596fc1b4
+D s-stausa.ads		20120510125834 017a0a05
+D s-stalib.ads		20120510125834 f78bcf95
+D s-stoele.ads		20120510125834 facd7d98
+D s-stoele.adb		20120510125834 afc5dc80
+D s-stopoo.ads		20120510125834 7b8fbeee
+D s-stposu.ads		20120510125834 197be7e5
+D s-stratt.ads		20120510125834 aedef97e
+D s-tasinf.ads		20120510125835 21316953
+D s-taspri.ads		20120510125836 15f617a8
+D s-taprop.ads		20120510125835 1dd2e1b6
+D s-taskin.ads		20120510125836 5e24fb30
+D s-taprob.ads		20120510125835 502249e3
+D s-tpoben.ads		20120510125837 20b7a89e
+D s-tassta.ads		20120510125836 3a253871
+D s-traent.ads		20120510125838 5221ee41
+D s-unstyp.ads		20120510125838 6ae15c76
+D s-wchcon.ads		20120510125840 bfeb2e3d
+X 1 ada.ads
+16K9*Ada 19e8 18|2r6 3r6 4r6 19r13 20r25 20r47 21r25 21r52 43r4 45r4
+X 2 a-calend.ads
+36K13*Calendar 375e17 18|3w10
+X 9 a-reatim.ads
+39K13*Real_Time 139e18 18|4w10 19r17 20r29 20r51 21r29 21r56
+41O9*Time 18|20r39
+46O9*Time_Span 18|19r27 21r39
+53V13*Clock{41O9} 18|20s61
+85V13*Milliseconds{46O9} 18|21s66
+X 12 a-textio.ads
+49K13*Text_IO 471e16 18|2w10 43r8 45r8
+263U14*Put_Line 18|43s16 45s16
+X 14 circuit.ads
+3K9*Circuit 91e12 18|6w6 7r5
+17W9*Referee 18|24r24 26r24 28r24
+18P9*Referee_Access(17W9) 18|10r33 14r16
+20i28 id{positive} 18|43r60
+24U17 setSegment 18|25s17 27s17 29s17
+31U17 setNext 18|31s17
+38W19*Car_Status 71e18 18|34r23
+73P9*Car_Status_Access(38W19) 18|11r18
+75T14*Car 18|36r20 37r21 38r21
+79P9*Car_Access(75T14) 18|15r15 16r16 17r16
+X 18 main.adb
+9U11*Main 9b11 49l5 49t9
+10a4 ref_array(14|18P9) 24m4 25r4 26m4 26r39 27r4 28m4 28r39 29r4 31r4 31r25
+. 36r26 37r27 38r27
+11p4 test_status{14|73P9} 34m4 36r39 37r40 38r40
+12i4 test_speed{positive}
+13i4 test_towait{positive}
+14p4 test_next{14|18P9} 43r50
+15p4 test_car{14|79P9} 36m4
+16p4 test_car2{14|79P9} 37m4
+17p4 test_car3{14|79P9} 38m4
+20o4 Poll_Time{9|41O9}
+21o4 Period{9|46O9}
+X 19 system.ads
+37K9*System 18|1w6 19|151e11
+
