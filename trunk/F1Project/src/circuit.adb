@@ -6,7 +6,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 package body Circuit is
 
    -- place for global variables
-   event_buffer : Event_Bucket_Access := new Event_Bucket(5);
+   event_buffer : Event_Bucket_Access := new Event_Bucket(10);
 
    -----------------------------------------------------------------------
    --------------------------- REFEREE -----------------------------------
@@ -35,6 +35,11 @@ package body Circuit is
          toWait := 1000; -- TODO calculate toWait
          nextReferee := next;
       end enterSegment;
+      procedure leaveSegment (car_ID : in Positive) is
+      begin
+         -- TODO remove car from current car list
+         car_number := car_number; -- DEBUG
+      end leaveSegment;
       procedure setNext (nextReferee : in Referee_Access) is
       begin
          next := nextReferee;
@@ -117,7 +122,8 @@ package body Circuit is
       toWait : Positive;
       nextReferee : Referee_Access := initialReferee;
       speed : Positive;
-      previousReferee : Positive;
+      previousReferee : Referee_Access;
+      event : Unbounded_String;
 
       use type Ada.Real_Time.Time_Span;
       Poll_Time :          Ada.Real_Time.Time := Ada.Real_Time.Clock; -- time to start polling
@@ -127,7 +133,7 @@ package body Circuit is
       speed := status.get_currentSpeed; -- the initial speed should be zero?
       loop
          Ada.Text_IO.Put_Line ("sono la macchina " & Positive'Image(id) & " ed entro nel segmento " & Positive'Image(nextReferee.id));
-         previousReferee := nextReferee.id;
+         previousReferee := nextReferee;
          -- enterSegment need to be done as first thing, in order to compensate lag
       	 nextReferee.enterSegment(id, status.get_currentBehaviour, speed, 1, toWait, nextReferee);
 
@@ -135,7 +141,9 @@ package body Circuit is
       	 Period := Ada.Real_Time.Milliseconds (toWait);
       	 toSleep := toSleep + Period;
       	 delay until toSleep;
-         event_buffer.insert_event(Ada.Strings.Unbounded.To_Unbounded_String("macchina " & Positive'Image(id) & " uscita dal segmento " & Positive'Image(previousReferee)));
+         event := Ada.Strings.Unbounded.To_Unbounded_String("macchina " & Positive'Image(id) & " uscita dal segmento " & Positive'Image(previousReferee.id));
+         previousReferee.leaveSegment(id);
+         event_buffer.insert_event(event);
          --Ada.Text_IO.Put_Line ("--> ToWait " & Positive'Image(toWait));
       end loop;
    end Car;
