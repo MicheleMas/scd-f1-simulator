@@ -6,6 +6,9 @@ package Circuit is
 
    package String_Vector is new Ada.Containers.Indefinite_Vectors(Natural, Unbounded_String);
 
+   -- constant
+   car_number : Positive := 3; -- number of car
+
    type Segment (id : Positive;
                  length : Positive;
                  multiplicity : Positive;
@@ -30,11 +33,13 @@ package Circuit is
                           acceleration : in Positive;
                           toWait : out Positive;
                           nextReferee : out Referee_Access);
+      procedure leaveSegment (car_ID : in Positive);
       procedure setNext (nextReferee : in Referee_Access);
    private
       next : Referee_Access := C_next;
       segmentOverridden : Boolean := false;
       seg : Segment_Access := C_seg;
+
    end Referee;
 
    protected type Car_Status (name : Positive;
