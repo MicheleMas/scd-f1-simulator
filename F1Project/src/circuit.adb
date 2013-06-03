@@ -194,6 +194,7 @@ package body Circuit is
          if bucket_size >= capacity
          then
             bucket.Delete_First;
+            Ada.Text_IO.Put_Line ("*** bucket pieno *** ");
          else
             bucket_size := bucket_size + 1;
          end if;
