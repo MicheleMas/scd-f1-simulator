@@ -1,4 +1,3 @@
-with Ada; use Ada;
 with Ada.Real_Time;
 with Ada.Text_IO;
 with Ada.Containers.Indefinite_Vectors;
@@ -118,6 +117,7 @@ package body Circuit is
       toWait : Positive;
       nextReferee : Referee_Access := initialReferee;
       speed : Positive;
+      previousReferee : Positive;
 
       use type Ada.Real_Time.Time_Span;
       Poll_Time :          Ada.Real_Time.Time := Ada.Real_Time.Clock; -- time to start polling
@@ -127,6 +127,7 @@ package body Circuit is
       speed := status.get_currentSpeed; -- the initial speed should be zero?
       loop
          Ada.Text_IO.Put_Line ("sono la macchina " & Positive'Image(id) & " ed entro nel segmento " & Positive'Image(nextReferee.id));
+         previousReferee := nextReferee.id;
          -- enterSegment need to be done as first thing, in order to compensate lag
       	 nextReferee.enterSegment(id, status.get_currentBehaviour, speed, 1, toWait, nextReferee);
 
@@ -134,7 +135,7 @@ package body Circuit is
       	 Period := Ada.Real_Time.Milliseconds (toWait);
       	 toSleep := toSleep + Period;
       	 delay until toSleep;
-         event_buffer.insert_event(Ada.Strings.Unbounded.To_Unbounded_String("macchina " & Positive'Image(id) & " uscita dal segmento " & Positive'Image(nextReferee.id-1)));
+         event_buffer.insert_event(Ada.Strings.Unbounded.To_Unbounded_String("macchina " & Positive'Image(id) & " uscita dal segmento " & Positive'Image(previousReferee)));
          --Ada.Text_IO.Put_Line ("--> ToWait " & Positive'Image(toWait));
       end loop;
    end Car;
@@ -149,16 +150,16 @@ package body Circuit is
 
       use type Ada.Real_Time.Time_Span;
       Poll_Time :          Ada.Real_Time.Time := Ada.Real_Time.Clock; -- time to start polling
-      Period    : constant Ada.Real_Time.Time_Span := Ada.Real_Time.Milliseconds (51000);
+      Period    : constant Ada.Real_Time.Time_Span := Ada.Real_Time.Milliseconds (15000);
       Sveglia   :          Ada.Real_Time.Time := Poll_Time;
 
    begin
-
+      -- TODO add random
       loop
          if isRaining then
-            Ada.Text_IO.Put_Line ("Piove, governo ladro");
+            event_buffer.insert_event(Ada.Strings.Unbounded.To_Unbounded_String("Piove, governo ladro"));
          else
-            Ada.Text_IO.Put_Line ("Non piove, ma il governo e' comunque ladro");
+            event_buffer.insert_event(Ada.Strings.Unbounded.To_Unbounded_String("Non Piove, ma il governo e' comunque ladro"));
          end if;
          Sveglia := Sveglia + Period;
          delay until Sveglia;
