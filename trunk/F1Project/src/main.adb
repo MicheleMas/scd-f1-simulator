@@ -34,8 +34,8 @@ begin
    test_status := new Car_Status(1,1, 200, 30);
 
    test_car := new Car(1,ref_array(1),test_status);
-   test_car2 := new Car(2,ref_array(2),test_status);
-   test_car3 := new Car(3,ref_array(3),test_status);
+   test_car2 := new Car(2,ref_array(1),test_status);
+   test_car3 := new Car(3,ref_array(1),test_status);
 
 
 

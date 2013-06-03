@@ -1,8 +1,10 @@
 with Ada.Containers.Indefinite_Vectors;
+with Ada.Strings.Unbounded;
+use Ada.Strings.Unbounded;
 
 package Circuit is
 
-   package String_Vector is new Ada.Containers.Indefinite_Vectors(Natural, String);
+   package String_Vector is new Ada.Containers.Indefinite_Vectors(Natural, Unbounded_String);
 
    type Segment (id : Positive;
                  length : Positive;
@@ -81,8 +83,8 @@ package Circuit is
    task weather_forecast;
 
    protected type Event_Bucket (capacity : Positive) is
-      entry get_event (event : out String);
-      procedure insert_event (event : in String);
+      entry get_event (event : out Unbounded_String);
+      procedure insert_event (event : in Unbounded_String);
    private
       bucket_size : Integer := 0;
       bucket : String_Vector.Vector;
@@ -90,6 +92,6 @@ package Circuit is
 
    type Event_Bucket_Access is access Event_Bucket;
 
-   task type Event_Handler (bucket : Event_Bucket_Access);
+   task Event_Handler;
 
 end Circuit;
