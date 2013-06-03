@@ -212,7 +212,7 @@ package body Circuit is
       -- timer to simulate a remote communication with an high latency (300ms)
       use type Ada.Real_Time.Time_Span;
       Poll_Time :          Ada.Real_Time.Time := Ada.Real_Time.Clock; -- time to start polling
-      Period    : constant Ada.Real_Time.Time_Span := Ada.Real_Time.Milliseconds (100);
+      Period    : constant Ada.Real_Time.Time_Span := Ada.Real_Time.Milliseconds (50);
       Sveglia   :          Ada.Real_Time.Time;
 
       event : Unbounded_String;

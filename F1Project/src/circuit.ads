@@ -7,7 +7,7 @@ package Circuit is
    package String_Vector is new Ada.Containers.Indefinite_Vectors(Natural, Unbounded_String);
 
    -- constant
-   car_number : Positive := 3; -- number of car
+   car_number : Positive := 15; -- number of car
 
    type Segment (id : Positive;
                  length : Positive;
