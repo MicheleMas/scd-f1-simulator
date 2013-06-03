@@ -7,6 +7,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 package body Circuit is
 
    -- place for global variables
+   event_buffer : Event_Bucket_Access := new Event_Bucket(5);
 
    -----------------------------------------------------------------------
    --------------------------- REFEREE -----------------------------------
@@ -133,6 +134,7 @@ package body Circuit is
       	 Period := Ada.Real_Time.Milliseconds (toWait);
       	 toSleep := toSleep + Period;
       	 delay until toSleep;
+         event_buffer.insert_event(Ada.Strings.Unbounded.To_Unbounded_String("macchina " & Positive'Image(id) & " uscita dal segmento " & Positive'Image(nextReferee.id-1)));
          --Ada.Text_IO.Put_Line ("--> ToWait " & Positive'Image(toWait));
       end loop;
    end Car;
@@ -170,14 +172,16 @@ package body Circuit is
    -----------------------------------------------------------------------
 
    protected body event_bucket is
-      entry get_event (event : out String) when bucket_size > 0 is
+      entry get_event (event : out Unbounded_String) when bucket_size > 0 is
       begin
-         event := bucket.First_Element;
+         event := bucket.First_Element;  -- bucket.First_Element;
+         -- Ada.Text_IO.Put_Line ("ho mangiato l'evento " & Ada.Strings.Unbounded.To_String(event));
          bucket.Delete_First;
          bucket_size := bucket_size - 1;
       end get_event;
-      procedure insert_event (event : in String) is
+      procedure insert_event (event : in Unbounded_String) is
       begin
+         -- Ada.Text_IO.Put_Line ("inserisco evento " & Ada.Strings.Unbounded.To_String(event));
          if bucket_size >= capacity
          then
             bucket.Delete_First;
@@ -185,6 +189,7 @@ package body Circuit is
             bucket_size := bucket_size + 1;
          end if;
          bucket.Append(event);
+         -- Ada.Text_IO.Put_Line ("size " & Positive'image(bucket_size));
       end insert_event;
    end event_bucket;
 
@@ -197,19 +202,21 @@ package body Circuit is
       -- timer to simulate a remote communication with an high latency (300ms)
       use type Ada.Real_Time.Time_Span;
       Poll_Time :          Ada.Real_Time.Time := Ada.Real_Time.Clock; -- time to start polling
-      Period    : constant Ada.Real_Time.Time_Span := Ada.Real_Time.Milliseconds (600);
+      Period    : constant Ada.Real_Time.Time_Span := Ada.Real_Time.Milliseconds (100);
       Sveglia   :          Ada.Real_Time.Time;
 
-      event : String := "";
+      event : Unbounded_String;
 
    begin
+      -- Ada.Text_IO.Put_Line ("il thread e' partito");
       loop
 
-         bucket.get_event(event);
+         event_buffer.get_event(event);
          Poll_Time := Ada.Real_Time.Clock;
          Sveglia := Poll_Time + Period;
+         -- Ada.Text_IO.Put_Line ("ho mangiato l'evento " & Ada.Strings.Unbounded.To_String(event));
          delay until Sveglia;
-         Ada.Text_IO.Put_Line ("Processed event " & event);
+         Ada.Text_IO.Put_Line ("Processed event " & Ada.Strings.Unbounded.To_String(event));
 
       end loop;
    end Event_Handler;
