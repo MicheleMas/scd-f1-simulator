@@ -9,6 +9,10 @@ package Circuit is
    -- constant
    car_number : Positive := 5; -- number of car
 
+   -----------------------------------------------------------------------
+   --------------------------- SEGMENT -----------------------------------
+   -----------------------------------------------------------------------
+
    type Segment (id : Positive;
                  length : Positive;
                  multiplicity : Positive;
@@ -21,6 +25,10 @@ package Circuit is
 
    type Referee;
    type Referee_Access is access Referee;
+
+   -----------------------------------------------------------------------
+   --------------------------- REFEREE -----------------------------------
+   -----------------------------------------------------------------------
 
    protected type Referee (id : Positive;
                            C_seg : Segment_Access; -- pretty stupid, need to change
@@ -41,6 +49,10 @@ package Circuit is
       seg : Segment_Access := C_seg;
 
    end Referee;
+
+   -----------------------------------------------------------------------
+   --------------------------- CAR STATUS --------------------------------
+   -----------------------------------------------------------------------
 
    protected type Car_Status (name : Positive;
                               C_behaviour : Positive;
@@ -79,6 +91,10 @@ package Circuit is
 
    type Car_Status_Access is access Car_Status;
 
+   -----------------------------------------------------------------------
+   --------------------------- CAR ---------------------------------------
+   -----------------------------------------------------------------------
+
    task type Car (id : Positive;
                   initialReferee : Referee_Access;
                   status : Car_Status_Access);
@@ -86,6 +102,10 @@ package Circuit is
    type Car_Access is access Car;
 
    task weather_forecast;
+
+   -----------------------------------------------------------------------
+   --------------------------- EVENT BUCKET ------------------------------
+   -----------------------------------------------------------------------
 
    protected type Event_Bucket (capacity : Positive) is
       entry get_event (event : out Unbounded_String);
