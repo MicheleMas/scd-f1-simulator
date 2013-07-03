@@ -17,7 +17,14 @@ package body parser is
             Line : String := Ada.Text_IO.Get_Line (File);
          begin
             Line_Count := Line_Count + 1;
-            Ada.Text_IO.Put_Line (Natural'Image (Line_Count) & ": " & Line);
+            -- Ada.Text_IO.Put_Line (Natural'Image (Line_Count) & ": " & Line);
+            if (Line(Line'First + 1) = '#')
+            then
+               Ada.Text_IO.Put_Line ("da leggere");
+            else
+               Ada.Text_IO.Put_Line ("commento");
+            end if;
+
 		--- costruzione del circuito a partire dai dati di ogni linea
 		--- ogni riga del file contiene i dati di un segmento
 		--- il segmento successivo sarà quello che viene dopo
