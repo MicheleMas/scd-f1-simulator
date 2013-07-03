@@ -1,0 +1,8 @@
+-costruire il circuito a partire da un file
+-leggere da file anche le macchine
+-calcolare il towait
+-implementare lista di macchine correntemente in un segmento
+-rimuovere la macchina quando chiama leaveSegment
+-aggiungere casualità nel cambio di tempo
+
+
