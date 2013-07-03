@@ -22,6 +22,7 @@ package body parser is
             Line : String := Ada.Text_IO.Get_Line (File);
             seg : Segment_Access := null;
             box : Boolean;
+            Working_Ref : Referee_Access := null;
          begin
             Line_Count := Line_Count + 1;
             -- Ada.Text_IO.Put_Line (Natural'Image (Line_Count) & ": " & Line);
@@ -46,11 +47,16 @@ package body parser is
                if (firstSegment)
                then
                   -- creare il primo referee
-
+                  First_Ref := new Referee(seg.id, null);
+                  First_Ref.setSegment(seg);
+                  Current_Ref := First_Ref;
                   firstSegment := false;
                else
-                  null;
                   -- creare un referee linkato
+                  Working_Ref := new Referee(seg.id, null);
+                  Working_Ref.setSegment(seg);
+                  Current_Ref.setNext(Working_Ref);
+                  Current_Ref := Working_Ref;
                end if;
             else
                Ada.Text_IO.Put_Line ("commento : " & Line);
@@ -64,6 +70,7 @@ package body parser is
 		--- ritorna il puntatore al primo referee
          end;
       end loop;
+      Current_Ref.setNext(First_Ref);
       Ada.Text_IO.Close (File);
       return First_Ref;
    end readCircuit;
