@@ -8,6 +8,8 @@ with Circuit;
 use Circuit;
 with car_p;
 use car_p;
+with referee_p;
+use referee_p;
 
 procedure Main is
    ref_array : array(1 .. 3) of Referee_Access;
