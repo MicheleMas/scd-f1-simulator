@@ -1,5 +1,6 @@
--costruire il circuito a partire da un file
--leggere da file anche le macchine
+	-costruire il circuito a partire da un file
+	-leggere da file anche le macchine
+	-chiamare la lettura da file e costruire macchine+circuito (lo facciamo fare al circuit)
 -calcolare il towait
 -implementare lista di macchine correntemente in un segmento
 -rimuovere la macchina quando chiama leaveSegment
