@@ -29,14 +29,14 @@ procedure Main is
 begin
 
    --Creo circuito di prova
-   ref_array(3) := new Referee(3,null);
-   ref_array(3).setSegment(null);
-   ref_array(2) := new Referee(2,ref_array(3));
-   ref_array(2).setSegment(null);
-   ref_array(1) := new Referee(1,ref_array(2));
-   ref_array(1).setSegment(null);
+   --ref_array(3) := new Referee(3,null);
+   --ref_array(3).setSegment(null);
+   --ref_array(2) := new Referee(2,ref_array(3));
+   --ref_array(2).setSegment(null);
+   --ref_array(1) := new Referee(1,ref_array(2));
+   --ref_array(1).setSegment(null);
 
-   ref_array(3).setNext(ref_array(1)); -- chiude il ciclo
+--   ref_array(3).setNext(ref_array(1)); -- chiude il ciclo
 
    --   ref_array(1).enterSegment(1,1, test_speed, 1, test_towait, test_next);
    --test_status := new Car_Status(1,1, 200, 30);
@@ -46,16 +46,17 @@ begin
    --test_car3 := new Car(3,ref_array(1),test_status);
 
    -- Creo le macchine
-   For_Loop :
-   for i in Integer range 1 .. custom_types.car_number loop
-      car_array(i) := new Car(i,ref_array(1),new Car_Status(i,i, 200, 30), Circuit.event_buffer);
-   end loop For_Loop;
+   --For_Loop :
+   --for i in Integer range 1 .. custom_types.car_number loop
+   --   car_array(i) := new Car(i,ref_array(1),new Car_Status(i,i, 200, 30), Circuit.event_buffer);
+   --end loop For_Loop;
 
 
   -- Ada.Text_IO.Put_Line ("--> " & Positive'image(test_next.id));
 
-   Ada.Text_IO.Put_Line ("Hello World!");
+   --Ada.Text_IO.Put_Line ("Hello World!");
    --delay until Poll_Time + Period;
    --Ada.Text_IO.Put_Line ("new speed: " & Positive'image(speed) & ", after: " & Positive'Image(toWait));
    -- Segment.leave;
+   null;
 end Main;
