@@ -10,6 +10,7 @@ package body Circuit is
    -- place for global variables
    firstReferee : Referee_Access;
    car_status_array : arrayOfCars;
+   car_array : array(1 .. custom_types.car_number) of Car_Access;
 
    task body bootstrap is
 
@@ -19,7 +20,10 @@ package body Circuit is
 
       firstReferee := parser.readCircuit("circuit.txt");
       car_status_array := parser.readCars("cars.txt");
-
+      For_Loop :
+      for i in Integer range 1 .. custom_types.car_number loop
+         car_array(i) := new Car(i,firstReferee,car_status_array(i), Circuit.event_buffer);
+      end loop For_Loop;
 
    end bootstrap;
 
