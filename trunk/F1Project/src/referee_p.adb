@@ -24,7 +24,8 @@ package body referee_p is
          -- TEST
          -- Ada.Text_IO.Put_Line ("Initial speed = " & Positive'Image(speed));
          speed := speed + 1;
-         toWait := 1000; -- TODO calculate toWait
+         toWait := 1000; -- TODO calculate toWait usando seg.length;
+
          nextReferee := next;
       end enterSegment;
       procedure leaveSegment (car_ID : in Positive) is
