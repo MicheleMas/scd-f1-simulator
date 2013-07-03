@@ -2,7 +2,8 @@ with System;
 with Ada.Text_IO;
 with Ada.Calendar;
 with Ada.Real_Time;
-
+with custom_types;
+use custom_types;
 with Circuit;
 use Circuit;
 

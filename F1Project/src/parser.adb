@@ -2,14 +2,13 @@ with Ada.Text_IO;
 
 package parser is
 
-   procedure Line_By_Line (fileName is
-      Filename   : String := "line_by_line.adb";
+   function Line_By_Line (Filename : in String) return Segment_Access is
       File       : Ada.Text_IO.File_Type;
       Line_Count : Natural := 0;
    begin
       Ada.Text_IO.Open (File => File,
-                     Mode => Ada.Text_IO.In_File,
-                     Name => Filename);
+                        Mode => Ada.Text_IO.In_File,
+                        Name => Filename);
       while not Ada.Text_IO.End_Of_File (File) loop
          declare
             Line : String := Ada.Text_IO.Get_Line (File);
