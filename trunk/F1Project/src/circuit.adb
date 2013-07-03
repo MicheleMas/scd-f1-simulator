@@ -2,11 +2,26 @@ with Ada.Real_Time;
 with Ada.Text_IO;
 with Ada.Containers.Indefinite_Vectors;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with parser;
+use parser;
 
 package body Circuit is
 
    -- place for global variables
+   firstReferee : Referee_Access;
+   car_status_array : arrayOfCars;
 
+   task body bootstrap is
+
+      test : Positive := 1;
+
+   begin
+
+      firstReferee := parser.readCircuit("circuit.txt");
+      car_status_array := parser.readCars("cars.txt");
+
+
+   end bootstrap;
 
    -----------------------------------------------------------------------
    --------------------------- TASK WEATHER ------------------------------
