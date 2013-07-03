@@ -9,9 +9,6 @@ package Circuit is
 
    package String_Vector is new Ada.Containers.Indefinite_Vectors(Natural, Unbounded_String);
 
-   -- constant
-   car_number : Positive := 5; -- number of car
-
    -----------------------------------------------------------------------
    --------------------------- CAR STATUS --------------------------------
    -----------------------------------------------------------------------

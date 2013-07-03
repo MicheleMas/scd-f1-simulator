@@ -9,7 +9,7 @@ use Circuit;
 
 procedure Main is
    ref_array : array(1 .. 3) of Referee_Access;
-   car_array : array(1 .. Circuit.car_number) of Car_Access;
+   car_array : array(1 .. custom_types.car_number) of Car_Access;
    --test_status : Car_Status_Access;
    test_speed : Positive := 1;
    test_towait : Positive := 1;
@@ -43,7 +43,7 @@ begin
 
    -- Creo le macchine
    For_Loop :
-   for i in Integer range 1 .. Circuit.car_number loop
+   for i in Integer range 1 .. custom_types.car_number loop
       car_array(i) := new Car(i,ref_array(1),new Car_Status(i,i, 200, 30));
    end loop For_Loop;
 
