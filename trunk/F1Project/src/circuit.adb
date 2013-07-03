@@ -10,7 +10,9 @@ package body Circuit is
    -- place for global variables
    firstReferee : Referee_Access;
    car_status_array : arrayOfCars;
+
    car_array : array(1 .. custom_types.car_number) of Car_Access;
+   ref_array : array(1 .. 3) of Referee_Access;
 
    task body bootstrap is
 

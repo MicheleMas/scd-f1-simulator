@@ -1,4 +1,4 @@
-	-costruire il circuito a partire da un file
+	#-costruire il circuito a partire da un file
 	-leggere da file anche le macchine
 	-chiamare la lettura da file e costruire macchine+circuito (lo facciamo fare al circuit)
 		#-task bootstrap che nasce, crea circuito && macchine && da il via && muore
