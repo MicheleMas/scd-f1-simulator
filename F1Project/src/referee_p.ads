@@ -11,7 +11,6 @@ package referee_p is
    -----------------------------------------------------------------------
 
    protected type Referee (id : Positive;
-                           C_seg : Segment_Access; -- pretty stupid, need to change
                            C_next : Referee_Access ) is
       function getSegment return Segment_Access;
       procedure setSegment (new_seg : in Segment_Access);
@@ -26,7 +25,7 @@ package referee_p is
    private
       next : Referee_Access := C_next;
       segmentOverridden : Boolean := false;
-      seg : Segment_Access := C_seg;
+      seg : Segment_Access := null;
 
    end Referee;
 

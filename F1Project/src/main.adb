@@ -29,11 +29,11 @@ procedure Main is
 begin
 
    --Creo circuito di prova
-   ref_array(3) := new Referee(3,null,null);
+   ref_array(3) := new Referee(3,null);
    ref_array(3).setSegment(null);
-   ref_array(2) := new Referee(2,null,ref_array(3));
+   ref_array(2) := new Referee(2,ref_array(3));
    ref_array(2).setSegment(null);
-   ref_array(1) := new Referee(1,null,ref_array(2));
+   ref_array(1) := new Referee(1,ref_array(2));
    ref_array(1).setSegment(null);
 
    ref_array(3).setNext(ref_array(1)); -- chiude il ciclo
