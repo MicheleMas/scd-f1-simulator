@@ -6,6 +6,8 @@ with custom_types;
 use custom_types;
 with Circuit;
 use Circuit;
+with car_p;
+use car_p;
 
 procedure Main is
    ref_array : array(1 .. 3) of Referee_Access;
@@ -44,7 +46,7 @@ begin
    -- Creo le macchine
    For_Loop :
    for i in Integer range 1 .. custom_types.car_number loop
-      car_array(i) := new Car(i,ref_array(1),new Car_Status(i,i, 200, 30));
+      car_array(i) := new Car(i,ref_array(1),new Car_Status(i,i, 200, 30), Circuit.event_buffer);
    end loop For_Loop;
 
 
