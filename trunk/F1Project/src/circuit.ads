@@ -3,6 +3,8 @@ with Ada.Strings.Unbounded;
 use Ada.Strings.Unbounded;
 with custom_types;
 use custom_types;
+with parser;
+use parser;
 
 
 package Circuit is
