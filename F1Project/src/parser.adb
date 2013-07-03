@@ -1,8 +1,8 @@
 with Ada.Text_IO;
 
-package parser is
+package body parser is
 
-   function Line_By_Line (Filename : in String) return Segment_Access is
+   function readCircuit (Filename : in String) return Segment_Access is
       File       : Ada.Text_IO.File_Type;
       Line_Count : Natural := 0;
    begin
@@ -18,7 +18,8 @@ package parser is
          end;
       end loop;
       Ada.Text_IO.Close (File);
-   end Line_By_Line;
+      return null;
+   end readCircuit;
 
 
 end parser;
