@@ -42,6 +42,10 @@ package body car_p is
       end set_damage;
 
       -- getter function
+      function get_name return Positive is
+      begin
+         return name;
+      end get_name;
       function get_tires_state return Positive is
       begin
          return tires_status;
@@ -86,7 +90,7 @@ package body car_p is
    begin
       speed := status.get_currentSpeed; -- the initial speed should be zero?
       loop
-         Ada.Text_IO.Put_Line ("sono la macchina " & Positive'Image(id) & " ed entro nel segmento " & Positive'Image(nextReferee.id));
+         Ada.Text_IO.Put_Line ("sono la macchina " & Positive'Image(status.get_name) & " ed entro nel segmento " & Positive'Image(nextReferee.id));
          previousReferee := nextReferee;
          -- enterSegment need to be done as first thing, in order to compensate lag
       	 nextReferee.enterSegment(id, status.get_currentBehaviour, speed, 1, toWait, nextReferee);
