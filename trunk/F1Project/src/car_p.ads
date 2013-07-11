@@ -33,6 +33,7 @@ package car_p is
       procedure set_damage (status : in Boolean);
 
       -- getter function
+      function get_name return Positive;
       function get_tires_state return Positive;
       function get_currentSegment return Segment_Access;
       function get_currentSpeed return Positive;
