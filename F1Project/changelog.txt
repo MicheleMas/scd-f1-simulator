@@ -1,6 +1,7 @@
 	#-costruire il circuito a partire da un file
-	-leggere da file anche le macchine
-	-chiamare la lettura da file e costruire macchine+circuito (lo facciamo fare al circuit)
+	#-leggere da file anche le macchine
+		[il campo name della macchina è un Positive invece che String, e ovviamente String non si può usare per motivi folli di ada. Cerco un modo per mettercelo..][Mi arrendo. Useremo numeri come nomi >_>]
+	#-chiamare la lettura da file e costruire macchine+circuito (lo facciamo fare al circuit) [al termine della lettura, i task partono]
 		#-task bootstrap che nasce, crea circuito && macchine && da il via && muore
 	-calcolare il towait (referee_p.adb)
 	-implementare lista di macchine correntemente in un segmento (nel referee, memorizzando solo le id)

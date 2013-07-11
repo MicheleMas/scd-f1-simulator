@@ -19,13 +19,17 @@ package body Circuit is
       test : Positive := 1;
 
    begin
-
+ 	--Ada.Text_IO.Put_Line ("Inizio il boot. ");
       firstReferee := parser.readCircuit("circuit.txt");
-      --car_status_array := parser.readCars("cars.txt");
-      --For_Loop :
-      --for i in Integer range 1 .. custom_types.car_number loop
-      --   car_array(i) := new Car(i,firstReferee,car_status_array(i), Circuit.event_buffer);
-      --end loop For_Loop;
+ 	--Ada.Text_IO.Put_Line ("Letto il circuito. ");
+      car_status_array := parser.readCars("cars.txt");
+ 	--Ada.Text_IO.Put_Line ("Lette le macchine. ");
+
+      For_Loop :
+      for i in Integer range 1 .. custom_types.car_number loop
+         car_array(i) := new Car(i,firstReferee,car_status_array(i), Circuit.event_buffer);
+      end loop For_Loop;
+	--Ada.Text_IO.Put_Line ("Costruiti i tasks. ");
 
    end bootstrap;
 
