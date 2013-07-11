@@ -1,0 +1,5 @@
+#id	length	multiplicity	difficulty	isBoxEntrance
+1 100 3 1 f
+2 100 3 1 f
+3 100 3 1 f
+4 100 3 1 f
