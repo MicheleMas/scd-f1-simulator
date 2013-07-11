@@ -58,8 +58,6 @@ package body parser is
                   Current_Ref.setNext(Working_Ref);
                   Current_Ref := Working_Ref;
                end if;
-            else
-               Ada.Text_IO.Put_Line ("commento : " & Line);
             end if;
 
 		--- costruzione del circuito a partire dai dati di ogni linea
@@ -80,6 +78,10 @@ package body parser is
       File       : Ada.Text_IO.File_Type;
       Line_Count : Natural := 0;
       Cars_Array : arrayOfCars;
+      Subs : GNAT.String_Split.Slice_Set;
+      Seps : String := " " & ASCII.HT;
+      car  : Car_Status_Access := null;
+      carNumber : Natural := 0;
    begin
       Ada.Text_IO.Open (File => File,
                         Mode => Ada.Text_IO.In_File,
@@ -89,7 +91,18 @@ package body parser is
             Line : String := Ada.Text_IO.Get_Line (File);
          begin
             Line_Count := Line_Count + 1;
-            Ada.Text_IO.Put_Line (Natural'Image (Line_Count) & ": " & Line);
+            -- Ada.Text_IO.Put_Line (Natural'Image (Line_Count) & ": " & Line);
+ 	    if (not (Line(Line'First) = '#'))
+            then
+               GNAT.String_Split.Create (Subs, Line, Seps, Mode => GNAT.String_Split.Multiple);
+               -- la riga successiva riempie i campi del Car_Status dichiarato di car_p.ads
+               car := new Car_Status(Positive'Value(GNAT.String_Split.Slice (Subs, 1)),
+                                     Positive'Value(GNAT.String_Split.Slice (Subs, 2)),
+                                     Positive'Value(GNAT.String_Split.Slice (Subs, 3)),
+                                     Positive'Value(GNAT.String_Split.Slice (Subs, 4)));
+               carNumber := carNumber + 1;
+               Cars_Array(carNumber):= car;
+	    end if;
             --- in ogni riga ci sono i dati di una macchina
             --- crea l'array con i dati di ogni macchina
 
