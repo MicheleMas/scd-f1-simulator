@@ -28,7 +28,7 @@ package body car_p is
       begin
          currentSegment := currentSeg;
       end set_currentSegment;
-      procedure set_currentSpeed (newSpeed : in Positive) is
+      procedure set_currentSpeed (newSpeed : in Float) is
       begin
          currentSpeed := newSpeed;
       end set_currentSpeed;
@@ -54,7 +54,7 @@ package body car_p is
       begin
          return currentSegment;
       end get_currentSegment;
-      function get_currentSpeed return Positive is
+      function get_currentSpeed return Float is
       begin
          return currentSpeed;
       end get_currentSpeed;
@@ -79,7 +79,7 @@ package body car_p is
    task body Car is
       toWait : Positive;
       nextReferee : Referee_Access := initialReferee;
-      speed : Positive;
+      speed : Float;
       previousReferee : Referee_Access;
       event : Unbounded_String;
 
