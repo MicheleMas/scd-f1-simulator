@@ -46,10 +46,8 @@ package body referee_p is
          toWait := Positive((((0.0 - speed) + Float_Function.Sqrt((speed**2) +
            (2.0 * currentAcceleration * Float(seg.length)))) /
              currentAcceleration) * 1000.0);
-
-         --toWait := 1000;
          Ada.Text_IO.Put_Line ("Time (millis) to wait = " & Positive'Image(toWait));
-         speed := ((currentAcceleration * (Float(toWait)/1000.0)) + speed) / 3.6;
+         speed := ((currentAcceleration * (Float(toWait)/1000.0)) + speed) * 3.6;
          if(speed > Float(maxSpeed))
          then
             speed := Float(maxSpeed);
