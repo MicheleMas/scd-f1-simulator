@@ -42,7 +42,7 @@ package body parser is
                seg := new Segment(Positive'Value(GNAT.String_Split.Slice (Subs, 1)),
                                   Positive'Value(GNAT.String_Split.Slice (Subs, 2)),
                                   Positive'Value(GNAT.String_Split.Slice (Subs, 3)),
-                                  Positive'Value(GNAT.String_Split.Slice (Subs, 4)),
+                                  Natural'Value(GNAT.String_Split.Slice (Subs, 4)),
                                   box);
                if (firstSegment)
                then

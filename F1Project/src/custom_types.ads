@@ -1,7 +1,7 @@
 package custom_types is
 
    -- constant
-   car_number : Positive := 5; -- number of car
+   car_number : Positive := 1; -- number of car
 
    -----------------------------------------------------------------------
    --------------------------- SEGMENT -----------------------------------
@@ -15,7 +15,7 @@ package custom_types is
    type Segment (id : Positive;
                  length : Positive;
                  multiplicity : Positive;
-                 difficulty : Positive;
+                 difficulty : Natural;
                  isBoxEntrance : Boolean) is record
       test : Positive;
    end record;
