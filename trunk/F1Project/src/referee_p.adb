@@ -1,4 +1,9 @@
+with Ada.Numerics.Generic_Elementary_Functions;
+with Ada.Text_IO;
+
 package body referee_p is
+
+   package Float_Function is new Ada.Numerics.Generic_Elementary_Functions(Float);
 
    -----------------------------------------------------------------------
    --------------------------- REFEREE -----------------------------------
@@ -21,16 +26,22 @@ package body referee_p is
                           toWait : out Positive;
                           nextReferee : out Referee_Access) when segmentOverridden is
          diff : Float := Float(seg.difficulty) / 10.0;
+         penality : Float := 0.8 * diff;
          currentAcceleration : Float := Float(acceleration);
       begin
-         -- Ada.Text_IO.Put_Line ("Initial speed = " & Positive'Image(speed));
+         Ada.Text_IO.Put_Line ("Initial speed = " & Float'Image(speed));
 
-         speed := (speed * (1.2 - diff)) * 3.6;
-         currentAcceleration := currentAcceleration * (1.2 * (1.2 - diff));
-         -- TODO capire la formula
-         toWait := 1000; -- TODO calculate toWait usando seg.length;
+         speed := (speed * (1.0 - penality)) * 3.6;
+         currentAcceleration := currentAcceleration * (1.0 - penality);
 
+         -- TODO la funzione non funziona
+         toWait := Positive((((0.0 - speed) + Float_Function.Sqrt((speed**2) +
+           (2.0 * currentAcceleration * Float(seg.length)))) /
+             currentAcceleration) * 1000.0);
+         Ada.Text_IO.Put_Line ("Time (millis) to wait = " & Positive'Image(toWait));
+         speed := ((currentAcceleration * (Float(toWait)/1000.0)) + speed) * 3.6;
          nextReferee := next;
+         Ada.Text_IO.Put_Line ("Final speed = " & Float'Image(speed));
       end enterSegment;
       procedure leaveSegment (car_ID : in Positive) is
       begin
