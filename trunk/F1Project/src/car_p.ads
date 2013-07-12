@@ -28,7 +28,7 @@ package car_p is
       -- setter procedure
       procedure set_tires_status (newState : in Positive);
       procedure set_currentSegment (currentSeg : in Segment_Access);
-      procedure set_currentSpeed (newSpeed : in Positive);
+      procedure set_currentSpeed (newSpeed : in Float);
       procedure set_currentFuelLevel (newLevel : in Positive);
       procedure set_damage (status : in Boolean);
 
@@ -36,7 +36,7 @@ package car_p is
       function get_name return Positive;
       function get_tires_state return Positive;
       function get_currentSegment return Segment_Access;
-      function get_currentSpeed return Positive;
+      function get_currentSpeed return Float;
       function get_currentBehaviour return Positive;
       function get_currentFuelLevel return Positive;
       function is_damaged return Boolean;
@@ -47,7 +47,7 @@ package car_p is
       fuel_level : Positive := 100;
       behaviour : Positive := C_behaviour;
       currentSegment : Segment_Access;
-      currentSpeed : Positive := 100; -- to change
+      currentSpeed : Float := 100.0; -- to change
       toWait : Positive;
       damaged : Boolean;
    end Car_Status;

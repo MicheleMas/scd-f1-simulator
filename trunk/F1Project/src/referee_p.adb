@@ -16,14 +16,18 @@ package body referee_p is
       end setSegment;
       entry enterSegment (car_ID : in Positive;
                           car_behaviour : in Positive;
-                          speed : in out Positive;
+                          speed : in out Float;
                           acceleration : in Positive;
                           toWait : out Positive;
                           nextReferee : out Referee_Access) when segmentOverridden is
+         diff : Float := Float(seg.difficulty) / 10.0;
+         currentAcceleration : Float := Float(acceleration);
       begin
-         -- TEST
          -- Ada.Text_IO.Put_Line ("Initial speed = " & Positive'Image(speed));
-         speed := speed + 1;
+
+         speed := (speed * (1.2 - diff)) * 3.6;
+         currentAcceleration := currentAcceleration * (1.2 * (1.2 - diff));
+         -- TODO capire la formula
          toWait := 1000; -- TODO calculate toWait usando seg.length;
 
          nextReferee := next;
