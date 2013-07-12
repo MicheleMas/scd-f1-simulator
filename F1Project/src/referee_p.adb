@@ -29,13 +29,20 @@ package body referee_p is
          diff : Float := Float(seg.difficulty) / 10.0;
          penality : Float := 0.8 * diff;
          currentAcceleration : Float := Float(acceleration);
+         --calc1 : Float;
       begin
-         Ada.Text_IO.Put_Line ("Initial speed = " & Float'Image(speed));
-
+         --Ada.Text_IO.Put_Line ("Initial speed = " & Float'Image(speed));
+         --Ada.Text_IO.Put_Line ("Initial acceleration = " & Positive'Image(acceleration));
          speed := (speed * (1.0 - penality)) / 3.6;
          currentAcceleration := currentAcceleration * (1.0 - penality);
 
-         -- TODO aggiungere cap speed
+         -- DEBUG --
+         --Ada.Text_IO.Put_Line ("Initial speed = " & Float'Image(speed));
+         --Ada.Text_IO.Put_Line ("Current acceleration = " & Float'Image(currentAcceleration));
+         --Ada.Text_IO.Put_Line ("Lenght = " & Float'Image(Float(seg.length)));
+         --calc1 := ((speed**2) + (2.0 * currentAcceleration * Float(seg.length)));
+         --Ada.Text_IO.Put_Line ("Delta = " & Float'Image(Float(seg.length)));
+         -- Fine DEBUG --
          toWait := Positive((((0.0 - speed) + Float_Function.Sqrt((speed**2) +
            (2.0 * currentAcceleration * Float(seg.length)))) /
              currentAcceleration) * 1000.0);
@@ -46,7 +53,7 @@ package body referee_p is
             speed := Float(maxSpeed);
          end if;
          nextReferee := next;
-         Ada.Text_IO.Put_Line ("Final speed = " & Float'Image(speed));
+         --Ada.Text_IO.Put_Line ("Final speed = " & Float'Image(speed));
       end enterSegment;
       procedure leaveSegment (car_ID : in Positive) is
       begin
