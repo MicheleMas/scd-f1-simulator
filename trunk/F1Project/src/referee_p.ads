@@ -18,6 +18,7 @@ package referee_p is
       entry enterSegment (car_ID : in Positive;
                           car_behaviour : in Positive;
                           speed : in out Float;
+                          maxSpeed : in Positive;
                           acceleration : in Positive;
                           toWait : out Positive;
                           nextReferee : out Referee_Access);
