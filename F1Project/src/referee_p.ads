@@ -1,3 +1,4 @@
+--with Ada.Numerics.Generic_Elementary_Functions;
 with custom_types;
 use custom_types;
 
