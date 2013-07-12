@@ -47,7 +47,7 @@ package car_p is
       fuel_level : Positive := 100;
       behaviour : Positive := C_behaviour;
       currentSegment : Segment_Access;
-      currentSpeed : Float := 100.0; -- to change
+      currentSpeed : Float := 1.0; -- to change
       toWait : Positive;
       damaged : Boolean;
    end Car_Status;
