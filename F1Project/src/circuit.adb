@@ -1,9 +1,12 @@
 with Ada.Real_Time;
 with Ada.Text_IO;
+use Ada.Text_IO;
 with Ada.Containers.Indefinite_Vectors;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with parser;
 use parser;
+with Ada.Numerics;
+with Ada.Numerics.Discrete_Random;
 
 package body Circuit is
 
@@ -43,17 +46,31 @@ package body Circuit is
 
       use type Ada.Real_Time.Time_Span;
       Poll_Time :          Ada.Real_Time.Time := Ada.Real_Time.Clock; -- time to start polling
-      Period    : constant Ada.Real_Time.Time_Span := Ada.Real_Time.Milliseconds (15000);
+      Period    : 	   Ada.Real_Time.Time_Span := Ada.Real_Time.Milliseconds (15000);
       Sveglia   :          Ada.Real_Time.Time := Poll_Time;
+
+      type Rand_Range is range 15..150;
+      package Rand_Int is new Ada.Numerics.Discrete_Random(Rand_Range);
+      seed 	: Rand_Int.Generator;
+      Num 	: Rand_Range;
+      numRandom : Positive := 1;
 
    begin
       -- TODO add random
       loop
          if isRaining then
-            event_buffer.insert_event(Ada.Strings.Unbounded.To_Unbounded_String("Piove, governo ladro"));
+            event_buffer.insert_event(Ada.Strings.Unbounded.To_Unbounded_String("Wheater: Piove, governo ladro"));
          else
-            event_buffer.insert_event(Ada.Strings.Unbounded.To_Unbounded_String("Non Piove, ma il governo e' comunque ladro"));
+            event_buffer.insert_event(Ada.Strings.Unbounded.To_Unbounded_String("Wheater: Non Piove, ma il governo e' comunque ladro"));
          end if;
+
+         Rand_Int.Reset(seed);
+         Num := Rand_Int.Random(seed);
+         --Put_Line(Rand_Range'Image(Num));
+         numRandom := Positive(Num);
+
+
+	 Period := Ada.Real_Time.Milliseconds (1000 * numRandom);
          Sveglia := Sveglia + Period;
          delay until Sveglia;
          isRaining := not isRaining;
@@ -84,7 +101,11 @@ package body Circuit is
          Sveglia := Poll_Time + Period;
          -- Ada.Text_IO.Put_Line ("ho mangiato l'evento " & Ada.Strings.Unbounded.To_String(event));
          delay until Sveglia;
-         Ada.Text_IO.Put_Line ("Processed event " & Ada.Strings.Unbounded.To_String(event));
+
+	 --filtro per stampare solo quello che ci serve
+        -- if Ada.Strings.Unbounded.To_String(event)(Ada.Strings.Unbounded.To_String(event)'First) = 'W' then
+            Ada.Text_IO.Put_Line ("Processed event " & Ada.Strings.Unbounded.To_String(event));
+         --end if;
 
       end loop;
    end Event_Handler;
