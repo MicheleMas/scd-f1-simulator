@@ -22,6 +22,7 @@ package body referee_p is
       entry enterSegment (car_ID : in Positive;
                           car_behaviour : in Positive;
                           speed : in out Float;
+                          maxSpeed : in Positive;
                           acceleration : in Positive;
                           toWait : out Positive;
                           nextReferee : out Referee_Access) when segmentOverridden is
@@ -31,15 +32,19 @@ package body referee_p is
       begin
          Ada.Text_IO.Put_Line ("Initial speed = " & Float'Image(speed));
 
-         speed := (speed * (1.0 - penality)) * 3.6;
+         speed := (speed * (1.0 - penality)) / 3.6;
          currentAcceleration := currentAcceleration * (1.0 - penality);
 
-         -- TODO la funzione non funziona
+         -- TODO aggiungere cap speed
          toWait := Positive((((0.0 - speed) + Float_Function.Sqrt((speed**2) +
            (2.0 * currentAcceleration * Float(seg.length)))) /
              currentAcceleration) * 1000.0);
          Ada.Text_IO.Put_Line ("Time (millis) to wait = " & Positive'Image(toWait));
          speed := ((currentAcceleration * (Float(toWait)/1000.0)) + speed) * 3.6;
+         if(speed > Float(maxSpeed))
+         then
+            speed := Float(maxSpeed);
+         end if;
          nextReferee := next;
          Ada.Text_IO.Put_Line ("Final speed = " & Float'Image(speed));
       end enterSegment;

@@ -93,7 +93,7 @@ package body car_p is
          --Ada.Text_IO.Put_Line ("sono la macchina " & Positive'Image(status.get_name) & " ed entro nel segmento " & Positive'Image(nextReferee.id));
          previousReferee := nextReferee;
          -- enterSegment need to be done as first thing, in order to compensate lag
-      	 nextReferee.enterSegment(id, status.get_currentBehaviour, speed, 1, toWait, nextReferee);
+      	 nextReferee.enterSegment(id, status.get_currentBehaviour, speed, status.max_speed, 1, toWait, nextReferee);
 
       	 status.set_currentSpeed(speed); -- set new speed on status
       	 Period := Ada.Real_Time.Milliseconds (toWait);
