@@ -47,6 +47,7 @@ package body referee_p is
              currentAcceleration) * 1000.0);
 
          -- calculate queue with other car
+         Ada.Text_IO.Put_Line ("molteplicita' segmento " & Positive'Image(seg.id) & ": " & Positive'Image(seg.multiplicity));
          if (carCounter >= seg.multiplicity) -- TODO controllarne la correttezza
          then
             maxWait := toSleep;
@@ -56,11 +57,11 @@ package body referee_p is
                   maxWait := maxWait;
                end if;
             end loop;
-            toSleep := maxWait + Ada.Real_Time.Milliseconds (100);
+            toSleep := maxWait + Ada.Real_Time.Milliseconds (200);
          end if;
 
          -- Debug!
-         Ada.Text_IO.Put_Line ("Time (millis) to wait = " & Positive'Image(toWait));
+         Ada.Text_IO.Put_Line ("Time (millis) to wait for car " & Positive'Image(car_ID) & " = " & Positive'Image(toWait));
 
          -- update speed (with cap)
          speed := ((currentAcceleration * (Float(toWait)/1000.0)) + speed) * 3.6;
@@ -76,13 +77,15 @@ package body referee_p is
 
          -- update counter and status
          carCounter := carCounter + 1;
+         Ada.Text_IO.Put_Line ("numero di macchine nel segmento " & Positive'Image(seg.id) & ": " & Natural'Image(carCounter));
          carArray(car_ID) := toSleep;
       end enterSegment;
+
       procedure leaveSegment (car_ID : in Positive) is
       begin
-         -- TODO remove car from current car list
-         car_number := car_number; -- DEBUG
+         carCounter := carCounter - 1;
       end leaveSegment;
+
       procedure setNext (nextReferee : in Referee_Access) is
       begin
          next := nextReferee;
