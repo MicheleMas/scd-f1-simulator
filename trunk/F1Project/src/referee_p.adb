@@ -52,6 +52,7 @@ package body referee_p is
             for i in carArray'Range loop
                if (maxWait < carArray(i))
                then
+                  Ada.Text_IO.Put_Line ("sono " & Positive'Image(car_ID) & " e " & Positive'Image(i) & " mi intralcia");
                   maxWait := carArray(i);
                end if;
             end loop;
@@ -87,8 +88,8 @@ package body referee_p is
          nextReferee := next;
 
          -- update counter and status
-         carCounter := carCounter + 1;
          Ada.Text_IO.Put_Line ("numero di macchine nel segmento " & Positive'Image(seg.id) & ": " & Natural'Image(carCounter));
+         carCounter := carCounter + 1;
          carArray(car_ID) := toSleep;
       end enterSegment;
 
