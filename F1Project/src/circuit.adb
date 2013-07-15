@@ -34,6 +34,9 @@ package body Circuit is
       end loop For_Loop;
 	--Ada.Text_IO.Put_Line ("Costruiti i tasks. ");
 
+      --let's start the race
+      firstReferee.setStart;
+
    end bootstrap;
 
    -----------------------------------------------------------------------

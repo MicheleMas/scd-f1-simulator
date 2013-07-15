@@ -55,6 +55,8 @@ package body parser is
                   -- creare un referee linkato
                   Working_Ref := new Referee(seg.id, null);
                   Working_Ref.setSegment(seg);
+                  -- we mark as started all segments except first
+                  Working_Ref.setStart;
                   Current_Ref.setNext(Working_Ref);
                   Current_Ref := Working_Ref;
                end if;

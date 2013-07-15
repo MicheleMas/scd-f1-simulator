@@ -20,15 +20,18 @@ package body referee_p is
       procedure setSegment (new_seg : in Segment_Access) is
       begin
          seg := new_seg;
-         segmentOverridden := true;
       end setSegment;
+      procedure setStart is
+      begin
+         isStarted := true;
+      end setStart;
       entry enterSegment (car_ID : in Positive;
                           car_behaviour : in Positive;
                           speed : in out Float;
                           maxSpeed : in Positive;
                           acceleration : in Positive;
                           toSleep : in out Ada.Real_Time.Time;
-                          nextReferee : out Referee_Access) when segmentOverridden is
+                          nextReferee : out Referee_Access) when isStarted is
          diff : Float := Float(seg.difficulty) / 10.0;
          penality : Float := 0.8 * diff;
          currentAcceleration : Float := Float(acceleration);
