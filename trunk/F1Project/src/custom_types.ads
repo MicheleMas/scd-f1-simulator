@@ -1,7 +1,7 @@
 package custom_types is
 
    -- constant
-   car_number : Positive := 1; -- number of car
+   car_number : Positive := 2; -- number of car
 
    -----------------------------------------------------------------------
    --------------------------- SEGMENT -----------------------------------
