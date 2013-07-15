@@ -43,7 +43,16 @@ package body referee_p is
          --Ada.Text_IO.Put_Line ("Initial acceleration = " & Positive'Image(acceleration));
 
          -- calculate time to wait
-         Ada.Text_IO.Put_Line ("molteplicita' segmento " & Positive'Image(seg.id) & ": " & Positive'Image(seg.multiplicity));
+         speed := (speed * (1.0 - penality)) / 3.6;
+            currentAcceleration := currentAcceleration * (1.0 - penality);
+            toWait := Positive((((0.0 - speed) + Float_Function.Sqrt((speed**2) +
+           (2.0 * currentAcceleration * Float(seg.length)))) /
+             currentAcceleration) * 1000.0);
+         Period := Ada.Real_Time.Milliseconds (toWait);
+         toSleep := toSleep + Period;
+         --Ada.Text_IO.Put_Line ("molteplicita' segmento " & Positive'Image(seg.id) & ": " & Positive'Image(seg.multiplicity));
+
+         -- check segment multiplicity
          if (carCounter >= seg.multiplicity)
          then
             Ada.Text_IO.Put_Line ("macchina " & Positive'Image(car_ID) & " trova occupato");
@@ -64,14 +73,6 @@ package body referee_p is
             speed := (Float(seg.length) / (Float(toWait) / 1000.0)) * 3.6;
          else
             Ada.Text_IO.Put_Line ("macchina " & Positive'Image(car_ID) & " trova libero");
-            -- no queue, increase speed and calculate time to wait
-            speed := (speed * (1.0 - penality)) / 3.6;
-            currentAcceleration := currentAcceleration * (1.0 - penality);
-            toWait := Positive((((0.0 - speed) + Float_Function.Sqrt((speed**2) +
-           (2.0 * currentAcceleration * Float(seg.length)))) /
-             currentAcceleration) * 1000.0);
-            Period := Ada.Real_Time.Milliseconds (toWait);
-            toSleep := toSleep + Period;
 
             -- update speed (with acceleration)
             speed := ((currentAcceleration * (Float(toWait)/1000.0)) + speed) * 3.6;
