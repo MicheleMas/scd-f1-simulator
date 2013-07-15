@@ -28,7 +28,7 @@ package referee_p is
       next : Referee_Access := C_next;
       segmentOverridden : Boolean := false;
       seg : Segment_Access := null;
-
+      carCounter : Natural := 0;
    end Referee;
 
 end referee_p;
