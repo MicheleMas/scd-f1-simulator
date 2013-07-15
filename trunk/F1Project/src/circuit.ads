@@ -16,6 +16,7 @@ use referee_p;
 package Circuit is
 
    event_buffer : Event_Bucket_Access := new Event_Bucket(10);
+   isRaining : Boolean := false;
 
    task bootstrap;
 
