@@ -35,45 +35,56 @@ package body referee_p is
          toWait : Positive;
          Period : Ada.Real_Time.Time_Span;
          maxWait : Ada.Real_Time.Time;
+         initialTime : Ada.Real_Time.Time := toSleep;
+         deltaTime : Ada.Real_Time.Time_Span;
+
       begin
          --Ada.Text_IO.Put_Line ("Initial speed = " & Float'Image(speed));
          --Ada.Text_IO.Put_Line ("Initial acceleration = " & Positive'Image(acceleration));
 
          -- calculate time to wait
-         speed := (speed * (1.0 - penality)) / 3.6;
-         currentAcceleration := currentAcceleration * (1.0 - penality);
-         toWait := Positive((((0.0 - speed) + Float_Function.Sqrt((speed**2) +
-           (2.0 * currentAcceleration * Float(seg.length)))) /
-             currentAcceleration) * 1000.0);
-
-         -- calculate queue with other car
          Ada.Text_IO.Put_Line ("molteplicita' segmento " & Positive'Image(seg.id) & ": " & Positive'Image(seg.multiplicity));
-         if (carCounter >= seg.multiplicity) -- TODO controllarne la correttezza
+         if (carCounter >= seg.multiplicity)
          then
+            Ada.Text_IO.Put_Line ("macchina " & Positive'Image(car_ID) & " trova occupato");
+            -- segment full, the car will exit 100ms after the last one
             maxWait := toSleep;
             for i in carArray'Range loop
                if (maxWait < carArray(i))
                then
-                  maxWait := maxWait;
+                  maxWait := carArray(i);
                end if;
             end loop;
-            toSleep := maxWait + Ada.Real_Time.Milliseconds (200);
+            toSleep := maxWait + Ada.Real_Time.Milliseconds (100); -- TODO insert a variable time based on speed
+            deltaTime := toSleep - initialTime;
+            toWait := Positive(Ada.Real_time.To_Duration(deltaTime*1000));
+
+            --update speed (without acceleration)
+            speed := (Float(seg.length) / (Float(toWait) / 1000.0)) * 3.6;
+         else
+            Ada.Text_IO.Put_Line ("macchina " & Positive'Image(car_ID) & " trova libero");
+            -- no queue, increase speed and calculate time to wait
+            speed := (speed * (1.0 - penality)) / 3.6;
+            currentAcceleration := currentAcceleration * (1.0 - penality);
+            toWait := Positive((((0.0 - speed) + Float_Function.Sqrt((speed**2) +
+           (2.0 * currentAcceleration * Float(seg.length)))) /
+             currentAcceleration) * 1000.0);
+            Period := Ada.Real_Time.Milliseconds (toWait);
+            toSleep := toSleep + Period;
+
+            -- update speed (with acceleration)
+            speed := ((currentAcceleration * (Float(toWait)/1000.0)) + speed) * 3.6;
+            if(speed > Float(maxSpeed))
+            then
+               speed := Float(maxSpeed);
+            end if;
          end if;
 
          -- Debug!
          Ada.Text_IO.Put_Line ("Time (millis) to wait for car " & Positive'Image(car_ID) & " = " & Positive'Image(toWait));
 
-         -- update speed (with cap)
-         speed := ((currentAcceleration * (Float(toWait)/1000.0)) + speed) * 3.6;
-         if(speed > Float(maxSpeed))
-         then
-            speed := Float(maxSpeed);
-         end if;
-
-         -- update referee and calculate absolute time to wait to
+         -- update referee
          nextReferee := next;
-         Period := Ada.Real_Time.Milliseconds (toWait);
-         toSleep := toSleep + Period;
 
          -- update counter and status
          carCounter := carCounter + 1;
