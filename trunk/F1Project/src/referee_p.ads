@@ -1,4 +1,5 @@
 --with Ada.Numerics.Generic_Elementary_Functions;
+with Ada.Real_Time;
 with custom_types;
 use custom_types;
 
@@ -20,7 +21,7 @@ package referee_p is
                           speed : in out Float;
                           maxSpeed : in Positive;
                           acceleration : in Positive;
-                          toWait : out Positive;
+                          toSleep : in out Ada.Real_Time.Time;
                           nextReferee : out Referee_Access);
       procedure leaveSegment (car_ID : in Positive);
       procedure setNext (nextReferee : in Referee_Access);
