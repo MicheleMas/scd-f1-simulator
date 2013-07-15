@@ -42,7 +42,7 @@ package body Circuit is
 
    task body weather_forecast is
 
-      isRaining : Boolean := false;
+      --isRaining : Boolean := false;
 
       use type Ada.Real_Time.Time_Span;
       Poll_Time :          Ada.Real_Time.Time := Ada.Real_Time.Clock; -- time to start polling
