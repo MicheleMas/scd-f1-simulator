@@ -96,7 +96,12 @@ package body car_p is
       	 nextReferee.enterSegment(id, status.get_currentBehaviour, speed, status.max_speed, status.acceleration, toWait, nextReferee);
 
       	 status.set_currentSpeed(speed); -- set new speed on status
-      	 Period := Ada.Real_Time.Milliseconds (toWait);
+         Period := Ada.Real_Time.Milliseconds (toWait);
+         --if(toSleep < toSleep)
+         --then
+         --   toSleep := toSleep + Period;
+         --end if;
+
       	 toSleep := toSleep + Period;
       	 delay until toSleep;
          event := Ada.Strings.Unbounded.To_Unbounded_String("macchina " & Positive'Image(id) & " uscita dal segmento " & Positive'Image(previousReferee.id));

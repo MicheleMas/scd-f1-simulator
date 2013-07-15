@@ -1,6 +1,7 @@
 with Ada.Strings.Unbounded;
 use Ada.Strings.Unbounded;
 with Ada.Real_Time;
+use Ada.Real_Time;
 with Ada.Text_IO;
 with custom_types;
 use custom_types;

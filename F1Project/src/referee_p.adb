@@ -4,6 +4,7 @@ with Ada.Text_IO;
 package body referee_p is
 
    package Float_Function is new Ada.Numerics.Generic_Elementary_Functions(Float);
+   carArray : array(1 .. custom_types.car_number) of Natural;
 
    -----------------------------------------------------------------------
    --------------------------- REFEREE -----------------------------------
@@ -43,9 +44,21 @@ package body referee_p is
          --calc1 := ((speed**2) + (2.0 * currentAcceleration * Float(seg.length)));
          --Ada.Text_IO.Put_Line ("Delta = " & Float'Image(Float(seg.length)));
          -- Fine DEBUG --
+
          toWait := Positive((((0.0 - speed) + Float_Function.Sqrt((speed**2) +
            (2.0 * currentAcceleration * Float(seg.length)))) /
              currentAcceleration) * 1000.0);
+
+         -- calculate queue with other car
+         if (carCounter >= seg.multiplicity)
+         then
+            for i in carArray'Range loop
+               Ada.Text_IO.Put_Line ("test"); -- TODO
+            end loop;
+         else
+            carCounter := carCounter + 1;
+         end if;
+
          Ada.Text_IO.Put_Line ("Time (millis) to wait = " & Positive'Image(toWait));
          speed := ((currentAcceleration * (Float(toWait)/1000.0)) + speed) * 3.6;
          if(speed > Float(maxSpeed))
