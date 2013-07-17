@@ -66,6 +66,7 @@ package body Circuit is
          else
             event_buffer.insert_event(Ada.Strings.Unbounded.To_Unbounded_String("Wheater: Non Piove, ma il governo e' comunque ladro"));
          end if;
+         event_buffer.set_raining(isRaining);
 
          Rand_Int.Reset(seed);
          Num := Rand_Int.Random(seed);
@@ -73,7 +74,7 @@ package body Circuit is
          numRandom := Positive(Num);
 
 
-	 Period := Ada.Real_Time.Milliseconds (1000 * numRandom);
+	 Period := Ada.Real_Time.Milliseconds (100 * numRandom);
          Sveglia := Sveglia + Period;
          delay until Sveglia;
          isRaining := not isRaining;

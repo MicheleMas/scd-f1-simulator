@@ -28,10 +28,10 @@ package body car_p is
       begin
          rain_tires := newTires;
       end set_rain_tires;
-      procedure set_currentSegment (currentSeg : in Segment_Access) is
-      begin
-         currentSegment := currentSeg;
-      end set_currentSegment;
+      --procedure set_currentSegment (currentSeg : in Segment_Access) is
+      --begin
+      --   currentSegment := currentSeg;
+      --end set_currentSegment;
       procedure set_currentSpeed (newSpeed : in Float) is
       begin
          currentSpeed := newSpeed;
@@ -44,6 +44,14 @@ package body car_p is
       begin
          damaged := status;
       end set_damage;
+      procedure set_tires_change is
+      begin
+         change_tires_required := true;
+      end set_tires_change;
+      procedure set_refuel is
+      begin
+         refuel_required := true;
+      end set_refuel;
 
       -- getter function
       function get_name return Positive is
@@ -58,10 +66,10 @@ package body car_p is
       begin
          return rain_tires;
       end get_rain_tires;
-      function get_currentSegment return Segment_Access is
-      begin
-         return currentSegment;
-      end get_currentSegment;
+      --function get_currentSegment return Segment_Access is
+      --begin
+      --   return currentSegment;
+      --end get_currentSegment;
       function get_currentSpeed return Float is
       begin
          return currentSpeed;
@@ -78,6 +86,10 @@ package body car_p is
       begin
          return damaged;
       end is_damaged;
+      function pitStopRequired return Boolean is
+      begin
+           return refuel_required or change_tires_required;
+      end pitStopRequired;
    end Car_Status;
 
    -----------------------------------------------------------------------
@@ -91,6 +103,7 @@ package body car_p is
       previousReferee : Referee_Access;
       event : Unbounded_String;
 
+
       use type Ada.Real_Time.Time_Span;
       Poll_Time :          Ada.Real_Time.Time := Ada.Real_Time.Clock; -- time to start polling
       --Period    :          Ada.Real_Time.Time_Span;
@@ -100,8 +113,18 @@ package body car_p is
       loop
          --Ada.Text_IO.Put_Line ("sono la macchina " & Positive'Image(status.get_name) & " ed entro nel segmento " & Positive'Image(nextReferee.id));
          previousReferee := nextReferee;
+
+	 --here, we have inadeguated tires for rain status
+         if event_buffer.isRaining xor status.get_rain_tires then
+            status.set_tires_change;
+         end if;
+
+         if nextReferee.getSegment.isBoxEntrance and status.pitStopRequired then
+		Ada.Text_IO.Put_Line ("--> Dovrei entrare in un box");
+         end if;
+
          -- enterSegment need to be done as first thing, in order to compensate lag
-      	 nextReferee.enterSegment(id, status.get_currentBehaviour, speed, status.max_speed, status.acceleration, status.get_rain_tires, toSleep, nextReferee);
+         nextReferee.enterSegment(id, status.get_currentBehaviour, speed, status.max_speed, status.acceleration, status.get_rain_tires, toSleep, nextReferee);
 
       	 status.set_currentSpeed(speed); -- set new speed on status
          --Period := Ada.Real_Time.Milliseconds (toWait);

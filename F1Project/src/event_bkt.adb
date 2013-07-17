@@ -27,6 +27,16 @@ package body event_bkt is
          bucket.Append(event);
          -- Ada.Text_IO.Put_Line ("size " & Positive'image(bucket_size));
       end insert_event;
+      --we save here the rain status
+      procedure set_raining (rain : in Boolean) is
+      begin
+         raining := rain;
+      end set_raining;
+      function isRaining return Boolean is
+      begin
+         return raining;
+      end isRaining;
+
    end event_bucket;
 
 end event_bkt;
