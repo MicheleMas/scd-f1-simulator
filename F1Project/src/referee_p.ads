@@ -22,6 +22,7 @@ package referee_p is
                           speed : in out Float;
                           maxSpeed : in Positive;
                           acceleration : in Positive;
+			  rain_tires : in Boolean;
                           toSleep : in out Ada.Real_Time.Time;
                           nextReferee : out Referee_Access);
       procedure leaveSegment (car_ID : in Positive);

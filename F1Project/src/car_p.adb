@@ -24,6 +24,10 @@ package body car_p is
       begin
          tires_status := newState;
       end set_tires_status;
+      procedure set_rain_tires (newTires : in Boolean) is
+      begin
+         rain_tires := newTires;
+      end set_rain_tires;
       procedure set_currentSegment (currentSeg : in Segment_Access) is
       begin
          currentSegment := currentSeg;
@@ -50,6 +54,10 @@ package body car_p is
       begin
          return tires_status;
       end get_tires_state;
+      function get_rain_tires return Boolean is
+      begin
+         return rain_tires;
+      end get_rain_tires;
       function get_currentSegment return Segment_Access is
       begin
          return currentSegment;
@@ -93,7 +101,7 @@ package body car_p is
          --Ada.Text_IO.Put_Line ("sono la macchina " & Positive'Image(status.get_name) & " ed entro nel segmento " & Positive'Image(nextReferee.id));
          previousReferee := nextReferee;
          -- enterSegment need to be done as first thing, in order to compensate lag
-      	 nextReferee.enterSegment(id, status.get_currentBehaviour, speed, status.max_speed, status.acceleration, toSleep, nextReferee);
+      	 nextReferee.enterSegment(id, status.get_currentBehaviour, speed, status.max_speed, status.acceleration, status.get_rain_tires, toSleep, nextReferee);
 
       	 status.set_currentSpeed(speed); -- set new speed on status
          --Period := Ada.Real_Time.Milliseconds (toWait);

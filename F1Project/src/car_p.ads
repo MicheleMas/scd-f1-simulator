@@ -28,6 +28,7 @@ package car_p is
 
       -- setter procedure
       procedure set_tires_status (newState : in Positive);
+      procedure set_rain_tires (newTires : in Boolean );
       procedure set_currentSegment (currentSeg : in Segment_Access);
       procedure set_currentSpeed (newSpeed : in Float);
       procedure set_currentFuelLevel (newLevel : in Positive);
@@ -36,6 +37,7 @@ package car_p is
       -- getter function
       function get_name return Positive;
       function get_tires_state return Positive;
+      function get_rain_tires return Boolean;
       function get_currentSegment return Segment_Access;
       function get_currentSpeed return Float;
       function get_currentBehaviour return Positive;
@@ -45,6 +47,7 @@ package car_p is
       change_tires_required : Boolean := false;
       refuel_required : Boolean := false;
       tires_status : Positive := 100;
+      rain_tires : Boolean := false;
       fuel_level : Positive := 100;
       behaviour : Positive := C_behaviour;
       currentSegment : Segment_Access;

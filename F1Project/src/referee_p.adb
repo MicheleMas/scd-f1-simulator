@@ -30,6 +30,7 @@ package body referee_p is
                           speed : in out Float;
                           maxSpeed : in Positive;
                           acceleration : in Positive;
+			  rain_tires : in Boolean;
                           toSleep : in out Ada.Real_Time.Time;
                           nextReferee : out Referee_Access) when isStarted is
          diff : Float := Float(seg.difficulty) / 10.0;
