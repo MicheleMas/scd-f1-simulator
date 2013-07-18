@@ -59,7 +59,6 @@ package body Circuit is
       numRandom : Positive := 1;
 
    begin
-      -- TODO add random
       loop
          if isRaining then
             event_buffer.insert_event(Ada.Strings.Unbounded.To_Unbounded_String("Wheater: Piove, governo ladro"));

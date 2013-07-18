@@ -50,7 +50,7 @@ package car_p is
       tires_status : Positive := 100;
       rain_tires : Boolean := false;
       fuel_level : Positive := 100;
-      behaviour : Positive := C_behaviour;
+      behaviour : Positive := C_behaviour; -- 1 to 10
       currentSpeed : Float := 1.0; -- to change
       toWait : Positive;
       damaged : Boolean := false;
