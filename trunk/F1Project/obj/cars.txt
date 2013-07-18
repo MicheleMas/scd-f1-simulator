@@ -1,6 +1,6 @@
 #name	C_behaviour	max_speed	acceleration
 91 10 200 12
-92 10 250 12
+92 10 200 12
 #93 10 200 5
 #94 10 200 5
 #95 10 200 5
