@@ -1,98 +1,6 @@
 package body car_p is
 
    -----------------------------------------------------------------------
-   --------------------------- CAR STATUS --------------------------------
-   -----------------------------------------------------------------------
-
-   protected body Car_Status is
-      -- override procedure
-      procedure Take_Fuel (order : in Boolean) is
-      begin
-         refuel_required := order;
-      end Take_Fuel;
-      procedure Change_Tires (order : in Boolean) is
-      begin
-         change_tires_required := order;
-      end Change_Tires;
-      procedure Change_Behaviour (bv : in Positive) is
-      begin
-         behaviour := bv;
-      end Change_Behaviour;
-
-      -- setter procedure
-      procedure set_tires_status (newState : in Positive) is
-      begin
-         tires_status := newState;
-      end set_tires_status;
-      procedure set_rain_tires (newTires : in Boolean) is
-      begin
-         rain_tires := newTires;
-      end set_rain_tires;
-      --procedure set_currentSegment (currentSeg : in Segment_Access) is
-      --begin
-      --   currentSegment := currentSeg;
-      --end set_currentSegment;
-      procedure set_currentSpeed (newSpeed : in Float) is
-      begin
-         currentSpeed := newSpeed;
-      end set_currentSpeed;
-      procedure set_currentFuelLevel (newLevel : in Positive) is
-      begin
-         fuel_level := newLevel;
-      end set_currentFuelLevel;
-      procedure set_damage (status : in Boolean) is
-      begin
-         damaged := status;
-      end set_damage;
-      procedure set_tires_change is
-      begin
-         change_tires_required := true;
-      end set_tires_change;
-      procedure set_refuel is
-      begin
-         refuel_required := true;
-      end set_refuel;
-
-      -- getter function
-      function get_name return Positive is
-      begin
-         return name;
-      end get_name;
-      function get_tires_state return Positive is
-      begin
-         return tires_status;
-      end get_tires_state;
-      function get_rain_tires return Boolean is
-      begin
-         return rain_tires;
-      end get_rain_tires;
-      --function get_currentSegment return Segment_Access is
-      --begin
-      --   return currentSegment;
-      --end get_currentSegment;
-      function get_currentSpeed return Float is
-      begin
-         return currentSpeed;
-      end get_currentSpeed;
-      function get_currentBehaviour return Positive is
-      begin
-         return behaviour;
-      end get_currentBehaviour;
-      function get_currentFuelLevel return Positive is
-      begin
-         return fuel_level;
-      end get_currentFuelLevel;
-      function is_damaged return Boolean is
-      begin
-         return damaged;
-      end is_damaged;
-      function pitStopRequired return Boolean is
-      begin
-           return refuel_required or change_tires_required;
-      end pitStopRequired;
-   end Car_Status;
-
-   -----------------------------------------------------------------------
    --------------------------- TASK CAR ----------------------------------
    -----------------------------------------------------------------------
 
@@ -102,7 +10,7 @@ package body car_p is
       speed : Float;
       previousReferee : Referee_Access;
       event : Unbounded_String;
-
+      box_stop : Boolean;
 
       use type Ada.Real_Time.Time_Span;
       Poll_Time :          Ada.Real_Time.Time := Ada.Real_Time.Clock; -- time to start polling
@@ -110,6 +18,8 @@ package body car_p is
       toSleep   :          Ada.Real_Time.Time := Poll_Time;
    begin
       speed := status.get_currentSpeed; -- the initial speed should be zero?
+      --- DEBUG, togliere!
+      --- status.Take_Fuel(true);
       loop
          --Ada.Text_IO.Put_Line ("sono la macchina " & Positive'Image(status.get_name) & " ed entro nel segmento " & Positive'Image(nextReferee.id));
          previousReferee := nextReferee;
@@ -119,12 +29,13 @@ package body car_p is
             status.set_tires_change;
          end if;
 
-         if nextReferee.getSegment.isBoxEntrance and status.pitStopRequired then
+         if nextReferee.getSegment.isBoxEntrance and (status.pitStop4fuel or status.pitStop4tires) then
 		Ada.Text_IO.Put_Line ("--> Dovrei entrare in un box");
          end if;
 
          -- enterSegment need to be done as first thing, in order to compensate lag
-         nextReferee.enterSegment(id, status.get_currentBehaviour, speed, status.max_speed, status.acceleration, status.get_rain_tires, toSleep, nextReferee);
+         -- nextReferee.enterSegment(id, status.get_currentBehaviour, speed, status.max_speed, status.acceleration, status.get_rain_tires, toSleep, nextReferee);
+         nextReferee.enterSegment(id, status, speed, toSleep, nextReferee, box_stop);
 
       	 status.set_currentSpeed(speed); -- set new speed on status
          --Period := Ada.Real_Time.Milliseconds (toWait);
@@ -136,7 +47,7 @@ package body car_p is
       	 --toSleep := toSleep + Period;
       	 delay until toSleep;
          event := Ada.Strings.Unbounded.To_Unbounded_String("macchina " & Positive'Image(id) & " uscita dal segmento " & Positive'Image(previousReferee.id));
-         previousReferee.leaveSegment(id);
+         previousReferee.leaveSegment(id, box_stop);
          event_buffer.insert_event(event);
          --Ada.Text_IO.Put_Line ("--> ToWait " & Positive'Image(toWait));
       end loop;
