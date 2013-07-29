@@ -2,6 +2,8 @@ with Ada.Text_IO;
 with custom_types;
 use custom_types;
 with GNAT.String_Split;
+with car_status;
+use car_status;
 
 package body parser is
 
@@ -47,13 +49,13 @@ package body parser is
                if (firstSegment)
                then
                   -- creare il primo referee
-                  First_Ref := new Referee(seg.id, null);
+                  First_Ref := new Referee(seg.id, null, null);
                   First_Ref.setSegment(seg);
                   Current_Ref := First_Ref;
                   firstSegment := false;
                else
                   -- creare un referee linkato
-                  Working_Ref := new Referee(seg.id, null);
+                  Working_Ref := new Referee(seg.id, null, First_Ref);
                   Working_Ref.setSegment(seg);
                   -- we mark as started all segments except first
                   Working_Ref.setStart;
@@ -98,10 +100,10 @@ package body parser is
             then
                GNAT.String_Split.Create (Subs, Line, Seps, Mode => GNAT.String_Split.Multiple);
                -- la riga successiva riempie i campi del Car_Status dichiarato di car_p.ads
-               car := new Car_Status(Positive'Value(GNAT.String_Split.Slice (Subs, 1)),
-                                     Positive'Value(GNAT.String_Split.Slice (Subs, 2)),
-                                     Positive'Value(GNAT.String_Split.Slice (Subs, 3)),
-                                     Positive'Value(GNAT.String_Split.Slice (Subs, 4)));
+               car := new car_status.Car_Status(Positive'Value(GNAT.String_Split.Slice (Subs, 1)),
+                                                Positive'Value(GNAT.String_Split.Slice (Subs, 2)),
+                                                Positive'Value(GNAT.String_Split.Slice (Subs, 3)),
+                                                Positive'Value(GNAT.String_Split.Slice (Subs, 4)));
                carNumber := carNumber + 1;
                Cars_Array(carNumber):= car;
 	    end if;
