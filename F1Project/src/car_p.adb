@@ -26,7 +26,7 @@ package body car_p is
 
 	 --here, we have inadeguated tires for rain status
          if event_buffer.isRaining xor status.get_rain_tires then
-            status.set_tires_change;
+            status.Change_Tires(true);
          end if;
 
          if nextReferee.getSegment.isBoxEntrance and (status.pitStop4fuel or status.pitStop4tires) then
@@ -35,7 +35,7 @@ package body car_p is
 
          -- enterSegment need to be done as first thing, in order to compensate lag
          -- nextReferee.enterSegment(id, status.get_currentBehaviour, speed, status.max_speed, status.acceleration, status.get_rain_tires, toSleep, nextReferee);
-         nextReferee.enterSegment(id, status, speed, toSleep, nextReferee, box_stop);
+         nextReferee.enterSegment(id, status, speed, toSleep, nextReferee, box_stop, event_buffer.isRaining);
 
       	 status.set_currentSpeed(speed); -- set new speed on status
          --Period := Ada.Real_Time.Milliseconds (toWait);

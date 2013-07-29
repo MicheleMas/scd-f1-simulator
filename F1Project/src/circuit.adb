@@ -45,14 +45,14 @@ package body Circuit is
 
    task body weather_forecast is
 
-      --isRaining : Boolean := false;
+      isRaining : Boolean := true;
 
       use type Ada.Real_Time.Time_Span;
       Poll_Time :          Ada.Real_Time.Time := Ada.Real_Time.Clock; -- time to start polling
       Period    : 	   Ada.Real_Time.Time_Span := Ada.Real_Time.Milliseconds (15000);
       Sveglia   :          Ada.Real_Time.Time := Poll_Time;
 
-      type Rand_Range is range 15..150;
+      type Rand_Range is range 150..1500;
       package Rand_Int is new Ada.Numerics.Discrete_Random(Rand_Range);
       seed 	: Rand_Int.Generator;
       Num 	: Rand_Range;
