@@ -44,10 +44,6 @@ package body car_status is
       begin
          damaged := status;
       end set_damage;
-      procedure set_tires_change is
-      begin
-         change_tires_required := true;
-      end set_tires_change;
       procedure set_refuel is
       begin
          refuel_required := true;

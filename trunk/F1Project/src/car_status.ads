@@ -19,7 +19,6 @@ package car_status is
       procedure set_currentSpeed (newSpeed : in Float);
       procedure set_currentFuelLevel (newLevel : in Positive);
       procedure set_damage (status : in Boolean);
-      procedure set_tires_change;
       procedure set_refuel;
 
       -- getter function

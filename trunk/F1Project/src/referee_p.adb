@@ -32,7 +32,8 @@ package body referee_p is
                           speed : in out Float;
                           toSleep : in out Ada.Real_Time.Time;
                           nextReferee : out Referee_Access;
-                          box_stop : out Boolean) when isStarted is
+                          box_stop : out Boolean;
+                          isRaining : in Boolean) when isStarted is
          car_behaviour : Positive := c_status.get_currentBehaviour;
          maxSpeed : Positive := c_status.max_speed;
          acceleration : Positive := c_status.acceleration;
@@ -127,17 +128,28 @@ package body referee_p is
             carCounter := carCounter + 1;
             carArray(car_ID) := toSleep;
          else
+            -- box
             Ada.Text_IO.Put_Line ("macchina " & Positive'Image(car_ID) & " entra ai box");
             toSleep := initialTime + Ada.Real_Time.Milliseconds (2000);
-            if (c_status.pitStop4fuel)
+            if (c_status.pitStop4fuel) -- rifornimento
             then
-               toSleep := toSleep + Ada.Real_Time.Milliseconds (1500);
+               toSleep := toSleep + Ada.Real_Time.Milliseconds (4500);
+               c_status.set_currentFuelLevel(100);
                Ada.Text_IO.Put_Line ("macchina " & Positive'Image(car_ID) & " deve fare rifornimento");
             end if;
-            if (c_status.pitStop4tires)
+            if (c_status.pitStop4tires) -- cambio gomme
             then
-               toSleep := toSleep + Ada.Real_Time.Milliseconds (3000);
-               Ada.Text_IO.Put_Line ("macchina " & Positive'Image(car_ID) & " deve cambiare le gomme");
+               c_status.Change_Tires(false);
+               toSleep := toSleep + Ada.Real_Time.Milliseconds (3500);
+               c_status.set_tires_status(100);
+               if(isRaining)
+               then
+                  c_status.set_rain_tires(true);
+                  Ada.Text_IO.Put_Line ("macchina " & Positive'Image(car_ID) & " monta gomme da pioggia");
+               else
+                  c_status.set_rain_tires(false);
+                  Ada.Text_IO.Put_Line ("macchina " & Positive'Image(car_ID) & " monta gomme da asciutto");
+               end if;
             end if;
             box_stop := true;
             nextReferee := First_Referee.getNext;
