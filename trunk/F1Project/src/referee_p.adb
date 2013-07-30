@@ -52,7 +52,7 @@ package body referee_p is
          --Ada.Text_IO.Put_Line ("Initial speed = " & Float'Image(speed));
          --Ada.Text_IO.Put_Line ("Initial acceleration = " & Positive'Image(acceleration));
 
-         if (not ((c_status.pitStop4tires or c_status.pitStop4fuel) and seg.isBoxEntrance))
+         if (not (c_status.pitStop4tires and seg.isBoxEntrance))
          then
             -- calculate time to wait
             speed := (speed * (1.0 - penality)) / 3.6;
@@ -120,6 +120,10 @@ package body referee_p is
             Ada.Text_IO.Put_Line ("Time (millis) to wait for car " & Positive'Image(car_ID) & " = " & Positive'Image(toWait));
             Ada.Text_IO.Put_Line ("New speed for car " & Positive'Image(car_ID) & " = " & Float'Image(speed));
 
+            -- update tires consumption (related to the behaviour)
+            c_status.set_tires_status(c_status.get_tires_state - Positive(car_behaviour/2)); -- TODO
+            ----- aggiungere anche difficulty dopo aver modificato tires_status da positive ad integer.
+
             -- update referee
             nextReferee := next;
 
@@ -131,12 +135,6 @@ package body referee_p is
             -- box
             Ada.Text_IO.Put_Line ("macchina " & Positive'Image(car_ID) & " entra ai box");
             toSleep := initialTime + Ada.Real_Time.Milliseconds (2000);
-            if (c_status.pitStop4fuel) -- rifornimento
-            then
-               toSleep := toSleep + Ada.Real_Time.Milliseconds (4500);
-               c_status.set_currentFuelLevel(100);
-               Ada.Text_IO.Put_Line ("macchina " & Positive'Image(car_ID) & " deve fare rifornimento");
-            end if;
             if (c_status.pitStop4tires) -- cambio gomme
             then
                c_status.Change_Tires(false);
@@ -151,6 +149,7 @@ package body referee_p is
                   Ada.Text_IO.Put_Line ("macchina " & Positive'Image(car_ID) & " monta gomme da asciutto");
                end if;
             end if;
+            -- if(c_status.pitStop4damage)
             box_stop := true;
             nextReferee := First_Referee.getNext;
          end if;
