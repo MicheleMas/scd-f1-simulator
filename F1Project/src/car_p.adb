@@ -29,7 +29,7 @@ package body car_p is
             status.Change_Tires(true);
          end if;
 
-         if nextReferee.getSegment.isBoxEntrance and (status.pitStop4fuel or status.pitStop4tires) then
+         if nextReferee.getSegment.isBoxEntrance and status.pitStop4tires then
 		Ada.Text_IO.Put_Line ("--> Dovrei entrare in un box");
          end if;
 

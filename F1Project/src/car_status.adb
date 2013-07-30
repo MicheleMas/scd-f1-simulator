@@ -6,10 +6,6 @@ package body car_status is
 
    protected body Car_Status is
       -- override procedure
-      procedure Take_Fuel (order : in Boolean) is
-      begin
-         refuel_required := order;
-      end Take_Fuel;
       procedure Change_Tires (order : in Boolean) is
       begin
          change_tires_required := order;
@@ -36,18 +32,10 @@ package body car_status is
       begin
          currentSpeed := newSpeed;
       end set_currentSpeed;
-      procedure set_currentFuelLevel (newLevel : in Positive) is
-      begin
-         fuel_level := newLevel;
-      end set_currentFuelLevel;
       procedure set_damage (status : in Boolean) is
       begin
          damaged := status;
       end set_damage;
-      procedure set_refuel is
-      begin
-         refuel_required := true;
-      end set_refuel;
 
       -- getter function
       function get_name return Positive is
@@ -74,18 +62,10 @@ package body car_status is
       begin
          return behaviour;
       end get_currentBehaviour;
-      function get_currentFuelLevel return Positive is
-      begin
-         return fuel_level;
-      end get_currentFuelLevel;
       function is_damaged return Boolean is
       begin
          return damaged;
       end is_damaged;
-      function pitStop4fuel return Boolean is
-      begin
-           return refuel_required;
-      end pitStop4fuel;
       function pitStop4tires return Boolean is
       begin
            return change_tires_required;
