@@ -12,6 +12,7 @@ package body car_p is
       event : Unbounded_String;
       box_stop : Boolean;
       incident : Boolean;
+      toRepair : Boolean := false;
 
       use type Ada.Real_Time.Time_Span;
       Poll_Time :          Ada.Real_Time.Time := Ada.Real_Time.Clock; -- time to start polling
@@ -28,9 +29,9 @@ package body car_p is
             status.Change_Tires(true);
          end if;
 
-         if nextReferee.getSegment.isBoxEntrance and status.pitStop4tires then
-		Ada.Text_IO.Put_Line ("--> Dovrei entrare in un box");
-         end if;
+         --if nextReferee.getSegment.isBoxEntrance and status.pitStop4tires then
+	 --	Ada.Text_IO.Put_Line ("--> Dovrei entrare in un box");
+         --end if;
 
          -- enterSegment need to be done as first thing, in order to compensate lag
          -- nextReferee.enterSegment(id, status.get_currentBehaviour, speed, status.max_speed, status.acceleration, status.get_rain_tires, toSleep, nextReferee);
@@ -38,10 +39,29 @@ package body car_p is
 
       	 status.set_currentSpeed(speed); -- set new speed on status
 
-         -- TODO generare l'evento per uscite di pista e danneggiamenti
+         if (incident)
+         then
+            event := Ada.Strings.Unbounded.To_Unbounded_String("macchina " & Positive'Image(id) & " uscita di pista");
+            event_buffer.insert_event(event);
+            if (status.is_damaged and (not toRepair))
+            then
+               toRepair := true;
+               event := Ada.Strings.Unbounded.To_Unbounded_String("macchina " & Positive'Image(id) & " ha riportato danni");
+               event_buffer.insert_event(event);
+            end if;
+         end if;
+         if (box_stop)
+         then
+            toRepair := false;
+            event := Ada.Strings.Unbounded.To_Unbounded_String("macchina " & Positive'Image(id) & " entra ai box");
+            event_buffer.insert_event(event);
+            delay until toSleep;
+            event := Ada.Strings.Unbounded.To_Unbounded_String("macchina " & Positive'Image(id) & " esce dai box");
+         else
+      	    delay until toSleep;
+            event := Ada.Strings.Unbounded.To_Unbounded_String("macchina " & Positive'Image(id) & " uscita dal segmento " & Positive'Image(previousReferee.id));
+         end if;
 
-      	 delay until toSleep;
-         event := Ada.Strings.Unbounded.To_Unbounded_String("macchina " & Positive'Image(id) & " uscita dal segmento " & Positive'Image(previousReferee.id));
          previousReferee.leaveSegment(id, box_stop);
          event_buffer.insert_event(event);
          --Ada.Text_IO.Put_Line ("--> ToWait " & Positive'Image(toWait));
