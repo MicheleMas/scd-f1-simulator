@@ -11,6 +11,7 @@ package body car_p is
       previousReferee : Referee_Access;
       event : Unbounded_String;
       box_stop : Boolean;
+      incident : Boolean;
 
       use type Ada.Real_Time.Time_Span;
       Poll_Time :          Ada.Real_Time.Time := Ada.Real_Time.Clock; -- time to start polling
@@ -35,7 +36,7 @@ package body car_p is
 
          -- enterSegment need to be done as first thing, in order to compensate lag
          -- nextReferee.enterSegment(id, status.get_currentBehaviour, speed, status.max_speed, status.acceleration, status.get_rain_tires, toSleep, nextReferee);
-         nextReferee.enterSegment(id, status, speed, toSleep, nextReferee, box_stop, event_buffer.isRaining);
+         nextReferee.enterSegment(id, status, speed, toSleep, nextReferee, box_stop, event_buffer.isRaining, incident);
 
       	 status.set_currentSpeed(speed); -- set new speed on status
          --Period := Ada.Real_Time.Milliseconds (toWait);

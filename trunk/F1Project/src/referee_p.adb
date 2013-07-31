@@ -4,6 +4,8 @@ with Ada.Real_Time;
 use Ada.Real_Time;
 with event_bkt;
 use event_bkt;
+with Ada.Numerics;
+with Ada.Numerics.Discrete_Random;
 
 package body referee_p is
 
@@ -33,7 +35,8 @@ package body referee_p is
                           toSleep : in out Ada.Real_Time.Time;
                           nextReferee : out Referee_Access;
                           box_stop : out Boolean;
-                          isRaining : in Boolean) when isStarted is
+                          isRaining : in Boolean;
+                          incident : out Boolean) when isStarted is
          car_behaviour : Positive := c_status.get_currentBehaviour;
          maxSpeed : Positive := c_status.max_speed;
          acceleration : Positive := c_status.acceleration;
@@ -48,12 +51,21 @@ package body referee_p is
          deltaTime : Ada.Real_Time.Time_Span;
          blockingCar : Positive := car_ID;
          initialSpeed : Float;
+         Incident_Chance : Positive := 1;
+         numRandom : Positive := 1;
       begin
+         incident := false;
          --Ada.Text_IO.Put_Line ("Initial speed = " & Float'Image(speed));
          --Ada.Text_IO.Put_Line ("Initial acceleration = " & Positive'Image(acceleration));
 
-         if (not (c_status.pitStop4tires and seg.isBoxEntrance))
+         if (not ((c_status.pitStop4tires or c_status.is_damaged) and seg.isBoxEntrance))
          then
+            -- check if the car is broken
+            if(c_status.is_damaged)
+            then
+               maxSpeed := 100; -- the car run slowly to the box
+            end if;
+
             -- calculate time to wait
             speed := (speed * (1.0 - penality)) / 3.6;
             initialSpeed := speed;
@@ -113,16 +125,53 @@ package body referee_p is
 
             box_stop := false;
 
-            -- calculate if incident occur
-            -- on difficulty, rain, tires_status, rain_tires, car_behaviour
-
             -- Debug!
             Ada.Text_IO.Put_Line ("Time (millis) to wait for car " & Positive'Image(car_ID) & " = " & Positive'Image(toWait));
             Ada.Text_IO.Put_Line ("New speed for car " & Positive'Image(car_ID) & " = " & Float'Image(speed));
 
-            -- update tires consumption (related to the behaviour)
-            c_status.set_tires_status(c_status.get_tires_state - Positive(car_behaviour/2)); -- TODO
-            ----- aggiungere anche difficulty dopo aver modificato tires_status da positive ad integer.
+            -- update tires consumption (related to the behaviour, segment difficulty, and random)
+            declare
+               type Rand_Tire_Cons is range 1..3;
+               package Rand_Tire is new Ada.Numerics.Discrete_Random(Rand_Tire_Cons);
+               seed 	: Rand_Tire.Generator;
+               Num 	: Rand_Tire_Cons;
+            begin
+
+               Rand_Tire.Reset(seed);
+               Num := Rand_Tire.Random(seed);
+               numRandom := Positive(Num);
+               c_status.set_tires_status(c_status.get_tires_state - (car_behaviour/2) - (seg.difficulty/2) - numRandom);
+               Ada.Text_IO.Put_Line ("New tires status for car " & Positive'Image(car_ID) & " = " & Integer'Image(c_status.get_tires_state));
+            end;
+
+            -- calculate if incident occur
+            -- on difficulty, rain, tires_status, rain_tires, car_behaviour
+            declare
+               type Rand_Incident_Limit is range 1..1000;
+               package Rand_Incident is new Ada.Numerics.Discrete_Random(Rand_Incident_Limit);
+               seed  : Rand_Incident.Generator;
+               Num   : Rand_Incident_Limit;
+            begin
+               Rand_Incident.Reset(seed);
+               Num := Rand_Incident.Random(seed);
+               numRandom := Positive(Num);
+               Incident_Chance := Incident_Chance + (car_behaviour * 2) + (seg.difficulty * 2);
+               if (isRaining)
+               then
+                  Incident_Chance := Incident_Chance + 30;
+                  if (not c_status.get_rain_tires)
+                  then
+                     Incident_Chance := Incident_Chance + 30;
+                  end if;
+               end if;
+               if (Incident_Chance > numRandom)
+               then
+                  -- incident occurs
+                  Ada.Text_IO.Put_Line ("######## car " & Positive'Image(car_ID) & " incident!!!!! ");
+                  incident := true;
+                  -- TODO aggiungere la chance di danneggiamento (c_status.setDamage)
+               end if;
+            end;
 
             -- update referee
             nextReferee := next;
@@ -139,7 +188,7 @@ package body referee_p is
             then
                c_status.Change_Tires(false);
                toSleep := toSleep + Ada.Real_Time.Milliseconds (3500);
-               c_status.set_tires_status(100);
+               c_status.set_tires_status(10000);
                if(isRaining)
                then
                   c_status.set_rain_tires(true);
@@ -149,7 +198,11 @@ package body referee_p is
                   Ada.Text_IO.Put_Line ("macchina " & Positive'Image(car_ID) & " monta gomme da asciutto");
                end if;
             end if;
-            -- if(c_status.pitStop4damage)
+            if(c_status.is_damaged) -- riparazione
+            then
+               c_status.set_damage(false);
+               toSleep := toSleep + Ada.Real_Time.Milliseconds (5000);
+            end if;
             box_stop := true;
             nextReferee := First_Referee.getNext;
          end if;

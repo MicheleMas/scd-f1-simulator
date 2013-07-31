@@ -26,7 +26,8 @@ package referee_p is
                           toSleep : in out Ada.Real_Time.Time;
                           nextReferee : out Referee_Access;
                           box_stop : out Boolean;
-                          isRaining : in Boolean);
+                          isRaining : in Boolean;
+                          incident : out Boolean);
       procedure leaveSegment (car_ID : in Positive;
                               box_stop : in Boolean);
       procedure setNext (nextReferee : in Referee_Access);
