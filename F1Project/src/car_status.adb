@@ -16,7 +16,7 @@ package body car_status is
       end Change_Behaviour;
 
       -- setter procedure
-      procedure set_tires_status (newState : in Positive) is
+      procedure set_tires_status (newState : in Integer) is
       begin
          tires_status := newState;
       end set_tires_status;
@@ -42,7 +42,7 @@ package body car_status is
       begin
          return name;
       end get_name;
-      function get_tires_state return Positive is
+      function get_tires_state return Integer is
       begin
          return tires_status;
       end get_tires_state;
