@@ -19,8 +19,6 @@ package body car_p is
       toSleep   :          Ada.Real_Time.Time := Poll_Time;
    begin
       speed := status.get_currentSpeed; -- the initial speed should be zero?
-      --- DEBUG, togliere!
-      --- status.Take_Fuel(true);
       loop
          --Ada.Text_IO.Put_Line ("sono la macchina " & Positive'Image(status.get_name) & " ed entro nel segmento " & Positive'Image(nextReferee.id));
          previousReferee := nextReferee;
@@ -39,13 +37,9 @@ package body car_p is
          nextReferee.enterSegment(id, status, speed, toSleep, nextReferee, box_stop, event_buffer.isRaining, incident);
 
       	 status.set_currentSpeed(speed); -- set new speed on status
-         --Period := Ada.Real_Time.Milliseconds (toWait);
-         --if(toSleep < toSleep)
-         --then
-         --   toSleep := toSleep + Period;
-         --end if;
 
-      	 --toSleep := toSleep + Period;
+         -- TODO generare l'evento per uscite di pista e danneggiamenti
+
       	 delay until toSleep;
          event := Ada.Strings.Unbounded.To_Unbounded_String("macchina " & Positive'Image(id) & " uscita dal segmento " & Positive'Image(previousReferee.id));
          previousReferee.leaveSegment(id, box_stop);

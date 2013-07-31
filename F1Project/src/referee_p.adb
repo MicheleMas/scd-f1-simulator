@@ -167,9 +167,13 @@ package body referee_p is
                if (Incident_Chance > numRandom)
                then
                   -- incident occurs
-                  Ada.Text_IO.Put_Line ("######## car " & Positive'Image(car_ID) & " incident!!!!! ");
+                  Ada.Text_IO.Put_Line ("######## car " & Positive'Image(car_ID) & " - incident ###### ");
                   incident := true;
-                  -- TODO aggiungere la chance di danneggiamento (c_status.setDamage)
+                  toSleep := toSleep + Ada.Real_Time.Milliseconds ((numRandom)/10);
+                  if(numRandom < 5) -- 5% di prob. di danneggiare il veicolo nell'uscita
+                  then
+                     c_status.set_damage(true);
+                  end if;
                end if;
             end;
 
