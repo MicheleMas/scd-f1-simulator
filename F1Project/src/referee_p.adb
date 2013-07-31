@@ -80,13 +80,13 @@ package body referee_p is
             -- check segment multiplicity
             if (carCounter >= seg.multiplicity)
             then
-               Ada.Text_IO.Put_Line ("macchina " & Positive'Image(car_ID) & " trova occupato");
+               --Ada.Text_IO.Put_Line ("macchina " & Positive'Image(car_ID) & " trova occupato");
                -- segment full, the car will exit 100ms after the last one
                maxWait := toSleep;
                for i in carArray'Range loop
                   if (maxWait < (carArray(i) + Ada.Real_Time.Milliseconds (100)))
                   then
-                     Ada.Text_IO.Put_Line ("sono " & Positive'Image(car_ID) & " e " & Positive'Image(i) & " mi intralcia");
+                     --Ada.Text_IO.Put_Line ("sono " & Positive'Image(car_ID) & " e " & Positive'Image(i) & " mi intralcia");
                      maxWait := carArray(i);
                      blockingCar := i;
                   end if;
@@ -96,7 +96,7 @@ package body referee_p is
 
                if(blockingCar = car_ID)
                then
-                  Ada.Text_IO.Put_Line ("macchina " & Positive'Image(car_ID) & " ha una accelerazione di " & Float'Image(currentAcceleration));
+                  --Ada.Text_IO.Put_Line ("macchina " & Positive'Image(car_ID) & " ha una accelerazione di " & Float'Image(currentAcceleration));
                   speed := ((currentAcceleration * (Float(toWait)/1000.0)) + speed) * 3.6;
                else
                   deltaTime := toSleep - initialTime;
@@ -110,7 +110,7 @@ package body referee_p is
                   speed := (initialSpeed + (currentAcceleration * (Float(toWait)/1000.0))) * 3.6;
                end if;
             else
-               Ada.Text_IO.Put_Line ("macchina " & Positive'Image(car_ID) & " trova libero");
+               --Ada.Text_IO.Put_Line ("macchina " & Positive'Image(car_ID) & " trova libero");
 
                -- update speed
                speed := ((currentAcceleration * (Float(toWait)/1000.0)) + speed) * 3.6;
@@ -126,8 +126,8 @@ package body referee_p is
             box_stop := false;
 
             -- Debug!
-            Ada.Text_IO.Put_Line ("Time (millis) to wait for car " & Positive'Image(car_ID) & " = " & Positive'Image(toWait));
-            Ada.Text_IO.Put_Line ("New speed for car " & Positive'Image(car_ID) & " = " & Float'Image(speed));
+            --Ada.Text_IO.Put_Line ("Time (millis) to wait for car " & Positive'Image(car_ID) & " = " & Positive'Image(toWait));
+            --Ada.Text_IO.Put_Line ("New speed for car " & Positive'Image(car_ID) & " = " & Float'Image(speed));
 
             -- update tires consumption (related to the behaviour, segment difficulty, and random)
             declare
@@ -141,7 +141,7 @@ package body referee_p is
                Num := Rand_Tire.Random(seed);
                numRandom := Positive(Num);
                c_status.set_tires_status(c_status.get_tires_state - (car_behaviour/2) - (seg.difficulty/2) - numRandom);
-               Ada.Text_IO.Put_Line ("New tires status for car " & Positive'Image(car_ID) & " = " & Integer'Image(c_status.get_tires_state));
+               --Ada.Text_IO.Put_Line ("New tires status for car " & Positive'Image(car_ID) & " = " & Integer'Image(c_status.get_tires_state));
             end;
 
             -- calculate if incident occur
@@ -169,11 +169,13 @@ package body referee_p is
                   -- incident occurs
                   Ada.Text_IO.Put_Line ("######## car " & Positive'Image(car_ID) & " - incident ###### ");
                   incident := true;
-                  toSleep := toSleep + Ada.Real_Time.Milliseconds ((numRandom)/10);
-                  if(numRandom < 5) -- 5% di prob. di danneggiare il veicolo nell'uscita
+                  Ada.Text_IO.Put_Line ("Macchina " & Positive'Image(car_ID) & " perde " & Integer'Image(3000 + (numRandom)*150));
+                  toSleep := toSleep + Ada.Real_Time.Milliseconds (3000 + ((numRandom)*150));
+                  if(numRandom < 10) -- 10% di prob. di danneggiare il veicolo nell'uscita
                   then
                      c_status.set_damage(true);
                   end if;
+                  speed := 0.0;
                end if;
             end;
 
@@ -181,12 +183,12 @@ package body referee_p is
             nextReferee := next;
 
             -- update counter and status
-            Ada.Text_IO.Put_Line ("numero di macchine nel segmento " & Positive'Image(seg.id) & ": " & Natural'Image(carCounter));
+            --Ada.Text_IO.Put_Line ("numero di macchine nel segmento " & Positive'Image(seg.id) & ": " & Natural'Image(carCounter));
             carCounter := carCounter + 1;
             carArray(car_ID) := toSleep;
          else
             -- box
-            Ada.Text_IO.Put_Line ("macchina " & Positive'Image(car_ID) & " entra ai box");
+            --Ada.Text_IO.Put_Line ("macchina " & Positive'Image(car_ID) & " entra ai box");
             toSleep := initialTime + Ada.Real_Time.Milliseconds (2000);
             if (c_status.pitStop4tires) -- cambio gomme
             then
