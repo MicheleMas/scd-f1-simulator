@@ -30,7 +30,7 @@ package body Circuit is
 
       For_Loop :
       for i in Integer range 1 .. custom_types.car_number loop
-         car_array(i) := new Car(i,firstReferee,car_status_array(i), Circuit.event_buffer);
+         car_array(i) := new Car(i,firstReferee,car_status_array(i), Circuit.event_buffer, Circuit.race_stat);
       end loop For_Loop;
 	--Ada.Text_IO.Put_Line ("Costruiti i tasks. ");
 
@@ -45,7 +45,8 @@ package body Circuit is
 
    task body weather_forecast is
 
-      isRaining : Boolean := true;
+      isRaining : Boolean := false;
+      raceOver : Boolean := false;
 
       use type Ada.Real_Time.Time_Span;
       Poll_Time :          Ada.Real_Time.Time := Ada.Real_Time.Clock; -- time to start polling
@@ -59,6 +60,8 @@ package body Circuit is
       numRandom : Positive := 1;
 
    begin
+      race_stat.isOver(raceOver);
+      while (not raceOver)
       loop
          if isRaining then
             event_buffer.insert_event(Ada.Strings.Unbounded.To_Unbounded_String("Wheater: Piove, governo ladro"));
@@ -77,8 +80,10 @@ package body Circuit is
          Sveglia := Sveglia + Period;
          delay until Sveglia;
          isRaining := not isRaining;
+         race_stat.isOver(raceOver);
       end loop;
-
+      Ada.Text_IO.Put_Line ("task meteo concluso");
+      --event_buffer.insert_event(Ada.Strings.Unbounded.To_Unbounded_String("La gara è conclusa"));
    end weather_forecast;
 
    -----------------------------------------------------------------------
@@ -87,18 +92,19 @@ package body Circuit is
 
    task body Event_Handler is
 
-      -- timer to simulate a remote communication with an high latency (300ms)
+      -- timer to simulate a remote communication 50ms of latency
       use type Ada.Real_Time.Time_Span;
       Poll_Time :          Ada.Real_Time.Time := Ada.Real_Time.Clock; -- time to start polling
       Period    : constant Ada.Real_Time.Time_Span := Ada.Real_Time.Milliseconds (50);
       Sveglia   :          Ada.Real_Time.Time;
 
       event : Unbounded_String;
+      raceOver : Boolean := false;
 
    begin
-      -- Ada.Text_IO.Put_Line ("il thread e' partito");
+      race_stat.isOver(raceOver);
+      while (not raceOver)
       loop
-
          event_buffer.get_event(event);
          Poll_Time := Ada.Real_Time.Clock;
          Sveglia := Poll_Time + Period;
@@ -106,11 +112,12 @@ package body Circuit is
          delay until Sveglia;
 
 	 --filtro per stampare solo quello che ci serve
-        -- if Ada.Strings.Unbounded.To_String(event)(Ada.Strings.Unbounded.To_String(event)'First) = 'W' then
+         -- if Ada.Strings.Unbounded.To_String(event)(Ada.Strings.Unbounded.To_String(event)'First) = 'W' then
             Ada.Text_IO.Put_Line ("Processed event " & Ada.Strings.Unbounded.To_String(event));
          --end if;
-
+         race_stat.isOver(raceOver);
       end loop;
+      Ada.Text_IO.Put_Line ("task eventi concluso");
    end Event_Handler;
 
 end Circuit;

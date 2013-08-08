@@ -13,6 +13,12 @@ package body car_p is
       box_stop : Boolean;
       incident : Boolean;
       toRepair : Boolean := false;
+      retired : Boolean := false;
+      lap : Positive := 1;
+      last_lap : Boolean := false;
+      race_over : Boolean := false;
+
+      tmp : Boolean;
 
       use type Ada.Real_Time.Time_Span;
       Poll_Time :          Ada.Real_Time.Time := Ada.Real_Time.Clock; -- time to start polling
@@ -20,7 +26,7 @@ package body car_p is
       toSleep   :          Ada.Real_Time.Time := Poll_Time;
    begin
       speed := status.get_currentSpeed; -- the initial speed should be zero?
-      loop
+      while (not race_over) loop
          --Ada.Text_IO.Put_Line ("sono la macchina " & Positive'Image(status.get_name) & " ed entro nel segmento " & Positive'Image(nextReferee.id));
          previousReferee := nextReferee;
 
@@ -34,10 +40,9 @@ package body car_p is
          --end if;
 
          -- enterSegment need to be done as first thing, in order to compensate lag
-         -- nextReferee.enterSegment(id, status.get_currentBehaviour, speed, status.max_speed, status.acceleration, status.get_rain_tires, toSleep, nextReferee);
-         nextReferee.enterSegment(id, status, speed, toSleep, nextReferee, box_stop, event_buffer.isRaining, incident);
+         nextReferee.enterSegment(id, status, speed, toSleep, nextReferee, box_stop, event_buffer.isRaining, incident, last_lap);
 
-      	 status.set_currentSpeed(speed); -- set new speed on status
+         status.set_currentSpeed(speed); -- set new speed on status
 
          if (incident)
          then
@@ -50,21 +55,46 @@ package body car_p is
                event_buffer.insert_event(event);
             end if;
          end if;
+
          if (box_stop)
          then
             toRepair := false;
             event := Ada.Strings.Unbounded.To_Unbounded_String("macchina " & Positive'Image(id) & " entra ai box");
             event_buffer.insert_event(event);
             delay until toSleep;
-            event := Ada.Strings.Unbounded.To_Unbounded_String("macchina " & Positive'Image(id) & " esce dai box");
+            event := Ada.Strings.Unbounded.To_Unbounded_String("macchina " & Positive'Image(id) & " esce dai box concludendo il giro "
+                                                               & Positive'Image(lap));
+            lap := lap + 1;
          else
       	    delay until toSleep;
-            event := Ada.Strings.Unbounded.To_Unbounded_String("macchina " & Positive'Image(id) & " uscita dal segmento " & Positive'Image(previousReferee.id));
+            event := Ada.Strings.Unbounded.To_Unbounded_String("macchina " & Positive'Image(id) & " uscita dal segmento " &
+                                                               Positive'Image(previousReferee.id) & " - giro " & Positive'Image(lap));
          end if;
 
          previousReferee.leaveSegment(id, box_stop);
          event_buffer.insert_event(event);
-         --Ada.Text_IO.Put_Line ("--> ToWait " & Positive'Image(toWait));
+
+         -- update lap
+         if (nextReferee.id = 1)
+         then
+            event := Ada.Strings.Unbounded.To_Unbounded_String("macchina " & Positive'Image(id) & " ha finito il giro " & Positive'Image(lap));
+            event_buffer.insert_event(event);
+            lap := lap + 1;
+            if(lap = custom_types.laps_number)
+            then
+               last_lap := true;
+            end if;
+         end if;
+
+         -- check if the race is over
+         if(lap > custom_types.laps_number)
+         then
+            race_over := true;
+            event := Ada.Strings.Unbounded.To_Unbounded_String("macchina " & Positive'Image(id) & " ha finito la gara!");
+            event_buffer.insert_event(event);
+            race_stat.car_end_race; -- this must be done as last thing to not compromise the order of arrival
+         end if;
+
       end loop;
    end Car;
 

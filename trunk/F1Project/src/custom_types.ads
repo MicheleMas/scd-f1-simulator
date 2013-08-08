@@ -2,6 +2,7 @@ package custom_types is
 
    -- constant
    car_number : Positive := 2; -- number of car
+   laps_number : Positive := 4; -- number of laps
 
    -----------------------------------------------------------------------
    --------------------------- SEGMENT -----------------------------------
@@ -21,6 +22,15 @@ package custom_types is
    end record;
 
    type Segment_Access is access Segment;
+
+   protected type race_status is
+      procedure isOver (over : out Boolean);
+      procedure car_end_race;
+   private
+      cars_in_race : Natural := car_number;
+   end race_status;
+
+   type race_status_Access is access race_status;
 
 
 end custom_types;
