@@ -36,7 +36,8 @@ package body referee_p is
                           nextReferee : out Referee_Access;
                           box_stop : out Boolean;
                           isRaining : in Boolean;
-                          incident : out Boolean) when isStarted is
+                          incident : out Boolean;
+                          last_lap : in Boolean) when isStarted is
          car_behaviour : Positive := c_status.get_currentBehaviour;
          maxSpeed : Positive := c_status.max_speed;
          acceleration : Positive := c_status.acceleration;
@@ -58,7 +59,7 @@ package body referee_p is
          --Ada.Text_IO.Put_Line ("Initial speed = " & Float'Image(speed));
          --Ada.Text_IO.Put_Line ("Initial acceleration = " & Positive'Image(acceleration));
 
-         if (not ((c_status.pitStop4tires or c_status.is_damaged) and seg.isBoxEntrance))
+         if (not ((c_status.pitStop4tires or c_status.is_damaged) and seg.isBoxEntrance and (not last_lap)))
          then
             -- check if the car is broken
             if(c_status.is_damaged)

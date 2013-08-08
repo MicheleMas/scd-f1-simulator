@@ -21,7 +21,8 @@ package car_p is
    task type Car (id : Positive;
                   initialReferee : Referee_Access;
                   status : Car_Status_Access;
-                  event_buffer : Event_Bucket_Access);
+                  event_buffer : Event_Bucket_Access;
+                  race_stat : race_status_Access);
 
    type Car_Access is access Car;
 
