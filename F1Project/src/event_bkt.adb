@@ -7,6 +7,15 @@ package body event_bkt is
    -----------------------------------------------------------------------
 
    protected body event_bucket is
+      procedure is_bucket_empty (is_empty : out Boolean) is
+      begin
+         if (bucket_size = 0)
+         then
+            is_empty := true;
+         else
+            is_empty := false;
+         end if;
+      end is_bucket_empty;
       entry get_event (event : out Unbounded_String) when bucket_size > 0 is
       begin
          event := bucket.First_Element;  -- bucket.First_Element;

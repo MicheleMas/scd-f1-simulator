@@ -100,10 +100,11 @@ package body Circuit is
 
       event : Unbounded_String;
       raceOver : Boolean := false;
+      bucket_empty : Boolean := false;
 
    begin
       race_stat.isOver(raceOver);
-      while (not raceOver)
+      while ((not raceOver) or else (not bucket_empty))
       loop
          event_buffer.get_event(event);
          Poll_Time := Ada.Real_Time.Clock;
@@ -116,6 +117,7 @@ package body Circuit is
             Ada.Text_IO.Put_Line ("Processed event " & Ada.Strings.Unbounded.To_String(event));
          --end if;
          race_stat.isOver(raceOver);
+         event_buffer.is_bucket_empty(bucket_empty);
       end loop;
       Ada.Text_IO.Put_Line ("task eventi concluso");
    end Event_Handler;

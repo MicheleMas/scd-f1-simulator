@@ -59,12 +59,13 @@ package body referee_p is
          --Ada.Text_IO.Put_Line ("Initial speed = " & Float'Image(speed));
          --Ada.Text_IO.Put_Line ("Initial acceleration = " & Positive'Image(acceleration));
 
-         if (not ((c_status.pitStop4tires or c_status.is_damaged) and seg.isBoxEntrance and (not last_lap)))
+         if (not ((c_status.pitStop4tires or c_status.is_damaged) and seg.isBoxEntrance and (not last_lap))) -- TODO non deve entrare ai box all'ultimo giro!
          then
             -- check if the car is broken
             if(c_status.is_damaged)
             then
                maxSpeed := 100; -- the car run slowly to the box
+               acceleration := 1;
             end if;
 
             -- calculate time to wait
@@ -191,7 +192,7 @@ package body referee_p is
          else
             -- box
             --Ada.Text_IO.Put_Line ("macchina " & Positive'Image(car_ID) & " entra ai box");
-            toSleep := initialTime + Ada.Real_Time.Milliseconds (2000);
+            toSleep := initialTime + Ada.Real_Time.Milliseconds (10000);
             if (c_status.pitStop4tires) -- cambio gomme
             then
                c_status.Change_Tires(false);
@@ -210,7 +211,7 @@ package body referee_p is
             then
                c_status.set_damage(false);
                c_status.Change_Behaviour(8);
-               toSleep := toSleep + Ada.Real_Time.Milliseconds (5000);
+               toSleep := toSleep + Ada.Real_Time.Milliseconds (6000);
             end if;
             box_stop := true;
             speed := 80.0;
