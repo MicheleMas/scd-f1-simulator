@@ -13,12 +13,10 @@ package body car_p is
       box_stop : Boolean;
       incident : Boolean;
       toRepair : Boolean := false;
-      retired : Boolean := false;
+      retired : Boolean := false; -- TODO da implementare l'incidente che comporta il ritiro
       lap : Positive := 1;
       last_lap : Boolean := false;
       race_over : Boolean := false;
-
-      tmp : Boolean;
 
       use type Ada.Real_Time.Time_Span;
       Poll_Time :          Ada.Real_Time.Time := Ada.Real_Time.Clock; -- time to start polling
@@ -68,7 +66,8 @@ package body car_p is
          else
       	    delay until toSleep;
             event := Ada.Strings.Unbounded.To_Unbounded_String("macchina " & Positive'Image(id) & " uscita dal segmento " &
-                                                               Positive'Image(previousReferee.id) & " - giro " & Positive'Image(lap));
+                                                               Positive'Image(previousReferee.id) & " - giro " & Positive'Image(lap) &
+                                                               " con velocita' " & Natural'Image(Natural(speed)));
          end if;
 
          previousReferee.leaveSegment(id, box_stop);

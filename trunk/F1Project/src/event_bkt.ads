@@ -11,6 +11,7 @@ package event_bkt is
    -----------------------------------------------------------------------
 
    protected type Event_Bucket (capacity : Positive) is
+      procedure is_bucket_empty (is_empty : out Boolean);
       entry get_event (event : out Unbounded_String);
       procedure insert_event (event : in Unbounded_String);
       procedure set_raining (rain : in Boolean);
