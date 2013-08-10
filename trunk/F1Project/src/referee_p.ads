@@ -27,7 +27,7 @@ package referee_p is
                           nextReferee : out Referee_Access;
                           box_stop : out Boolean;
                           isRaining : in Boolean;
-                          incident : out Boolean;
+                          incident : out Natural;
                           last_lap : in Boolean);
       procedure leaveSegment (car_ID : in Positive;
                               box_stop : in Boolean);

@@ -11,9 +11,8 @@ package body car_p is
       previousReferee : Referee_Access;
       event : Unbounded_String;
       box_stop : Boolean;
-      incident : Boolean;
+      incident : Natural;
       toRepair : Boolean := false;
-      retired : Boolean := false; -- TODO da implementare l'incidente che comporta il ritiro
       lap : Positive := 1;
       last_lap : Boolean := false;
       race_over : Boolean := false;
@@ -42,16 +41,25 @@ package body car_p is
 
          status.set_currentSpeed(speed); -- set new speed on status
 
-         if (incident)
+         if (incident > 0)
          then
             event := Ada.Strings.Unbounded.To_Unbounded_String("macchina " & Positive'Image(id) & " uscita di pista");
             event_buffer.insert_event(event);
-            if (status.is_damaged and (not toRepair))
+         end if;
+
+         if (incident = 2)
             then
                toRepair := true;
                event := Ada.Strings.Unbounded.To_Unbounded_String("macchina " & Positive'Image(id) & " ha riportato danni");
                event_buffer.insert_event(event);
-            end if;
+         end if;
+
+         if (incident = 3)
+         then
+            race_over := true;
+            event := Ada.Strings.Unbounded.To_Unbounded_String("macchina " & Positive'Image(id) & " ha abbandonato la gara!");
+            event_buffer.insert_event(event);
+            race_stat.car_end_race; -- this must be done as last thing to not compromise the order of arrival
          end if;
 
          if (box_stop)

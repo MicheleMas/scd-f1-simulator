@@ -36,7 +36,7 @@ package body referee_p is
                           nextReferee : out Referee_Access;
                           box_stop : out Boolean;
                           isRaining : in Boolean;
-                          incident : out Boolean;
+                          incident : out Natural;
                           last_lap : in Boolean) when isStarted is
          car_behaviour : Positive := c_status.get_currentBehaviour;
          maxSpeed : Positive := c_status.max_speed;
@@ -55,7 +55,7 @@ package body referee_p is
          Incident_Chance : Positive := 1;
          numRandom : Positive := 1;
       begin
-         incident := false;
+         incident := 0;
          --Ada.Text_IO.Put_Line ("Initial speed = " & Float'Image(speed));
          --Ada.Text_IO.Put_Line ("Initial acceleration = " & Positive'Image(acceleration));
 
@@ -170,13 +170,18 @@ package body referee_p is
                then
                   -- incident occurs
                   Ada.Text_IO.Put_Line ("######## car " & Positive'Image(car_ID) & " - incident ###### ");
-                  incident := true;
+                  incident := 1;
                   Ada.Text_IO.Put_Line ("Macchina " & Positive'Image(car_ID) & " perde " & Integer'Image(3000 + (numRandom)*150));
                   toSleep := toSleep + Ada.Real_Time.Milliseconds (3000 + ((numRandom)*150));
                   if(numRandom < 15) -- 15% di prob. di danneggiare il veicolo nell'uscita
                   then
+                     incident := 2;
                      c_status.set_damage(true);
                      c_status.Change_Behaviour(4);
+                  end if;
+		  if(numRandom < 5) -- 5% prob. di danneggiare il veicolo irrimediabilmente
+                  then
+                     incident := 3;
                   end if;
                   speed := 0.0;
                end if;
