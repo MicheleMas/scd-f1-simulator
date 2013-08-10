@@ -157,7 +157,7 @@ package body referee_p is
                Rand_Incident.Reset(seed);
                Num := Rand_Incident.Random(seed);
                numRandom := Positive(Num);
-               Incident_Chance := Incident_Chance + (car_behaviour * 2) + (seg.difficulty * 2);
+               Incident_Chance := (car_behaviour * 2) + (seg.difficulty * 2);
                if (isRaining)
                then
                   Incident_Chance := Incident_Chance + 20;
