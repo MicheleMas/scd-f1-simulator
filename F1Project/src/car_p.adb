@@ -60,49 +60,50 @@ package body car_p is
             event := Ada.Strings.Unbounded.To_Unbounded_String("macchina " & Positive'Image(id) & " ha abbandonato la gara!");
             event_buffer.insert_event(event);
             race_stat.car_end_race; -- this must be done as last thing to not compromise the order of arrival
-         end if;
-
-         if (box_stop)
-         then
-            toRepair := false;
-            event := Ada.Strings.Unbounded.To_Unbounded_String("macchina " & Positive'Image(id) & " entra ai box");
-            event_buffer.insert_event(event);
-            delay until toSleep;
-            event := Ada.Strings.Unbounded.To_Unbounded_String("macchina " & Positive'Image(id) & " esce dai box concludendo il giro "
-                                                               & Positive'Image(lap));
-            lap := lap + 1;
          else
-      	    delay until toSleep;
-            event := Ada.Strings.Unbounded.To_Unbounded_String("macchina " & Positive'Image(id) & " uscita dal segmento " &
-                                                               Positive'Image(previousReferee.id) & " - giro " & Positive'Image(lap) &
-                                                               " con velocita' " & Natural'Image(Natural(speed)));
-         end if;
 
-         previousReferee.leaveSegment(id, box_stop);
-         event_buffer.insert_event(event);
+         	if (box_stop)
+         	then
+         	   toRepair := false;
+	            event := Ada.Strings.Unbounded.To_Unbounded_String("macchina " & Positive'Image(id) & " entra ai box");
+        	    event_buffer.insert_event(event);
+	            delay until toSleep;
+        	    event := Ada.Strings.Unbounded.To_Unbounded_String("macchina " & Positive'Image(id) & " esce dai box concludendo il giro "
+	                                                               & Positive'Image(lap));
+        	    lap := lap + 1;
+	         else
+      		    delay until toSleep;
+	            event := Ada.Strings.Unbounded.To_Unbounded_String("macchina " & Positive'Image(id) & " uscita dal segmento " &
+        	                                                       Positive'Image(previousReferee.id) & " - giro " & Positive'Image(lap) &
+                	                                               " con velocita' " & Natural'Image(Natural(speed)));
+	         end if;
 
-         -- update lap
-         if (nextReferee.id = 1)
-         then
-            event := Ada.Strings.Unbounded.To_Unbounded_String("macchina " & Positive'Image(id) & " ha finito il giro " & Positive'Image(lap));
-            event_buffer.insert_event(event);
-            lap := lap + 1;
-            if(lap = custom_types.laps_number)
-            then
-               last_lap := true;
+        	 previousReferee.leaveSegment(id, box_stop);
+	         event_buffer.insert_event(event);
+
+        	 -- update lap
+	         if (nextReferee.id = 1)
+        	 then
+	            event := Ada.Strings.Unbounded.To_Unbounded_String("macchina " & Positive'Image(id) & " ha finito il giro " & Positive'Image(lap));
+        	    event_buffer.insert_event(event);
+	            lap := lap + 1;
+        	    if(lap = custom_types.laps_number)
+	            then
+        	       last_lap := true;
+	            end if;
+        	 end if;
+
+	         -- check if the race is over
+        	 if(lap > custom_types.laps_number)
+	         then
+        	    race_over := true;
+	            event := Ada.Strings.Unbounded.To_Unbounded_String("macchina " & Positive'Image(id) & " ha finito la gara!");
+        	    event_buffer.insert_event(event);
+	            race_stat.car_end_race; -- this must be done as last thing to not compromise the order of arrival
             end if;
          end if;
-
-         -- check if the race is over
-         if(lap > custom_types.laps_number)
-         then
-            race_over := true;
-            event := Ada.Strings.Unbounded.To_Unbounded_String("macchina " & Positive'Image(id) & " ha finito la gara!");
-            event_buffer.insert_event(event);
-            race_stat.car_end_race; -- this must be done as last thing to not compromise the order of arrival
-         end if;
-
       end loop;
+
    end Car;
 
 end car_p;
