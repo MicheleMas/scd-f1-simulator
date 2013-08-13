@@ -11,7 +11,7 @@ package body publisher is
       event : Unbounded_String;
       raceOver : Boolean := false;
       bucket_empty : Boolean := false;
-      Publisher_Address : constant String := "localhost:12345"; -- this should be passed
+      Publisher_Address : constant String := "tcp://localhost:12345"; -- this should be passed
                                                                 -- with constructor paramether
       Publisher_Agent : aliased YAMI.Agents.Agent := YAMI.Agents.Make_Agent;
       Resolved_Publisher_Address : String (1 .. YAMI.Agents.Max_Target_Length);
