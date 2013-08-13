@@ -3,7 +3,7 @@ package body custom_types is
    protected body race_status is
       procedure isOver (over : out Boolean) is
       begin
-         if (cars_in_race = 0) -- can be added more condition here
+         if (cars_in_race = 0) -- can be added more conditions here
          then
             over := true;
          else

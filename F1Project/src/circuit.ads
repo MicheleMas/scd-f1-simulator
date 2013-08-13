@@ -23,6 +23,6 @@ package Circuit is
 
    task weather_forecast;
 
-   task Event_Handler;
+   --task Event_Handler;
 
 end Circuit;
