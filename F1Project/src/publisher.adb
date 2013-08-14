@@ -12,7 +12,7 @@ package body publisher is
       raceOver : Boolean := false;
       bucket_empty : Boolean := false;
       Publisher_Address : constant String := "tcp://localhost:12345"; -- this should be passed
-                                                                -- with constructor paramether
+                                                                      -- with constructor paramether
       Publisher_Agent : aliased YAMI.Agents.Agent := YAMI.Agents.Make_Agent;
       Resolved_Publisher_Address : String (1 .. YAMI.Agents.Max_Target_Length);
       Resolved_Publisher_Address_Last : Natural;
@@ -44,6 +44,7 @@ package body publisher is
          race_stat.isOver(raceOver);
          event_buffer.is_bucket_empty(bucket_empty);
       end loop;
+      delay(3.0);
       Ada.Text_IO.Put_Line ("task eventi concluso");
    end Event_Handler;
 
