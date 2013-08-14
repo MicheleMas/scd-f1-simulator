@@ -64,14 +64,18 @@ package body Circuit is
       Num 	: Rand_Range;
       numRandom : Positive := 1;
 
+      event : event_array_Access := new event_array;
    begin
       race_stat.isOver(raceOver);
+      event(1) := Ada.Strings.Unbounded.To_Unbounded_String("WC");
       while (not raceOver)
       loop
          if isRaining then
-            event_buffer.insert_event(Ada.Strings.Unbounded.To_Unbounded_String("Wheater: Piove, governo ladro"));
+            event(2) := Ada.Strings.Unbounded.To_Unbounded_String("R"); -- rainy
+            event_buffer.insert_event(event);
          else
-            event_buffer.insert_event(Ada.Strings.Unbounded.To_Unbounded_String("Wheater: Non Piove, ma il governo e' comunque ladro"));
+            event(2) := Ada.Strings.Unbounded.To_Unbounded_String("S"); -- sunny
+            event_buffer.insert_event(event);
          end if;
          event_buffer.set_raining(isRaining);
 

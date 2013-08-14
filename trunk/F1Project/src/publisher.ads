@@ -13,15 +13,18 @@ package Publisher is
    -- > Rientro ai box
    --   type = EB
    -- > Uscita dai box
-   --   type = LB | tire_t = (bool)rain_tire
+   --   type = LB | tire_t = (bool)rain_tire | lap = (Pos)giro terminato
    -- > Fine Giro
-   --   type = EL | sarebbe bello avere anche il tempo
+   --   type = EL | car = (Pos)ID
+   --   sarebbe bello avere anche il tempo
    -- > Una macchina conclude la gara
    --   type = CE | car = (Pos)ID | tempo totale
    -- > La gara è finita
    --   type = ER
-   -- > Una macchina si ritira
-   --   type = CR | car = (Pos)ID
+   -- > Una macchina fa un incidente
+   --   type = CA | car = (Pos)ID | damage = (bool) | retired = (bool)
+   -- > Cambio meteo
+   --   type = WC | rain = (bool)
 
    task type Event_Handler (event_buffer : Event_Bucket_Access;
                             race_stat : race_status_Access);

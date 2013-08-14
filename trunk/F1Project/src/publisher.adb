@@ -10,7 +10,7 @@ with Ada.Command_Line;
 package body publisher is
 
    task body Event_Handler is
-      event : Unbounded_String;
+      event : event_array_Access;
       raceOver : Boolean := false;
       bucket_empty : Boolean := false;
       Publisher_Address : constant String := "tcp://localhost:12345"; -- this is used if no parameter is passed
@@ -23,13 +23,14 @@ package body publisher is
       Content : YAMI.Parameters.Parameters_Collection :=
         YAMI.Parameters.Make_Parameters;
 
+      test : Positive := 1; --------- da rimuovere
    begin
 
       race_stat.isOver(raceOver);
 
       if Ada.Command_Line.Argument_Count /= 1 then
          Ada.Text_IO.Put_Line
-           ("to send messages to broker, we need protocol://adress:port to open");
+           ("No endpoint specified, using tcp://localhost:12345");
          Ada.Command_Line.Set_Exit_Status
            (Ada.Command_Line.Failure);
          Publisher_Agent.Add_Listener(Target            => Publisher_Address, -- we open standard preimpostated port
@@ -49,10 +50,61 @@ package body publisher is
       loop
          event_buffer.get_event(event);
 
-         Content.Set_String(Name  => "event",
-                            Value => Ada.Strings.Unbounded.To_String(event));
-         Publisher.Publish(Content);
-         Ada.Text_IO.Put_Line ("Processed event " & Ada.Strings.Unbounded.To_String(event));
+         -- check the kind of the message
+         if (event(1) = "ES")
+         then
+            -- End Segment
+            test := 1;
+         else
+            if (event(1) = "EB")
+            then
+               -- Enter Box
+               test := 1;
+            else
+               if (event(1) = "LB")
+               then
+                  -- Leave Box
+                  test := 1;
+               else
+                  if (event(1) = "EL")
+                  then
+                     -- End Lap
+                     test := 1;
+                  else
+                     if (event(1) = "CE")
+                     then
+                        -- Car End
+                        test := 1;
+                     else
+                        if (event(1) = "ER")
+                        then
+                           -- End Race
+                           test := 1;
+                        else
+                           if (event(1) = "CA")
+                           then
+                              -- Car Accident
+                              test := 1;
+                           else
+                              if (event(1) = "WC")
+                              then
+                                 -- Weather Change
+                                 test := 1;
+                                 Ada.Text_IO.Put_Line ("ricevuto meteo");
+                              end if;
+                           end if;
+                        end if;
+                     end if;
+                  end if;
+               end if;
+            end if;
+         end if;
+
+
+         --Content.Set_String(Name  => "event",
+         --                   Value => Ada.Strings.Unbounded.To_String(event));
+         --Publisher.Publish(Content);
+         Ada.Text_IO.Put_Line ("Processed event "); --& Ada.Strings.Unbounded.To_String(event));
 
          race_stat.isOver(raceOver);
          event_buffer.is_bucket_empty(bucket_empty);
