@@ -4,6 +4,8 @@ with YAMI.Agents;
 with YAMI.Parameters;
 with YAMI.Serializables;
 with YAMI.Value_Publishers;
+with Ada.Command_Line;
+with Ada.Command_Line;
 
 package body publisher is
 
@@ -11,8 +13,7 @@ package body publisher is
       event : Unbounded_String;
       raceOver : Boolean := false;
       bucket_empty : Boolean := false;
-      Publisher_Address : constant String := "tcp://localhost:12345"; -- this should be passed
-                                                                      -- with constructor paramether
+      Publisher_Address : constant String := "tcp://localhost:12345"; -- this is used if no parameter is passed
       Publisher_Agent : aliased YAMI.Agents.Agent := YAMI.Agents.Make_Agent;
       Resolved_Publisher_Address : String (1 .. YAMI.Agents.Max_Target_Length);
       Resolved_Publisher_Address_Last : Natural;
@@ -25,10 +26,22 @@ package body publisher is
    begin
 
       race_stat.isOver(raceOver);
-      Ada.Text_IO.Put_Line ("arrivo fino a qui!");
-      Publisher_Agent.Add_Listener(Target               => Publisher_Address,
+
+      if Ada.Command_Line.Argument_Count /= 1 then
+         Ada.Text_IO.Put_Line
+           ("to send messages to broker, we need protocol://adress:port to open");
+         Ada.Command_Line.Set_Exit_Status
+           (Ada.Command_Line.Failure);
+         Publisher_Agent.Add_Listener(Target            => Publisher_Address, -- we open standard preimpostated port
                                    Resolved_Target      => Resolved_Publisher_Address,
                                    Resolved_Target_Last => Resolved_Publisher_Address_Last);
+      else
+         Publisher_Agent.Add_Listener(Target            => Ada.Command_Line.Argument (1), -- we open the port passed by parameter
+                                   Resolved_Target      => Resolved_Publisher_Address,
+                                   Resolved_Target_Last => Resolved_Publisher_Address_Last);
+      end if;
+
+
       Publisher.Register_At(The_Agent   => Publisher_Agent'Unchecked_Access,
                             Object_Name => "event_publisher");
 
