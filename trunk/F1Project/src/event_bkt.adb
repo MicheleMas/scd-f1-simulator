@@ -24,8 +24,10 @@ package body event_bkt is
          bucket_size := bucket_size - 1;
       end get_event;
       procedure insert_event (event : in event_array_Access) is
+         event_array_copy : event_array_Access := new event_array;
       begin
          -- Ada.Text_IO.Put_Line ("inserisco evento " & Ada.Strings.Unbounded.To_String(event));
+         event_array.all := event.all;
          if bucket_size >= capacity
          then
             bucket.Delete_First;
