@@ -11,11 +11,12 @@ package Publisher is
    --   beh = (Pos)behaviour | tire_s = (Int) tire_status
    --   tire_t = (bool)rain_tire
    -- > Rientro ai box
-   --   type = EB
+   --   type = EB | car = (Pos)ID
    -- > Uscita dai box
-   --   type = LB | tire_t = (bool)rain_tire | lap = (Pos)giro terminato
+   --   type = LB | car = (Pos)ID | tire_t = (bool)rain_tire |
+   --   lap = (Pos)giro terminato
    -- > Fine Giro
-   --   type = EL | car = (Pos)ID
+   --   type = EL | car = (Pos)ID | lap = (Pos)giro terminato
    --   sarebbe bello avere anche il tempo
    -- > Una macchina conclude la gara
    --   type = CE | car = (Pos)ID | tempo totale
