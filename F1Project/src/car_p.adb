@@ -40,20 +40,21 @@ package body car_p is
          if (incident > 0)
          then
             event(1) := Ada.Strings.Unbounded.To_Unbounded_String("CA");
+            event(2) := Ada.Strings.Unbounded.To_Unbounded_String(Positive'Image(id));
             if (incident = 2)
             then
                toRepair := true;
-               event(2) := Ada.Strings.Unbounded.To_Unbounded_String("T");  -- car damaged
+               event(3) := Ada.Strings.Unbounded.To_Unbounded_String("T");  -- car damaged
             else
-               event(2) := Ada.Strings.Unbounded.To_Unbounded_String("F");  -- car not damaged
+               event(3) := Ada.Strings.Unbounded.To_Unbounded_String("F");  -- car not damaged
             end if;
             if (incident = 3)
             then
                race_over := true;
                race_stat.car_end_race;
-               event(3) := Ada.Strings.Unbounded.To_Unbounded_String("T");  -- car retired
+               event(4) := Ada.Strings.Unbounded.To_Unbounded_String("T");  -- car retired
             else
-               event(3) := Ada.Strings.Unbounded.To_Unbounded_String("F");  -- car not retired
+               event(4) := Ada.Strings.Unbounded.To_Unbounded_String("F");  -- car not retired
             end if;
             event_buffer.insert_event(event);
          end if;
@@ -65,58 +66,61 @@ package body car_p is
             then
                toRepair := false;
                event(1) := Ada.Strings.Unbounded.To_Unbounded_String("EB");
+               event(2) := Ada.Strings.Unbounded.To_Unbounded_String(Positive'Image(id));
                event_buffer.insert_event(event);
                delay until toSleep;
                event(1) := Ada.Strings.Unbounded.To_Unbounded_String("LB");
+               event(2) := Ada.Strings.Unbounded.To_Unbounded_String(Positive'Image(id));
                if(status.get_rain_tires)
                then
-                  event(2) := Ada.Strings.Unbounded.To_Unbounded_String("T"); -- rain tires
+                  event(3) := Ada.Strings.Unbounded.To_Unbounded_String("T"); -- rain tires
                else
-                  event(2) := Ada.Strings.Unbounded.To_Unbounded_String("F"); -- dry tires
+                  event(3) := Ada.Strings.Unbounded.To_Unbounded_String("F"); -- dry tires
                end if;
-               event(3) := Ada.Strings.Unbounded.To_Unbounded_String(Positive'Image(lap)); -- ended lap
+               event(4) := Ada.Strings.Unbounded.To_Unbounded_String(Positive'Image(lap)); -- ended lap
                lap := lap + 1;
-	       else
-                  delay until toSleep;
-                  event(1) := Ada.Strings.Unbounded.To_Unbounded_String("ES");
-                  event(2) := Ada.Strings.Unbounded.To_Unbounded_String(Positive'Image(id));
-                  event(3) := Ada.Strings.Unbounded.To_Unbounded_String(Positive'Image(previousReferee.id));
-                  event(4) := Ada.Strings.Unbounded.To_Unbounded_String(Natural'Image(Natural(speed)));
-                  event(5) := Ada.Strings.Unbounded.To_Unbounded_String(Positive'Image(status.get_currentBehaviour));
-                  event(6) := Ada.Strings.Unbounded.To_Unbounded_String(Integer'Image(status.get_tires_state));
-                  if(status.get_rain_tires)
-                  then
-                     event(7) :=  Ada.Strings.Unbounded.To_Unbounded_String("T");
-                  else
-                     event(7) :=  Ada.Strings.Unbounded.To_Unbounded_String("F");
-                  end if;
-               end if;
-
-               previousReferee.leaveSegment(id, box_stop);
-	       event_buffer.insert_event(event);
-
-               -- update lap
-	       if (nextReferee.id = 1)
+	    else
+               delay until toSleep;
+               event(1) := Ada.Strings.Unbounded.To_Unbounded_String("ES");
+               event(2) := Ada.Strings.Unbounded.To_Unbounded_String(Positive'Image(id));
+               event(3) := Ada.Strings.Unbounded.To_Unbounded_String(Positive'Image(previousReferee.id));
+               event(4) := Ada.Strings.Unbounded.To_Unbounded_String(Natural'Image(Natural(speed)));
+               event(5) := Ada.Strings.Unbounded.To_Unbounded_String(Positive'Image(status.get_currentBehaviour));
+               event(6) := Ada.Strings.Unbounded.To_Unbounded_String(Integer'Image(status.get_tires_state));
+               if(status.get_rain_tires)
                then
-                  event(1) := Ada.Strings.Unbounded.To_Unbounded_String("EL"); -- end lap
-                  event(2) := Ada.Strings.Unbounded.To_Unbounded_String(Positive'Image(id));
-        	  event_buffer.insert_event(event);
-	          lap := lap + 1;
-        	  if(lap = custom_types.laps_number)
-	          then
-        	     last_lap := true;
-	          end if;
+                  event(7) :=  Ada.Strings.Unbounded.To_Unbounded_String("T");
+               else
+                  event(7) :=  Ada.Strings.Unbounded.To_Unbounded_String("F");
                end if;
+            end if;
 
-	       -- check if the race is over
-               if(lap > custom_types.laps_number)
+            previousReferee.leaveSegment(id, box_stop);
+	    event_buffer.insert_event(event);
+
+            -- update lap
+	    if (nextReferee.id = 1)
+            then
+               event(1) := Ada.Strings.Unbounded.To_Unbounded_String("EL"); -- end lap
+               event(2) := Ada.Strings.Unbounded.To_Unbounded_String(Positive'Image(id));
+               event(3) := Ada.Strings.Unbounded.To_Unbounded_String(Positive'Image(lap));
+               event_buffer.insert_event(event);
+	       lap := lap + 1;
+               if(lap = custom_types.laps_number)
 	       then
-                  race_over := true;
-                  event(1) := Ada.Strings.Unbounded.To_Unbounded_String("CE");
-                  event(2) := Ada.Strings.Unbounded.To_Unbounded_String(Positive'Image(id));
-        	  event_buffer.insert_event(event);
-	          race_stat.car_end_race; -- this must be done as last thing to not compromise the order of arrival
-               end if;
+        	  last_lap := true;
+	       end if;
+            end if;
+
+	    -- check if the race is over
+            if(lap > custom_types.laps_number)
+	    then
+               race_over := true;
+               event(1) := Ada.Strings.Unbounded.To_Unbounded_String("CE");
+               event(2) := Ada.Strings.Unbounded.To_Unbounded_String(Positive'Image(id));
+               event_buffer.insert_event(event);
+	       race_stat.car_end_race; -- this must be done as last thing to not compromise the order of arrival
+            end if;
          end if;
       end loop;
 

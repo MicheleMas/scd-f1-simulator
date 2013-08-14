@@ -2,6 +2,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO;
 with YAMI.Agents;
 with YAMI.Parameters;
+use YAMI.Parameters;
 with YAMI.Serializables;
 with YAMI.Value_Publishers;
 with Ada.Command_Line;
@@ -54,43 +55,99 @@ package body publisher is
          if (event(1) = "ES")
          then
             -- End Segment
-            test := 1;
+            Ada.Text_IO.Put_Line ("Processing event: car " & Ada.Strings.Unbounded.To_String(event(2)) &
+                                  " ended segment " & Ada.Strings.Unbounded.To_String(event(3)));
+            Content.Set_String("type", Ada.Strings.Unbounded.To_String(event(1)));
+            Content.Set_Integer("car", YAMI_Integer(Integer'Value(Ada.Strings.Unbounded.To_String(event(2)))));
+            Content.Set_Integer("seg", YAMI_Integer(Integer'Value(Ada.Strings.Unbounded.To_String(event(3)))));
+            Content.Set_Integer("vel", YAMI_Integer(Integer'Value(Ada.Strings.Unbounded.To_String(event(4)))));
+            Content.Set_Integer("beh", YAMI_Integer(Integer'Value(Ada.Strings.Unbounded.To_String(event(5)))));
+            Content.Set_Integer("tire_s", YAMI_Integer(Integer'Value(Ada.Strings.Unbounded.To_String(event(6)))));
+            if(event(7) = "T")
+            then
+               Content.Set_Boolean("tire_t", true);
+            else
+               Content.Set_Boolean("tire_t", false);
+            end if;
          else
             if (event(1) = "EB")
             then
                -- Enter Box
-               test := 1;
+               Ada.Text_IO.Put_Line ("Processing event: car " & Ada.Strings.Unbounded.To_String(event(2)) &
+                                     " enter the box");
+               Content.Set_String("type", Ada.Strings.Unbounded.To_String(event(1)));
+               Content.Set_Integer("car", YAMI_Integer(Integer'Value(Ada.Strings.Unbounded.To_String(event(2)))));
             else
                if (event(1) = "LB")
                then
                   -- Leave Box
-                  test := 1;
+                  Ada.Text_IO.Put_Line ("Processing event: car " & Ada.Strings.Unbounded.To_String(event(2)) &
+                                        " left the box");
+                  Content.Set_String("type", Ada.Strings.Unbounded.To_String(event(1)));
+                  Content.Set_Integer("car", YAMI_Integer(Integer'Value(Ada.Strings.Unbounded.To_String(event(2)))));
+                  if(event(3) = "T")
+                  then
+                     Content.Set_Boolean("tire_t", true);
+                  else
+                     Content.Set_Boolean("tire_t", false);
+                  end if;
+                  Content.Set_Integer("lap", YAMI_Integer(Integer'Value(Ada.Strings.Unbounded.To_String(event(4)))));
                else
                   if (event(1) = "EL")
                   then
                      -- End Lap
-                     test := 1;
+                     Ada.Text_IO.Put_Line ("Processing event: car " & Ada.Strings.Unbounded.To_String(event(2)) &
+                                           " end lap " & Ada.Strings.Unbounded.To_String(event(3)));
+                     Content.Set_String("type", Ada.Strings.Unbounded.To_String(event(1)));
+                     Content.Set_Integer("car", YAMI_Integer(Integer'Value(Ada.Strings.Unbounded.To_String(event(2)))));
                   else
                      if (event(1) = "CE")
                      then
                         -- Car End
-                        test := 1;
+                        Ada.Text_IO.Put_Line ("Processing event: car " & Ada.Strings.Unbounded.To_String(event(2)) &
+                                              " end the race");
+                        Content.Set_String("type", Ada.Strings.Unbounded.To_String(event(1)));
+                        Content.Set_Integer("car", YAMI_Integer(Integer'Value(Ada.Strings.Unbounded.To_String(event(2)))));
                      else
                         if (event(1) = "ER")
                         then
                            -- End Race
-                           test := 1;
+                           Ada.Text_IO.Put_Line ("Processing event: end race");
+                           Content.Set_String("type", Ada.Strings.Unbounded.To_String(event(1)));
                         else
                            if (event(1) = "CA")
                            then
                               -- Car Accident
-                              test := 1;
+                              Ada.Text_IO.Put_Line ("Processing event car " & Ada.Strings.Unbounded.To_String(event(2)) &
+                                                    " car incident occurs, " & Ada.Strings.Unbounded.To_String(event(3)) &
+                                                    " " & Ada.Strings.Unbounded.To_String(event(4)));
+                              Content.Set_String("type", Ada.Strings.Unbounded.To_String(event(1)));
+                              Content.Set_Integer("car", YAMI_Integer(Integer'Value(Ada.Strings.Unbounded.To_String(event(2)))));
+                              if(event(3) = "T")
+                              then
+                                 Content.Set_Boolean("damage", true);
+                              else
+                                 Content.Set_Boolean("damage", false);
+                              end if;
+                              if(event(4) = "T")
+                              then
+                                 Content.Set_Boolean("retired", true);
+                              else
+                                 Content.Set_Boolean("retired", false);
+                              end if;
                            else
                               if (event(1) = "WC")
                               then
                                  -- Weather Change
-                                 test := 1;
-                                 Ada.Text_IO.Put_Line ("ricevuto meteo");
+                                 Ada.Text_IO.Put_Line ("Processing event: Weather Change, rain: " &
+                                                       Ada.Strings.Unbounded.To_String(event(2)));
+                                 Content.Set_String("type", Ada.Strings.Unbounded.To_String(event(1)));
+                                 if(event(2) = "T")
+                                 then
+                                    Content.Set_Boolean("rain", true);
+                                 else
+                                    Content.Set_Boolean("rain", false);
+                              end if;
                               end if;
                            end if;
                         end if;
@@ -100,11 +157,8 @@ package body publisher is
             end if;
          end if;
 
-
-         --Content.Set_String(Name  => "event",
-         --                   Value => Ada.Strings.Unbounded.To_String(event));
-         --Publisher.Publish(Content);
-         Ada.Text_IO.Put_Line ("Processed event "); --& Ada.Strings.Unbounded.To_String(event));
+         Publisher.Publish(Content);
+         --Ada.Text_IO.Put_Line ("Processed event " & Ada.Strings.Unbounded.To_String(event(1)));
 
          race_stat.isOver(raceOver);
          event_buffer.is_bucket_empty(bucket_empty);

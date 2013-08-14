@@ -71,10 +71,10 @@ package body Circuit is
       while (not raceOver)
       loop
          if isRaining then
-            event(2) := Ada.Strings.Unbounded.To_Unbounded_String("R"); -- rainy
+            event(2) := Ada.Strings.Unbounded.To_Unbounded_String("T"); -- rainy
             event_buffer.insert_event(event);
          else
-            event(2) := Ada.Strings.Unbounded.To_Unbounded_String("S"); -- sunny
+            event(2) := Ada.Strings.Unbounded.To_Unbounded_String("F"); -- sunny
             event_buffer.insert_event(event);
          end if;
          event_buffer.set_raining(isRaining);
