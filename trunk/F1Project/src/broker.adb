@@ -19,7 +19,7 @@ procedure Broker is
       procedure Process
         (Content : in out YAMI.Parameters.Parameters_Collection)
       is
-         event : constant String := Content.Get_String("event");
+         event : constant String := Content.Get_String("type");
       begin
          Ada.Text_IO.Put_Line ("ricevuto: " & event);
       end Process;
