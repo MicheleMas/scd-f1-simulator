@@ -27,7 +27,7 @@ package body event_bkt is
          event_array_copy : event_array_Access := new event_array;
       begin
          -- Ada.Text_IO.Put_Line ("inserisco evento " & Ada.Strings.Unbounded.To_String(event));
-         event_array.all := event.all;
+         event_array_copy.all := event.all;
          if bucket_size >= capacity
          then
             bucket.Delete_First;
@@ -35,7 +35,7 @@ package body event_bkt is
          else
             bucket_size := bucket_size + 1;
          end if;
-         bucket.Append(event);
+         bucket.Append(event_array_copy);
          -- Ada.Text_IO.Put_Line ("size " & Positive'image(bucket_size));
       end insert_event;
       --we save here the rain status
