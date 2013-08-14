@@ -191,12 +191,10 @@ package body referee_p is
             nextReferee := next;
 
             -- update counter and status
-            --Ada.Text_IO.Put_Line ("numero di macchine nel segmento " & Positive'Image(seg.id) & ": " & Natural'Image(carCounter));
             carCounter := carCounter + 1;
             carArray(car_ID) := toSleep;
          else
             -- box
-            --Ada.Text_IO.Put_Line ("macchina " & Positive'Image(car_ID) & " entra ai box");
             toSleep := initialTime + Ada.Real_Time.Milliseconds (10000);
             if (c_status.pitStop4tires) -- cambio gomme
             then

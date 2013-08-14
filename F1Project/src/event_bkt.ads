@@ -1,10 +1,12 @@
 with Ada.Strings.Unbounded;
 use Ada.Strings.Unbounded;
 with Ada.Containers.Indefinite_Vectors;
+with YAMI.Parameters; use YAMI.Parameters;
+with custom_types; use custom_types;
 
 package event_bkt is
 
-   package String_Vector is new Ada.Containers.Indefinite_Vectors(Natural, Unbounded_String);
+   package String_Vector is new Ada.Containers.Indefinite_Vectors(Natural, event_array_Access);
 
    -----------------------------------------------------------------------
    --------------------------- EVENT BUCKET ------------------------------
@@ -12,8 +14,8 @@ package event_bkt is
 
    protected type Event_Bucket (capacity : Positive) is
       procedure is_bucket_empty (is_empty : out Boolean);
-      entry get_event (event : out Unbounded_String);
-      procedure insert_event (event : in Unbounded_String);
+      entry get_event (event : out event_array_Access);
+      procedure insert_event (event : in event_array_Access);
       procedure set_raining (rain : in Boolean);
       function isRaining return Boolean;
    private

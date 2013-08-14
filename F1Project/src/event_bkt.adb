@@ -16,14 +16,14 @@ package body event_bkt is
             is_empty := false;
          end if;
       end is_bucket_empty;
-      entry get_event (event : out Unbounded_String) when bucket_size > 0 is
+      entry get_event (event : out event_array_Access) when bucket_size > 0 is
       begin
          event := bucket.First_Element;  -- bucket.First_Element;
          -- Ada.Text_IO.Put_Line ("ho mangiato l'evento " & Ada.Strings.Unbounded.To_String(event));
          bucket.Delete_First;
          bucket_size := bucket_size - 1;
       end get_event;
-      procedure insert_event (event : in Unbounded_String) is
+      procedure insert_event (event : in event_array_Access) is
       begin
          -- Ada.Text_IO.Put_Line ("inserisco evento " & Ada.Strings.Unbounded.To_String(event));
          if bucket_size >= capacity

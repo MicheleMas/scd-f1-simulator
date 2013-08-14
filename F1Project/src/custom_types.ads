@@ -1,3 +1,4 @@
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 package custom_types is
 
    -- constant
@@ -32,5 +33,8 @@ package custom_types is
 
    type race_status_Access is access race_status;
 
+   type event_array is array (1 .. 7) of Unbounded_String;
+
+   type event_array_Access is access event_array;
 
 end custom_types;
