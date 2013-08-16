@@ -14,13 +14,7 @@ package body publisher is
       event : event_array_Access;
       raceOver : Boolean := false;
       bucket_empty : Boolean := false;
-      --Publisher_Address : constant String := "tcp://localhost:12345"; -- this is used if no parameter is passed
-      --Publisher_Agent : aliased YAMI.Agents.Agent := YAMI.Agents.Make_Agent;
-      --Resolved_Publisher_Address : String (1 .. YAMI.Agents.Max_Target_Length);
-      --Resolved_Publisher_Address_Last : Natural;
 
-      --Publisher : YAMI.Value_Publishers.Value_Publisher :=
-      --  YAMI.Value_Publishers.Make_Value_Publisher;
       Content : YAMI.Parameters.Parameters_Collection :=
         YAMI.Parameters.Make_Parameters;
       Client_Agent : YAMI.Agents.Agent := YAMI.Agents.Make_Agent;
@@ -33,21 +27,19 @@ package body publisher is
          Ada.Text_IO.Put_Line
            ("No endpoint specified, running locally");
          local := true;
-         --Ada.Command_Line.Set_Exit_Status
-         --  (Ada.Command_Line.Failure);
-         --Publisher_Agent.Add_Listener(Target            => Publisher_Address, -- we open standard preimpostated port
-         --                          Resolved_Target      => Resolved_Publisher_Address,
-         --                          Resolved_Target_Last => Resolved_Publisher_Address_Last);
-      --else
-
-         --Publisher_Agent.Add_Listener(Target            => Ada.Command_Line.Argument (1), -- we open the port passed by parameter
-         --                          Resolved_Target      => Resolved_Publisher_Address,
-         --                          Resolved_Target_Last => Resolved_Publisher_Address_Last);
       end if;
 
-
-      --Publisher.Register_At(The_Agent   => Publisher_Agent'Unchecked_Access,
-      --                      Object_Name => "event_publisher");
+      -- send setup information
+      Content.Set_String("type", "SP");
+      Content.Set_Integer("car_number", YAMI_Integer(custom_types.car_number));
+      Content.Set_Integer("laps", YAMI_Integer(custom_types.car_number));
+      if(not local)
+         then
+            Client_Agent.Send_One_Way(Ada.Command_Line.Argument (1),
+                                      "Event_Dispatcher",
+                                      "event",
+                                      Content);
+      end if;
 
       while ((not raceOver) or else (not bucket_empty))
       loop
