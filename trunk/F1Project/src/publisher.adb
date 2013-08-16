@@ -14,37 +14,40 @@ package body publisher is
       event : event_array_Access;
       raceOver : Boolean := false;
       bucket_empty : Boolean := false;
-      Publisher_Address : constant String := "tcp://localhost:12345"; -- this is used if no parameter is passed
-      Publisher_Agent : aliased YAMI.Agents.Agent := YAMI.Agents.Make_Agent;
-      Resolved_Publisher_Address : String (1 .. YAMI.Agents.Max_Target_Length);
-      Resolved_Publisher_Address_Last : Natural;
+      --Publisher_Address : constant String := "tcp://localhost:12345"; -- this is used if no parameter is passed
+      --Publisher_Agent : aliased YAMI.Agents.Agent := YAMI.Agents.Make_Agent;
+      --Resolved_Publisher_Address : String (1 .. YAMI.Agents.Max_Target_Length);
+      --Resolved_Publisher_Address_Last : Natural;
 
-      Publisher : YAMI.Value_Publishers.Value_Publisher :=
-        YAMI.Value_Publishers.Make_Value_Publisher;
+      --Publisher : YAMI.Value_Publishers.Value_Publisher :=
+      --  YAMI.Value_Publishers.Make_Value_Publisher;
       Content : YAMI.Parameters.Parameters_Collection :=
         YAMI.Parameters.Make_Parameters;
-
+      Client_Agent : YAMI.Agents.Agent := YAMI.Agents.Make_Agent;
+      local : boolean := false;
    begin
 
       race_stat.isOver(raceOver);
 
       if Ada.Command_Line.Argument_Count /= 1 then
          Ada.Text_IO.Put_Line
-           ("No endpoint specified, using tcp://localhost:12345");
-         Ada.Command_Line.Set_Exit_Status
-           (Ada.Command_Line.Failure);
-         Publisher_Agent.Add_Listener(Target            => Publisher_Address, -- we open standard preimpostated port
-                                   Resolved_Target      => Resolved_Publisher_Address,
-                                   Resolved_Target_Last => Resolved_Publisher_Address_Last);
-      else
-         Publisher_Agent.Add_Listener(Target            => Ada.Command_Line.Argument (1), -- we open the port passed by parameter
-                                   Resolved_Target      => Resolved_Publisher_Address,
-                                   Resolved_Target_Last => Resolved_Publisher_Address_Last);
+           ("No endpoint specified, running locally");
+         local := true;
+         --Ada.Command_Line.Set_Exit_Status
+         --  (Ada.Command_Line.Failure);
+         --Publisher_Agent.Add_Listener(Target            => Publisher_Address, -- we open standard preimpostated port
+         --                          Resolved_Target      => Resolved_Publisher_Address,
+         --                          Resolved_Target_Last => Resolved_Publisher_Address_Last);
+      --else
+
+         --Publisher_Agent.Add_Listener(Target            => Ada.Command_Line.Argument (1), -- we open the port passed by parameter
+         --                          Resolved_Target      => Resolved_Publisher_Address,
+         --                          Resolved_Target_Last => Resolved_Publisher_Address_Last);
       end if;
 
 
-      Publisher.Register_At(The_Agent   => Publisher_Agent'Unchecked_Access,
-                            Object_Name => "event_publisher");
+      --Publisher.Register_At(The_Agent   => Publisher_Agent'Unchecked_Access,
+      --                      Object_Name => "event_publisher");
 
       while ((not raceOver) or else (not bucket_empty))
       loop
@@ -146,7 +149,7 @@ package body publisher is
                                     Content.Set_Boolean("rain", true);
                                  else
                                     Content.Set_Boolean("rain", false);
-                              end if;
+                                 end if;
                               end if;
                            end if;
                         end if;
@@ -156,7 +159,15 @@ package body publisher is
             end if;
          end if;
 
-         Publisher.Publish(Content);
+         if(not local)
+         then
+            Client_Agent.Send_One_Way(Ada.Command_Line.Argument (1),
+                                      "Event_Dispatcher",
+                                      "event",
+                                      Content);
+         end if;
+
+         --Publisher.Publish(Content);
          race_stat.isOver(raceOver);
          event_buffer.is_bucket_empty(bucket_empty);
       end loop;
@@ -164,7 +175,14 @@ package body publisher is
       -- race is over
       Ada.Text_IO.Put_Line ("Processing event: Race Over");
       Content.Set_String("type", "ER");
-      Publisher.Publish(Content);
+      if(not local)
+         then
+            Client_Agent.Send_One_Way(Ada.Command_Line.Argument (1),
+                                      "Event_Dispatcher",
+                                      "event",
+                                      Content);
+         end if;
+      --Publisher.Publish(Content);
 
       delay(3.0);
       Ada.Text_IO.Put_Line ("task eventi concluso");
