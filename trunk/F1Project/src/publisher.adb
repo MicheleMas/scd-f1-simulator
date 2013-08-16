@@ -52,11 +52,11 @@ package body publisher is
             Ada.Text_IO.Put_Line ("Processing event: car " & Ada.Strings.Unbounded.To_String(event(2)) &
                                   " ended segment " & Ada.Strings.Unbounded.To_String(event(3)));
             Content.Set_String("type", Ada.Strings.Unbounded.To_String(event(1)));
-            Content.Set_Integer("car", YAMI_Integer(Integer'Value(Ada.Strings.Unbounded.To_String(event(2)))));
-            Content.Set_Integer("seg", YAMI_Integer(Integer'Value(Ada.Strings.Unbounded.To_String(event(3)))));
-            Content.Set_Integer("vel", YAMI_Integer(Integer'Value(Ada.Strings.Unbounded.To_String(event(4)))));
-            Content.Set_Integer("beh", YAMI_Integer(Integer'Value(Ada.Strings.Unbounded.To_String(event(5)))));
-            Content.Set_Integer("tire_s", YAMI_Integer(Integer'Value(Ada.Strings.Unbounded.To_String(event(6)))));
+            Content.Set_String("car", Ada.Strings.Unbounded.To_String(event(2)));
+            Content.Set_String("seg", Ada.Strings.Unbounded.To_String(event(3)));
+            Content.Set_String("vel", Ada.Strings.Unbounded.To_String(event(4)));
+            Content.Set_String("beh", Ada.Strings.Unbounded.To_String(event(5)));
+            Content.Set_String("tire_s", Ada.Strings.Unbounded.To_String(event(6)));
             if(event(7) = "T")
             then
                Content.Set_Boolean("tire_t", true);
@@ -70,7 +70,7 @@ package body publisher is
                Ada.Text_IO.Put_Line ("Processing event: car " & Ada.Strings.Unbounded.To_String(event(2)) &
                                      " enter the box");
                Content.Set_String("type", Ada.Strings.Unbounded.To_String(event(1)));
-               Content.Set_Integer("car", YAMI_Integer(Integer'Value(Ada.Strings.Unbounded.To_String(event(2)))));
+               Content.Set_String("car", Ada.Strings.Unbounded.To_String(event(2)));
             else
                if (event(1) = "LB")
                then
@@ -78,7 +78,7 @@ package body publisher is
                   Ada.Text_IO.Put_Line ("Processing event: car " & Ada.Strings.Unbounded.To_String(event(2)) &
                                         " left the box");
                   Content.Set_String("type", Ada.Strings.Unbounded.To_String(event(1)));
-                  Content.Set_Integer("car", YAMI_Integer(Integer'Value(Ada.Strings.Unbounded.To_String(event(2)))));
+                  Content.Set_String("car", Ada.Strings.Unbounded.To_String(event(2)));
                   if(event(3) = "T")
                   then
                      Content.Set_Boolean("tire_t", true);
@@ -93,7 +93,7 @@ package body publisher is
                      Ada.Text_IO.Put_Line ("Processing event: car " & Ada.Strings.Unbounded.To_String(event(2)) &
                                            " end lap " & Ada.Strings.Unbounded.To_String(event(3)));
                      Content.Set_String("type", Ada.Strings.Unbounded.To_String(event(1)));
-                     Content.Set_Integer("car", YAMI_Integer(Integer'Value(Ada.Strings.Unbounded.To_String(event(2)))));
+                     Content.Set_String("car", Ada.Strings.Unbounded.To_String(event(2)));
                   else
                      if (event(1) = "CE")
                      then
@@ -101,7 +101,7 @@ package body publisher is
                         Ada.Text_IO.Put_Line ("Processing event: car " & Ada.Strings.Unbounded.To_String(event(2)) &
                                               " end the race");
                         Content.Set_String("type", Ada.Strings.Unbounded.To_String(event(1)));
-                        Content.Set_Integer("car", YAMI_Integer(Integer'Value(Ada.Strings.Unbounded.To_String(event(2)))));
+                        Content.Set_String("car", Ada.Strings.Unbounded.To_String(event(2)));
                      else
                         if (event(1) = "ER")
                         then
@@ -116,7 +116,7 @@ package body publisher is
                                                     " car incident occurs, " & Ada.Strings.Unbounded.To_String(event(3)) &
                                                     " " & Ada.Strings.Unbounded.To_String(event(4)));
                               Content.Set_String("type", Ada.Strings.Unbounded.To_String(event(1)));
-                              Content.Set_Integer("car", YAMI_Integer(Integer'Value(Ada.Strings.Unbounded.To_String(event(2)))));
+                              Content.Set_String("car", Ada.Strings.Unbounded.To_String(event(2)));
                               if(event(3) = "T")
                               then
                                  Content.Set_Boolean("damage", true);
