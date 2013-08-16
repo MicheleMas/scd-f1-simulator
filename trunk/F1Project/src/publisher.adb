@@ -24,7 +24,6 @@ package body publisher is
       Content : YAMI.Parameters.Parameters_Collection :=
         YAMI.Parameters.Make_Parameters;
 
-      test : Positive := 1; --------- da rimuovere
    begin
 
       race_stat.isOver(raceOver);
@@ -158,11 +157,15 @@ package body publisher is
          end if;
 
          Publisher.Publish(Content);
-         --Ada.Text_IO.Put_Line ("Processed event " & Ada.Strings.Unbounded.To_String(event(1)));
-
          race_stat.isOver(raceOver);
          event_buffer.is_bucket_empty(bucket_empty);
       end loop;
+
+      -- race is over
+      Ada.Text_IO.Put_Line ("Processing event: Race Over");
+      Content.Set_String("type", "ER");
+      Publisher.Publish(Content);
+
       delay(3.0);
       Ada.Text_IO.Put_Line ("task eventi concluso");
    end Event_Handler;
