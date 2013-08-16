@@ -8,12 +8,14 @@ with Ada.Command_Line;
 
 procedure Broker is
 
-   type Update_Handler is
+   stop : boolean := false;
+
+   type Incoming_Message_Handler is
      new YAMI.Incoming_Messages.Message_Handler
        with null record;
 
    overriding procedure Call
-     (H : in out Update_Handler;
+     (H : in out Incoming_Message_Handler;
       Message : in out YAMI.Incoming_Messages.Incoming_Message'Class) is
 
       procedure Process
@@ -22,54 +24,50 @@ procedure Broker is
          event : constant String := Content.Get_String("type");
       begin
          Ada.Text_IO.Put_Line ("ricevuto: " & event);
+         if(event = "ER")
+         then
+            stop := true;
+         end if;
       end Process;
 
    begin
       Message.Process_Content (Process'Access);
    end Call;
 
-   My_Handler : aliased Update_Handler;
+   My_Handler : aliased Incoming_Message_Handler;
 
 begin
 
    if Ada.Command_Line.Argument_Count /= 1 then
       Ada.Text_IO.Put_Line
-        ("expecting one parameter: publisher destination");
+        ("Expecting one parameter: server destination");
       Ada.Command_Line.Set_Exit_Status
         (Ada.Command_Line.Failure);
       return;
    end if;
 
    declare
-      Publisher_Address : constant String :=
+      Server_Address : constant String :=
         Ada.Command_Line.Argument (1);
 
-      Subscriber_Agent : YAMI.Agents.Agent :=
+      Server_Agent : YAMI.Agents.Agent :=
         YAMI.Agents.Make_Agent;
 
-      Update_Object_Name : constant String :=
-        "update_handler";
+      Resolved_Server_Address : String (1 .. YAMI.Agents.Max_Target_Length);
+      Resolved_Server_Address_Last : Natural;
 
-      Params : YAMI.Parameters.Parameters_Collection :=
-        YAMI.Parameters.Make_Parameters;
    begin
-      --  prepare subscription update callback
 
-      Subscriber_Agent.Register_Object
-        (Update_Object_Name, My_Handler'Unchecked_Access);
+      Server_Agent.Add_Listener(Server_Address,
+                                Resolved_Server_Address,
+                                Resolved_Server_Address_Last);
 
-      --  subscribe to the producer
+      Ada.Text_IO.Put_Line("The server is listening on " &
+                             Resolved_Server_Address (1 .. Resolved_Server_Address_Last));
 
-      Params.Set_String
-        ("destination_object", Update_Object_Name);
+      Server_Agent.Register_Object("Event_Dispatcher", My_Handler'Unchecked_Access);
 
-      Subscriber_Agent.Send_One_Way
-        (Publisher_Address,
-         "event_publisher", "subscribe", Params);
-
-      Ada.Text_IO.Put_Line
-        ("subscribed, waiting for updates");
-
+      while(not stop)
       loop
          delay 10.0;
       end loop;
