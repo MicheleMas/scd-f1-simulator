@@ -50,7 +50,7 @@ package body Circuit is
 
    task body weather_forecast is
 
-      isRaining : Boolean := false;
+      isRaining : Boolean := true;
       raceOver : Boolean := false;
 
       use type Ada.Real_Time.Time_Span;
@@ -70,25 +70,28 @@ package body Circuit is
       event(1) := Ada.Strings.Unbounded.To_Unbounded_String("WC");
       while (not raceOver)
       loop
-         if isRaining then
-            event(2) := Ada.Strings.Unbounded.To_Unbounded_String("T"); -- rainy
-            event_buffer.insert_event(event);
+         if(numRandom <= 5) then
+
+            isRaining := not isRaining;
+            if isRaining then
+               event(2) := Ada.Strings.Unbounded.To_Unbounded_String("T"); -- rainy
+               event_buffer.insert_event(event);
+            else
+               event(2) := Ada.Strings.Unbounded.To_Unbounded_String("F"); -- sunny
+               event_buffer.insert_event(event);
+            end if;
+            event_buffer.set_raining(isRaining);
+
+            Rand_Int.Reset(seed);
+            Num := Rand_Int.Random(seed);
+            numRandom := Positive(Num);
          else
-            event(2) := Ada.Strings.Unbounded.To_Unbounded_String("F"); -- sunny
-            event_buffer.insert_event(event);
+            numRandom := numRandom - 50;
          end if;
-         event_buffer.set_raining(isRaining);
 
-         Rand_Int.Reset(seed);
-         Num := Rand_Int.Random(seed);
-         --Put_Line(Rand_Range'Image(Num));
-         numRandom := Positive(Num);
-
-
-	 Period := Ada.Real_Time.Milliseconds (100 * numRandom);
+         Period := Ada.Real_Time.Milliseconds (5000);
          Sveglia := Sveglia + Period;
          delay until Sveglia;
-         isRaining := not isRaining;
          race_stat.isOver(raceOver);
       end loop;
       Ada.Text_IO.Put_Line ("task meteo concluso");
