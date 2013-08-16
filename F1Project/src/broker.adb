@@ -6,9 +6,14 @@ with Ada.Text_IO;
 with Ada.Exceptions;
 with Ada.Command_Line;
 
+with broker_race_status;
+use broker_race_status;
+use YAMI.Parameters;
+
 procedure Broker is
 
    stop : boolean := false;
+   status : race_status_Access;
 
    type Incoming_Message_Handler is
      new YAMI.Incoming_Messages.Message_Handler
@@ -24,6 +29,11 @@ procedure Broker is
          event : constant String := Content.Get_String("type");
       begin
          Ada.Text_IO.Put_Line ("ricevuto: " & event);
+         if(event = "SP")
+         then
+            status := new race_status(Integer'Value(Content.Get_String("laps")),
+                                      Integer'Value(Content.Get_String("car_number")));
+         end if;
          if(event = "ER")
          then
             stop := true;
