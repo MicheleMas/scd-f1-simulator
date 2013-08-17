@@ -1,2 +1,4 @@
-xterm -T "Broker" -e './broker tcp://localhost:12345' &
-xterm -T "Main" -e './main tcp://localhost:12345' &
+rm LOGbroker.txt
+rm LOGmain.txt
+xterm -l -lf LOGbroker.txt -T "Broker" -e './broker tcp://localhost:12345' &
+xterm -l -lf LOGmainlog.txt -T "Main" -e './main tcp://localhost:12345' &
