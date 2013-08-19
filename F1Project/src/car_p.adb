@@ -21,7 +21,14 @@ package body car_p is
       Poll_Time :          Ada.Real_Time.Time := Ada.Real_Time.Clock; -- time to start polling
       --Period    :          Ada.Real_Time.Time_Span;
       toSleep   :          Ada.Real_Time.Time := Poll_Time;
+      --secondsToSleep : Ada.Real_Time.Seconds_Count;
+      durationToSleep : Ada.Real_Time.Time_Span;
    begin
+
+      --Ada.Real_Time.Split(Poll_Time,secondsToSleep,durationToSleep);
+
+      --Ada.Text_IO.Put_Line ("--> " & Ada.Real_Time.Seconds_Count'image(secondcount));	--STAMPARE Seconds_Count
+      --Ada.Text_IO.Put_Line ("-DIVERSA-> " & Duration'Image(Ada.Real_Time.To_Duration(duratiosn))); --STAMPARE TIME_SPAN
       speed := status.get_currentSpeed; -- the initial speed should be zero?
       while (not race_over) loop
          --Ada.Text_IO.Put_Line ("sono la macchina " & Positive'Image(status.get_name) & " ed entro nel segmento " & Positive'Image(nextReferee.id));
@@ -35,7 +42,15 @@ package body car_p is
          -- enterSegment need to be done as first thing, in order to compensate lag
          nextReferee.enterSegment(id, status, speed, toSleep, nextReferee, box_stop, event_buffer.isRaining, incident, last_lap);
 
+         --Ada.Real_Time.Split(toSleep,secondsToSleep,durationToSleep);
+         durationToSleep := toSleep - Poll_Time;
+        -- Ada.Text_IO.Put_Line ("--seconds_count--> " & Ada.Real_Time.Seconds_Count'image(secondsToSleep));	--STAMPARE Seconds_Count
+         --Ada.Text_IO.Put_Line ("----time_span----> " & Duration'Image(Ada.Real_Time.To_Duration(durationToSleep))); --STAMPARE TIME_SPAN
+
          status.set_currentSpeed(speed); -- set new speed on status
+
+         event (8) := Ada.Strings.Unbounded.To_Unbounded_String
+           (Duration'Image(Ada.Real_Time.To_Duration(durationToSleep)));
 
          if (incident > 0)
          then
