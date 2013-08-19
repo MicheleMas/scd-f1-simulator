@@ -79,7 +79,7 @@ begin
 
       while(not stop)
       loop
-         delay 10.0;
+         delay 5.0;
       end loop;
    end;
 exception
