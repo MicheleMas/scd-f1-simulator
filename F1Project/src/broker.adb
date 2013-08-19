@@ -18,6 +18,11 @@ procedure Broker is
    stop : boolean := false;
    position_history : car_positions;
    position_index : index_positions;
+   distances : cars_distances;
+   speed_avgs : array (1 .. car_number) of Integer;
+   n_speed_avgs : array (1 .. car_number) of Integer;
+   lap_time_avg : array (1 .. car_number) of Integer;
+   lap_completed : array (1 .. car_number) of Integer;
    --status : race_status_Access;
 
    type Incoming_Message_Handler is
@@ -47,12 +52,25 @@ procedure Broker is
                seg : Positive := Positive'Value(Content.Get_String("seg"));
                speed : Integer := Integer'Value(Content.Get_String("vel"));
             begin
+               speed_avgs(car) := (speed_avgs(car) * n_speed_avgs(car) + speed) / (n_speed_avgs(car)+1);
+               n_speed_avgs(car) := n_speed_avgs(car) + 1;
                position_history(car)(position_index(car)) := new enter_segment(time,seg,speed);
                position_index(car) := position_index(car) + 1;
                if(position_index(car) > 100)
                then
                   position_index(car) := 1;
                end if;
+            end;
+         end if;
+         if(event = "EL")
+         then
+            declare
+               car : Positive := Positive'Value(Content.Get_String("car"));
+               time : Integer := Integer((Float'Value(Content.Get_String("time")))*1000.0);
+               lap : Integer := Integer((Float'Value(Content.Get_String("lap"))));
+            begin
+               lap_time_avg(car) := time / lap;
+               lap_completed(car) := lap;
             end;
          end if;
          if(event = "ER")
@@ -89,6 +107,18 @@ begin
 
    begin
 
+      --Inizialization
+      for i in Positive range 1 .. car_number loop
+         position_index(i) := 1;
+         speed_avgs(i) := 0;
+         lap_time_avg(i) := 0;
+         n_speed_avgs(i) := 0;
+         lap_completed(i) := 0;
+         for k in Positive range 1 .. car_number loop
+            distances(i)(k) := 0;
+         end loop;
+      end loop;
+
       Server_Agent.Add_Listener(Server_Address,
                                 Resolved_Server_Address,
                                 Resolved_Server_Address_Last);
@@ -98,13 +128,44 @@ begin
 
       Server_Agent.Register_Object("Event_Dispatcher", My_Handler'Unchecked_Access);
 
-      for i in Positive range 1 .. car_number loop
-         position_index(i) := 1;
-      end loop;
-
+      --task che interpola gli evente
+      --devo salvarmi la velocità media di ogni macchina, e il tempo medio di giro
       while(not stop)
       loop
-         delay 5.0;
+         for i in Positive range 1 .. car_number loop
+            for k in Positive range i+1 .. car_number loop
+               if(position_index(i)>1 and position_index(k)>1)
+               then
+                  declare
+                     posi : Integer := position_index(i)-1;
+                     segi : Integer := position_history(i)(posi).get_segment; --segmento in cui è i
+                     posk : Ingeget := position_index(k)-1;
+                     segk : Integer := position_history(k)(posk).get_segment; --segmento in cui è k
+                     precPosK: Integer ;
+                     deltaK:Integer;
+                  begin
+                     if(lap_completed(i) = lap_completed(k))
+                     then
+                        if(segi < segk)
+                        then
+                           precPosK := posk-(segk-segi);
+                           if(precPosK <= 0)
+                           then
+                              precPosK := 100 + precPosK;
+                           end if;
+                           deltaK := position_history(k)(posk).get_time-position_history(k)(precPosK).get_time; -- tempo in cui k era al segmento i
+
+                        end if;
+                     else
+
+                     end if;
+                  end;
+
+               end if;
+            end loop;
+         end loop;
+         delay 1.0;
+         stop :=stop; -- WARNING
       end loop;
 
       Ada.Text_IO.Put_Line(Positive'Image(position_index(1)));

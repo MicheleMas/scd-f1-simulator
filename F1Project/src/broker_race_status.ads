@@ -20,6 +20,10 @@ package broker_race_status is
 
    type index_positions is array (1 .. car_number) of Positive;
 
+   type sub_cars_distances is array (1 .. car_number) of Integer;
+
+   type cars_distances is array (1 .. car_number) of sub_cars_distances;
+
    protected type race_status is
 
       procedure set_weather(new_weather : in boolean);
