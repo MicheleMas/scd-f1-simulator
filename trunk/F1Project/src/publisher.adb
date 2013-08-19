@@ -30,16 +30,15 @@ package body publisher is
       end if;
 
       -- send setup information
-      Content.Set_String("type", "SP");
-      Content.Set_Integer("car_number", YAMI_Integer(custom_types.car_number));
-      Content.Set_Integer("laps", YAMI_Integer(custom_types.car_number));
-      if(not local)
-         then
-            Client_Agent.Send_One_Way(Ada.Command_Line.Argument (1),
-                                      "Event_Dispatcher",
-                                      "event",
-                                      Content);
-      end if;
+      --Content.Set_String("type", "SP");
+      --Content.Set_Integer("car_number", YAMI_Integer(custom_types.car_number));
+      --Content.Set_Integer("laps", YAMI_Integer(custom_types.car_number));
+      --if(not local) then
+      --      Client_Agent.Send_One_Way(Ada.Command_Line.Argument (1),
+      --                                "Event_Dispatcher",
+      --                                "event",
+      --                                Content);
+      --end if;
 
       while ((not raceOver) or else (not bucket_empty))
       loop
