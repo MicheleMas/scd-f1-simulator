@@ -50,7 +50,8 @@ package body publisher is
          then
             -- End Segment
             Ada.Text_IO.Put_Line ("Processing event: car " & Ada.Strings.Unbounded.To_String(event(2)) &
-                                  " ended segment " & Ada.Strings.Unbounded.To_String(event(3)));
+                                    " ended segment " & Ada.Strings.Unbounded.To_String(event(3)) &
+                                  " at time " & Ada.Strings.Unbounded.To_String(event(8)));
             Content.Set_String("type", Ada.Strings.Unbounded.To_String(event(1)));
             Content.Set_String("car", Ada.Strings.Unbounded.To_String(event(2)));
             Content.Set_String("seg", Ada.Strings.Unbounded.To_String(event(3)));
@@ -63,6 +64,7 @@ package body publisher is
             else
                Content.Set_Boolean("tire_t", false);
             end if;
+            Content.Set_String("time",Ada.Strings.Unbounded.To_String(event(8)));
          else
             if (event(1) = "EB")
             then
@@ -71,6 +73,7 @@ package body publisher is
                                      " enter the box");
                Content.Set_String("type", Ada.Strings.Unbounded.To_String(event(1)));
                Content.Set_String("car", Ada.Strings.Unbounded.To_String(event(2)));
+               Content.Set_String("time",Ada.Strings.Unbounded.To_String(event(8)));
             else
                if (event(1) = "LB")
                then
@@ -86,6 +89,7 @@ package body publisher is
                      Content.Set_Boolean("tire_t", false);
                   end if;
                   Content.Set_Integer("lap", YAMI_Integer(Integer'Value(Ada.Strings.Unbounded.To_String(event(4)))));
+                  Content.Set_String("time",Ada.Strings.Unbounded.To_String(event(8)));
                else
                   if (event(1) = "EL")
                   then
@@ -94,6 +98,7 @@ package body publisher is
                                            " end lap " & Ada.Strings.Unbounded.To_String(event(3)));
                      Content.Set_String("type", Ada.Strings.Unbounded.To_String(event(1)));
                      Content.Set_String("car", Ada.Strings.Unbounded.To_String(event(2)));
+                     Content.Set_String("time",Ada.Strings.Unbounded.To_String(event(8)));
                   else
                      if (event(1) = "CE")
                      then
@@ -102,6 +107,7 @@ package body publisher is
                                               " end the race");
                         Content.Set_String("type", Ada.Strings.Unbounded.To_String(event(1)));
                         Content.Set_String("car", Ada.Strings.Unbounded.To_String(event(2)));
+                        Content.Set_String("time",Ada.Strings.Unbounded.To_String(event(8)));
                      else
                         if (event(1) = "ER")
                         then
@@ -129,6 +135,7 @@ package body publisher is
                               else
                                  Content.Set_Boolean("retired", false);
                               end if;
+                              Content.Set_String("time",Ada.Strings.Unbounded.To_String(event(8)));
                            else
                               if (event(1) = "WC")
                               then
