@@ -4,9 +4,11 @@ use custom_types;
 package broker_race_status is
 
    protected type enter_segment (time : Integer;
-                                 segment : Integer) is
+                                 segment : Integer;
+                                 speed : Integer) is
       function get_time return Integer;
       function get_segment return Integer;
+      function get_speed return Integer;
 
    end enter_segment;
 
@@ -16,7 +18,7 @@ package broker_race_status is
 
    type car_positions is array (1 .. car_number) of positions;
 
-   type index_position is array (1 .. car_number) of Positive;
+   type index_positions is array (1 .. car_number) of Positive;
 
    protected type race_status is
 
