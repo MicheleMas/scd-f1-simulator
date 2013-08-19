@@ -13,6 +13,7 @@ use YAMI.Parameters;
 procedure Broker is
 
    stop : boolean := false;
+
    --status : race_status_Access;
 
    type Incoming_Message_Handler is

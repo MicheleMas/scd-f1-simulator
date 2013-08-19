@@ -1,3 +1,6 @@
+with custom_types;
+use custom_types;
+
 package broker_race_status is
 
    protected type enter_segment (time : Integer;
@@ -11,7 +14,9 @@ package broker_race_status is
 
    type positions is array (1 .. 100) of enter_segment_Access;
 
-   type car_status is array (1 .. 20) of positions; -- TODO cambiare 20
+   type car_positions is array (1 .. car_number) of positions;
+
+   type index_position is array (1 .. car_number) of Positive;
 
    protected type race_status is
 
