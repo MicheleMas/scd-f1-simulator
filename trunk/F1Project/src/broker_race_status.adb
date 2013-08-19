@@ -12,6 +12,10 @@ package body broker_race_status is
       begin
          return segment;
       end get_segment;
+      function get_speed return Integer is
+      begin
+         return speed;
+      end get_speed;
 
    end enter_segment;
 
