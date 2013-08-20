@@ -40,4 +40,34 @@ package body broker_race_status is
 
    end race_status;
 
+   protected body car_snapshot is
+
+      procedure get_segment(seg : out Integer) is
+      begin
+         seg := segment;
+      end get_segment;
+      procedure get_progress(prog : out Integer) is
+      begin
+         prog := progress;
+      end get_progress;
+      procedure is_retired(ret : out boolean) is
+      begin
+         ret := retired;
+      end is_retired;
+
+      procedure set_segment(seg : in Integer) is
+      begin
+         segment := seg;
+      end set_segment;
+      procedure set_progress(prog : in Integer) is
+      begin
+         progress := prog;
+      end set_progress;
+      procedure car_retired is
+      begin
+         retired := true;
+      end car_retired;
+
+   end car_snapshot;
+
 end broker_race_status;
