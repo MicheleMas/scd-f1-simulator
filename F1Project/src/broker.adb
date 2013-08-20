@@ -13,6 +13,9 @@ use YAMI.Parameters;
 with custom_types;
 use custom_types;
 
+with broker_publisher;
+use broker_publisher;
+
 with Ada.Real_Time;
 use Ada.Real_Time;
 
@@ -244,7 +247,7 @@ begin
                      end if;
                   else if(last_end(i).get_time < t)
                   then
-                     snapshot(i).set_data(0,0.0,false,false,false);
+                     snapshot(i).set_data(0,0.0,false,false,true);
                      retired_cars(i):=true;
                   else
                      --sono successe cose molto strane
