@@ -75,29 +75,33 @@ package body broker_race_status is
 
       procedure get_data(seg : out Integer;
                          prog : out Float;
+                         inci : out boolean;
                          ret : out boolean;
                          over : out boolean) is
       begin
          seg := segment;
          prog := progress;
+         inci := incident;
          ret := retired;
          over := race_completed;
       end get_data;
 
       procedure set_data(seg : in Integer;
                          prog : in Float;
+                         inci : in boolean;
                          ret : in boolean;
                          over : in boolean) is
       begin
          segment := seg;
          progress := prog;
+         incident := inci;
          retired := ret;
          race_completed := over;
       end set_data;
 
       procedure print_data is
       begin
-         Ada.Text_IO.Put_Line(Integer'Image(segment) & " " & Integer'Image(Integer(progress)) & " - " & Boolean'Image(retired) & " " & Boolean'Image(race_completed));
+         Ada.Text_IO.Put_Line(Integer'Image(segment) & " " & Integer'Image(Integer(progress)) & " -  Incident=" & Boolean'Image(incident) & " Ret=" & Boolean'Image(retired) & " Completed=" & Boolean'Image(race_completed));
       end print_data;
 
    end car_snapshot;
