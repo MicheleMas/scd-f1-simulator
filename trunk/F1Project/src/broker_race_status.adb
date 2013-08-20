@@ -1,3 +1,5 @@
+with Ada; use Ada;
+with Ada.Text_IO;
 
 
 package body broker_race_status is
@@ -92,6 +94,11 @@ package body broker_race_status is
          retired := ret;
          race_completed := over;
       end set_data;
+
+      procedure print_data is
+      begin
+         Ada.Text_IO.Put_Line(Integer'Image(segment) & " " & Integer'Image(Integer(progress)) & " - " & Boolean'Image(retired) & " " & Boolean'Image(race_completed));
+      end print_data;
 
    end car_snapshot;
 

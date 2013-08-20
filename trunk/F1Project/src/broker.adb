@@ -21,13 +21,16 @@ procedure Broker is
    stop : boolean := false;
    position_history : car_positions;
    position_index : index_positions;
+   last_incident : array (1 .. car_number) of incident_event_Access;
+   last_box : array (1 .. car_number) of box_event_Access;
+
    distances : cars_distances;
    speed_avgs : array (1 .. car_number) of Integer;
    n_speed_avgs : array (1 .. car_number) of Integer;
    lap_time_avg : array (1 .. car_number) of Integer;
    current_lap : array (1 .. car_number) of Integer;
    retired_cars : array (1 .. car_number) of boolean; -- true means retired
-   snapshot : array (1 .. car_number) of car_snapshot;
+   snapshot : snapshot_array;
    --status : race_status_Access;
 
    Poll_Time : Ada.Real_Time.Time;
@@ -94,10 +97,19 @@ procedure Broker is
          if(event = "CA")
          then
             -- TODO gestire le altre azioni per l'incidente
-            if(Content.Get_Boolean("retired"))
+            declare
+               car : Positive := Positive'Value(Content.Get_String("car"));
+               retired : Boolean := Boolean'Value(Content.Get_String("retired"));
+               damage : Boolean := Boolean'Value(Content.Get_String("damage"));
+               time : Integer := Integer((Float'Value(Content.Get_String("time")))*1000.0);
+               seg : Positive := Positive'Value(Content.Get_String("seg"));
+            begin
+               last_incident(car):=new incident_event(time,seg,damage,retired);
+            if(retired)
             then
                retired_cars(Positive'Value(Content.Get_String("car"))) := true;
-            end if;
+               end if;
+            end;
          end if;
 
       end Process;
@@ -135,7 +147,8 @@ begin
          --we add a special ES event to each car, to show that they are on starting lane
          position_history(i)(1) := new enter_segment(0,0,0);
          position_index(i) := 2;
-
+         last_incident(i) := new incident_event(0,0,false,false);
+         last_box(i) := new box_event(0);
          speed_avgs(i) := 0;
          lap_time_avg(i) := 0;
          n_speed_avgs(i) := 0;
@@ -158,7 +171,7 @@ begin
       --Aspettiamo fino a quando non viene fatto il setup
       while(not setup_done)
       loop
-         delay 1.0;
+         delay 2.0;
       end loop;
 
       --task che interpola gli eventi
@@ -175,7 +188,7 @@ begin
          loop
             -- snapshot
             for i in Positive range 1 .. car_number loop
-               if(position_index(i)-2 > 0) --se abbiamo almeno un evento per la macchina i
+               if(position_index(i) > 2 and retired_cars(i) = false) --se abbiamo almeno un evento per la macchina i E non si e' ritirata
                then
                   --cerco l'evento ES immediatamente successivo al tempo t
                   indexPreEvent := position_index(i)-1;
@@ -192,17 +205,37 @@ begin
 
                      nextTime := position_history(i)(indexNextEvent).get_time;
                      progress := Float(100*(t-precTime)) / Float((nextTime - precTime));
-                     snapshot(i).set_segment(position_history(i)(indexPreEvent).get_segment);
+                     snapshot(i).set_data(position_history(i)(indexPreEvent).get_segment,progress,false,false);
+                     -- casi limite, la macchina o sta facendo un incidente, o è ai box,
+                  else if(last_box(i).get_time > t)
+                  then
+                     nextTime := last_box(i).get_time;
+                     progress := Float(100*(t-precTime)) / Float((nextTime - precTime));
+                     snapshot(i).set_data(-1,progress,false,false);
+                  else if(last_incident(i).get_time > t)
+                  then
+                     --è incidentata
+                     snapshot(i).set_data(-1,9999.9,true,true);
+                     null;
                   else
-                     progress := 0.0;
-                     snapshot(i).set_segment(position_history(i)(indexPreEvent).get_segment + 1);
+                     --sono successe cose molto strane
+                     snapshot(i).set_data(-9,0.0,false,false);
+
                   end if;
-                  snapshot(i).set_progress(progress);
+                     end if;
+                  end if;
                end if;
+
             end loop;
             t := t + 500;
             delay 0.5;
             stop :=stop; -- WARNING
+            Ada.Text_IO.Put_Line("---");
+            Ada.Text_IO.Put_Line(" ## 1: ");
+            snapshot(1).print_data;
+            Ada.Text_IO.Put_Line(" ## 2: ");
+            snapshot(2).print_data;
+            Ada.Text_IO.Put_Line("---");
          end loop;
       end;
       Ada.Text_IO.Put_Line(Positive'Image(position_index(1)));

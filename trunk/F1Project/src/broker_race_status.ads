@@ -40,11 +40,11 @@ package broker_race_status is
 
    end incident_event;
 
-   type incident_event_Access is access enter_segment;
+   type incident_event_Access is access incident_event;
 
    type incident is array (1 .. 20) of incident_event_Access;
 
-   type car_incident is array (1 .. car_number) of positions;
+   type car_incident is array (1 .. car_number) of incident;
 
    type index_incident is array (1 .. car_number) of Positive;
 
@@ -82,6 +82,7 @@ package broker_race_status is
                          prog : in Float;
                          ret : in boolean;
                          over : in boolean);
+      procedure print_data;
 
    private
 
@@ -92,7 +93,7 @@ package broker_race_status is
 
    end car_snapshot;
 
-   type snapshot is array (1 .. car_number) of car_snapshot;
+   type snapshot_array is array (1 .. car_number) of car_snapshot;
 
    protected type race_status is
 
