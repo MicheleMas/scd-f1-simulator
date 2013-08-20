@@ -3,6 +3,8 @@ use custom_types;
 
 package broker_race_status is
 
+   -------- Positions array ---------
+
    protected type enter_segment (time : Integer;
                                  segment : Integer;
                                  speed : Integer) is
@@ -19,6 +21,10 @@ package broker_race_status is
    type car_positions is array (1 .. car_number) of positions;
 
    type index_positions is array (1 .. car_number) of Positive;
+
+   --------- End Positions Array ----------
+
+
 
    type sub_cars_distances is array (1 .. car_number) of Integer;
 
