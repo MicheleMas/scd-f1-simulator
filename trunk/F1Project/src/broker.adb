@@ -60,7 +60,7 @@ procedure Broker is
             Poll_Time := Ada.Real_Time.Clock;
          end if;
 
-         Ada.Text_IO.Put_Line ("ricevuto: " & event);
+         Ada.Text_IO.Put_Line ("ricevuto: " & event & " at " & Content.Get_String("time"));
          --if(event = "SP")
          --then
          --   status := new race_status(Integer'Value(Content.Get_String("laps")),
@@ -196,6 +196,7 @@ begin
       loop
          delay 1.0;
       end loop;
+      --delay 2.0;
 
       --task che interpola gli eventi
       declare
@@ -229,7 +230,7 @@ begin
 
                      nextTime := position_history(i)(indexNextEvent).get_time;
                      progress := Float(100*(t-precTime)) / Float((nextTime - precTime));
-                     snapshot(i).set_data(position_history(i)(indexPreEvent).get_segment,progress,false,false,false);
+                     snapshot(i).set_data(position_history(i)(indexNextEvent).get_segment,progress,false,false,false);
                      -- casi limite, la macchina o sta facendo un incidente, o è ai box,
                   else if(last_box(i).get_time > t)
                   then
@@ -269,7 +270,7 @@ begin
             end loop;
             t := t + 500;
             delay 0.5;
-            Ada.Text_IO.Put_Line("-- SNAP TIME " & Integer'Image(t) & " --");
+            Ada.Text_IO.Put_Line("-- SNAP TIME " & Integer'Image(t-500) & " --");
             Ada.Text_IO.Put_Line(" ## 1: ");
             snapshot(1).print_data;
             Ada.Text_IO.Put_Line(" ## 2: ");

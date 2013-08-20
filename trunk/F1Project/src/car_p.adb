@@ -84,7 +84,6 @@ package body car_p is
                event(1) := Ada.Strings.Unbounded.To_Unbounded_String("EB");
                event(2) := Ada.Strings.Unbounded.To_Unbounded_String(Positive'Image(id));
                event_buffer.insert_event(event);
-               delay until toSleep;
                event(1) := Ada.Strings.Unbounded.To_Unbounded_String("LB");
                event(2) := Ada.Strings.Unbounded.To_Unbounded_String(Positive'Image(id));
                if(status.get_rain_tires)
@@ -94,9 +93,10 @@ package body car_p is
                   event(3) := Ada.Strings.Unbounded.To_Unbounded_String("F"); -- dry tires
                end if;
                event(4) := Ada.Strings.Unbounded.To_Unbounded_String(Positive'Image(lap)); -- ended lap
+               event_buffer.insert_event(event);
+               delay until toSleep;
                lap := lap + 1;
 	    else
-               delay until toSleep;
                event(1) := Ada.Strings.Unbounded.To_Unbounded_String("ES");
                event(2) := Ada.Strings.Unbounded.To_Unbounded_String(Positive'Image(id));
                event(3) := Ada.Strings.Unbounded.To_Unbounded_String(Positive'Image(previousReferee.id));
@@ -109,10 +109,11 @@ package body car_p is
                else
                   event(7) :=  Ada.Strings.Unbounded.To_Unbounded_String("F");
                end if;
+               event_buffer.insert_event(event);
+               delay until toSleep;
             end if;
 
             previousReferee.leaveSegment(id, box_stop);
-	    event_buffer.insert_event(event);
 
             -- update lap
 	    if (nextReferee.id = 1)
