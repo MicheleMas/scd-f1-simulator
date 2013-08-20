@@ -32,7 +32,7 @@ procedure Broker is
    lap_time_avg : array (1 .. car_number) of Integer;
    current_lap : array (1 .. car_number) of Integer;
    retired_cars : array (1 .. car_number) of boolean; -- true means retired
-   snapshot : snapshot_array;
+   snapshot : snapshot_array_Access := new snapshot_array;
    --status : race_status_Access;
 
    Poll_Time : Ada.Real_Time.Time;
@@ -172,6 +172,7 @@ begin
          n_speed_avgs(i) := 0;
          current_lap(i) := 1;
          retired_cars(i) := false;
+         snapshot(i) := new car_snapshot;
          last_end(i) := new end_race_event(999999999);
          for k in Positive range 1 .. car_number loop
             distances(i)(k) := 0;
