@@ -42,11 +42,6 @@ package broker_race_status is
 
    type incident_event_Access is access incident_event;
 
-   type incident is array (1 .. 20) of incident_event_Access;
-
-   type car_incident is array (1 .. car_number) of incident;
-
-   type index_incident is array (1 .. car_number) of Positive;
 
    -------- Box array ---------
 
@@ -58,11 +53,16 @@ package broker_race_status is
 
    type box_event_Access is access box_event;
 
-   type box is array (1 .. 100) of box_event_Access;
 
-   type car_box is array (1 .. car_number) of box;
+   ---------
 
-   type index_box is array (1 .. car_number) of Positive;
+ protected type end_race_event (time : Integer) is
+
+      function get_time return Integer;
+
+   end end_race_event;
+
+   type end_race_event_Access is access end_race_event;
 
 
    ---------
