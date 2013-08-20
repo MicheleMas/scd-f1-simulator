@@ -54,6 +54,10 @@ package body broker_race_status is
       begin
          ret := retired;
       end is_retired;
+      procedure is_over(over : out boolean) is
+      begin
+         over := race_completed;
+      end is_over;
 
       procedure set_segment(seg : in Integer) is
       begin
@@ -67,6 +71,10 @@ package body broker_race_status is
       begin
          retired := true;
       end car_retired;
+      procedure set_over is
+      begin
+         race_completed := true;
+      end set_over;
 
    end car_snapshot;
 

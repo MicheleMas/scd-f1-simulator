@@ -33,16 +33,19 @@ package broker_race_status is
       procedure get_segment(seg : out Integer);
       procedure get_progress(prog : out Integer);
       procedure is_retired(ret : out boolean);
+      procedure is_over(over : out boolean);
 
       procedure set_segment(seg : in Integer);
       procedure set_progress(prog : in Integer);
       procedure car_retired;
+      procedure set_over;
 
    private
 
       segment : Integer := 1;
       progress : Integer := 0;
       retired : boolean := false;
+      race_completed : boolean := false;
 
    end car_snapshot;
 
