@@ -172,6 +172,7 @@ begin
          n_speed_avgs(i) := 0;
          current_lap(i) := 1;
          retired_cars(i) := false;
+         last_end(i) := new end_race_event(999999999);
          for k in Positive range 1 .. car_number loop
             distances(i)(k) := 0;
          end loop;
@@ -203,7 +204,7 @@ begin
          precTime:Integer;
          raceFinished:boolean := false;
       begin
-         while(not raceFinished)
+         while(not raceFinished or not stop)
          loop
             -- snapshot
             for i in Positive range 1 .. car_number loop
@@ -240,7 +241,7 @@ begin
                      if(last_incident(i).car_retired) then
                         retired_cars(i):=true;
                      end if;
-                  else if(last_end(i).get_time > t)
+                  else if(last_end(i).get_time < t)
                   then
                      snapshot(i).set_data(0,0.0,false,false,false);
                      retired_cars(i):=true;
@@ -258,6 +259,7 @@ begin
             for i in Positive range 1 .. car_number loop
                if(not retired_cars(i))
                then
+	          --Ada.Text_IO.Put_Line("La macchina " & Positive'Image(i) & " e' ancora in corsa");
                   raceFinished:=false;
                end if;
             end loop;
