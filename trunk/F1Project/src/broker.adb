@@ -187,19 +187,21 @@ begin
 
                   --uso il tempo segnato nell'evento per capire a che percentuale del tratto segnato è al tempo t
                   precTime := position_history(i)(indexPreEvent).get_time;
-Ada.Text_IO.Put_Line("--> t=" & Integer'Image(t) & " prec =" & Integer'Image(precTime));
-                  nextTime := position_history(i)(indexNextEvent).get_time;
-                  progress := Float(100*(t-precTime)) / Float((nextTime - precTime));
-                  --salvo tratto e percentuale da qualche parte
-                  snapshot(i).set_segment(position_history(i)(indexPreEvent).get_segment);
+                  if(position_index(i) > indexNextEvent)
+                  then
+
+                     nextTime := position_history(i)(indexNextEvent).get_time;
+                     progress := Float(100*(t-precTime)) / Float((nextTime - precTime));
+                     snapshot(i).set_segment(position_history(i)(indexPreEvent).get_segment);
+                  else
+                     progress := 0.0;
+                     snapshot(i).set_segment(position_history(i)(indexPreEvent).get_segment + 1);
+                  end if;
                   snapshot(i).set_progress(progress);
-                    --set tratto = position_history(i)(indexPreEvent).get_segment
-                    --set percentuale = progress
-                  null;
                end if;
             end loop;
             t := t + 500;
-            delay 1.0;
+            delay 0.5;
             stop :=stop; -- WARNING
          end loop;
       end;
