@@ -1,6 +1,7 @@
 with broker_race_status;
 use broker_race_status;
 with Ada.Containers.Indefinite_Vectors;
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 package broker_publisher is
 
@@ -30,6 +31,9 @@ package broker_publisher is
 
    type condition_Access is access condition;
 
-   task type updater (snapshot : condition_Access);
+   task type updater (frame : condition_Access;
+                      address : Unbounded_String);
+
+   type updater_Access is access updater;
 
 end broker_publisher;

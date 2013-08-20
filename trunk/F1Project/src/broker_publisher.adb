@@ -3,6 +3,7 @@ with YAMI.Agents;
 with Ada.Text_IO;
 with Ada.Command_Line;
 with YAMI.Parameters;
+use YAMI.Parameters;
 with YAMI.Value_Publishers;
 
 
@@ -63,7 +64,7 @@ package body broker_publisher is
       end if;
 
       declare
-         Publish_Address : constant String := Ada.Command_Line.Argument(2);
+         --Publish_Address : constant String := Ada.Command_Line.Argument(2);
          Publisher_Agent : aliased YAMI.Agents.Agent := YAMI.Agents.Make_Agent;
          Resolved_Publisher_Address : String (1 .. YAMI.Agents.Max_Target_Length);
          Resolved_Publisher_Address_Last : Natural;
@@ -73,23 +74,44 @@ package body broker_publisher is
 
          Content : YAMI.Parameters.Parameters_Collection := Yami.Parameters.Make_Parameters;
 
+         current_snapshot : snapshot_array_Access;
       begin
+         Ada.Text_IO.Put_Line("*****************Arrivo qui*****************");
+         Publisher_Agent.Add_Listener(address, Resolved_Publish_Address,
+                                      Resolved_Publisher_Address_Last);
          if(default)
          then
             Publisher_Agent.Add_Listener(default_Address, Resolved_Publisher_Address,
-                                       Resolved_Publisher_Address_Last);
-         else
-            Publisher_Agent.Add_Listener(Publish_Address, Resolved_Publisher_Address,
-                                       Resolved_Publisher_Address_Last);
+                                         Resolved_Publisher_Address_Last);
+         --else
+            --Publisher_Agent.Add_Listener(Publish_Address, Resolved_Publisher_Address,
+                                        -- Resolved_Publisher_Address_Last);
          end if;
 
          Snapshot_Publisher.Register_At(Publisher_Agent'Unchecked_Access, "snapshots");
 
          while(not race_over)
          loop
-            -- leggi lo stato e convertilo
-            null;
-            delay 0.5;
+            -- read the snapshot and convert it to a Content
+            frame.get_snapshot(current_snapshot);
+            declare
+               seg : Integer;
+               prog : Float;
+               inci : boolean;
+               ret : boolean;
+               over : boolean;
+            begin
+               for i in Positive range 1 .. cars_number loop
+                  current_snapshot(i).get_data(seg, prog, inci, ret, over);
+                  Content.Set_Integer("seg" & Positive'Image(i), YAMI_Integer(seg));
+                  Content.Set_Long_Float("prog" & Positive'Image(i), YAMI_Long_Float(prog));
+                  Content.Set_Boolean("inci" & Positive'Image(i), inci);
+                  Content.Set_Boolean("ret" & Positive'Image(i), ret);
+                  Content.Set_Boolean("over" & Positive'Image(i), over);
+               end loop;
+            end;
+            Snapshot_Publisher.Publish(Content);
+            Ada.Text_IO.Put_Line("-------inviato!!-------");
          end loop;
 
       end;
