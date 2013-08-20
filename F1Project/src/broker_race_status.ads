@@ -96,7 +96,11 @@ package broker_race_status is
 
    end car_snapshot;
 
-   type snapshot_array is array (1 .. car_number) of car_snapshot;
+   type car_snapshot_Access is access car_snapshot;
+
+   type snapshot_array is array (1 .. car_number) of car_snapshot_Access;
+
+   type snapshot_array_Access is access snapshot_array;
 
    protected type race_status is
 
