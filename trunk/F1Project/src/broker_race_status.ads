@@ -22,7 +22,50 @@ package broker_race_status is
 
    type index_positions is array (1 .. car_number) of Positive;
 
-   --------- End Positions Array ----------
+   -------- Incident array ---------
+
+   -- nell'array car_incident è salvato all'id corrispondente al numero della
+   -- macchina una lista circolare contenente gli ultimi 20 incidenti che ha
+   -- effettuato. L'indice della lista circolare è contenuto nell'array
+   -- index_incident.
+
+   protected type incident_event (time : Integer;
+                                  segment : Integer;
+                                  damaged : boolean;
+                                  retired : boolean) is
+      function get_time return Integer;
+      function get_segment return Integer;
+      function is_damaged return boolean;
+      function car_retired return boolean;
+
+   end incident_event;
+
+   type incident_event_Access is access enter_segment;
+
+   type incident is array (1 .. 20) of incident_event_Access;
+
+   type car_incident is array (1 .. car_number) of positions;
+
+   type index_incident is array (1 .. car_number) of Positive;
+
+   -------- Box array ---------
+
+   protected type box_event (time : Integer) is
+
+      function get_time return Integer;
+
+   end box_event;
+
+   type box_event_Access is access box_event;
+
+   type box is array (1 .. 100) of box_event_Access;
+
+   type car_box is array (1 .. car_number) of box;
+
+   type index_box is array (1 .. car_number) of Positive;
+
+
+   ---------
 
    type sub_cars_distances is array (1 .. car_number) of Integer;
 
@@ -30,15 +73,15 @@ package broker_race_status is
 
    protected type car_snapshot is
 
-      procedure get_segment(seg : out Integer);
-      procedure get_progress(prog : out Float);
-      procedure is_retired(ret : out boolean);
-      procedure is_over(over : out boolean);
+      procedure get_data(seg : out Integer;
+                         prog : out Float;
+                         ret : out boolean;
+                         over : out boolean);
 
-      procedure set_segment(seg : in Integer);
-      procedure set_progress(prog : in Float);
-      procedure car_retired;
-      procedure set_over;
+      procedure set_data(seg : in Integer;
+                         prog : in Float;
+                         ret : in boolean;
+                         over : in boolean);
 
    private
 
