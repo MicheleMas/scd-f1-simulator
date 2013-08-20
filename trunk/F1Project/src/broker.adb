@@ -143,7 +143,7 @@ procedure Broker is
 
 begin
 
-   if Ada.Command_Line.Argument_Count /= 1 then
+   if Ada.Command_Line.Argument_Count < 1 then
       Ada.Text_IO.Put_Line
         ("Expecting one parameter: server destination");
       Ada.Command_Line.Set_Exit_Status

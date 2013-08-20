@@ -3,6 +3,7 @@ with YAMI.Agents;
 with Ada.Text_IO;
 with Ada.Command_Line;
 with YAMI.Parameters;
+with YAMI.Value_Publishers;
 
 
 package body broker_publisher is
@@ -52,12 +53,13 @@ package body broker_publisher is
    end condition;
 
    task body updater is
+      default_Address : constant String := "tcp://localhost:12346";
+      default : boolean := false;
    begin
-      if(Ada.Command_Line.Argument_Count /= 2)
+      if(Ada.Command_Line.Argument_Count < 2)
       then
-         Ada.Text_IO.Put_Line("expecting 2 parameter, rtfm!");
-         Ada.Command_Line.Set_Exit_Status(Ada.Command_Line.Failure);
-         return;
+         Ada.Text_IO.Put_Line("expecting 2 parameter, using default tcp://localhost:12346");
+         default := true;
       end if;
 
       declare
@@ -72,6 +74,14 @@ package body broker_publisher is
          Content : YAMI.Parameters.Parameters_Collection := Yami.Parameters.Make_Parameters;
 
       begin
+         if(default)
+         then
+            Publisher_Agent.Add_Listener(default_Address, Resolved_Publisher_Address,
+                                       Resolved_Publisher_Address_Last);
+         else
+            Publisher_Agent.Add_Listener(Publish_Address, Resolved_Publisher_Address,
+                                       Resolved_Publisher_Address_Last);
+         end if;
 
          Snapshot_Publisher.Register_At(Publisher_Agent'Unchecked_Access, "snapshots");
 
