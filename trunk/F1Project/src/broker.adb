@@ -27,6 +27,7 @@ procedure Broker is
    lap_time_avg : array (1 .. car_number) of Integer;
    current_lap : array (1 .. car_number) of Integer;
    retired_cars : array (1 .. car_number) of boolean; -- true means retired
+   snapshot : array (1 .. car_number) of car_snapshot;
    --status : race_status_Access;
 
    Poll_Time : Ada.Real_Time.Time;
@@ -131,7 +132,10 @@ begin
 
       --Initialization
       for i in Positive range 1 .. car_number loop
-         position_index(i) := 1;
+         --we add a special ES event to each car, to show that they are on starting lane
+         position_history(i)(1) := new enter_segment(0,0,0);
+         position_index(i) := 2;
+
          speed_avgs(i) := 0;
          lap_time_avg(i) := 0;
          n_speed_avgs(i) := 0;
@@ -159,7 +163,7 @@ begin
 
       --task che interpola gli eventi
       declare
-         t:Float := 0.0;
+         t:Integer := 0;
          indexPreEvent:Integer;
          indexNextEvent:Integer;
          progress:Float;
@@ -171,28 +175,31 @@ begin
          loop
             -- snapshot
             for i in Positive range 1 .. car_number loop
-               if(position_index(i)-1 > 0) --se abbiamo almeno un evento per la macchina i
+               if(position_index(i)-2 > 0) --se abbiamo almeno un evento per la macchina i
                then
                   --cerco l'evento ES immediatamente successivo al tempo t
                   indexPreEvent := position_index(i)-1;
-                  while( indexPreEvent > 0 and Integer(t*1000.0) < position_history(i)(indexPreEvent).get_time)
+                  while( indexPreEvent > 0 and t < position_history(i)(indexPreEvent).get_time)
                   loop
                      indexPreEvent := indexPreEvent - 1;
                   end loop;
                   indexNextEvent := indexPreEvent +  1; --indice dell'evento immediatamente successivo
 
                   --uso il tempo segnato nell'evento per capire a che percentuale del tratto segnato è al tempo t
-                  nextTime := position_history(i)(indexNextEvent).get_time;
                   precTime := position_history(i)(indexPreEvent).get_time;
-                  progress := 100*(t-precTime) / (nextTime - precTime);
+Ada.Text_IO.Put_Line("--> t=" & Integer'Image(t) & " prec =" & Integer'Image(precTime));
+                  nextTime := position_history(i)(indexNextEvent).get_time;
+                  progress := Float(100*(t-precTime)) / Float((nextTime - precTime));
                   --salvo tratto e percentuale da qualche parte
+                  snapshot(i).set_segment(position_history(i)(indexPreEvent).get_segment);
+                  snapshot(i).set_progress(progress);
                     --set tratto = position_history(i)(indexPreEvent).get_segment
                     --set percentuale = progress
                   null;
                end if;
             end loop;
-            t := t + 0.5;
-            delay 0.5;
+            t := t + 500;
+            delay 1.0;
             stop :=stop; -- WARNING
          end loop;
       end;

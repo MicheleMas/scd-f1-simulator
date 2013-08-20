@@ -31,19 +31,19 @@ package broker_race_status is
    protected type car_snapshot is
 
       procedure get_segment(seg : out Integer);
-      procedure get_progress(prog : out Integer);
+      procedure get_progress(prog : out Float);
       procedure is_retired(ret : out boolean);
       procedure is_over(over : out boolean);
 
       procedure set_segment(seg : in Integer);
-      procedure set_progress(prog : in Integer);
+      procedure set_progress(prog : in Float);
       procedure car_retired;
       procedure set_over;
 
    private
 
       segment : Integer := 1;
-      progress : Integer := 0;
+      progress : Float := 0.0;
       retired : boolean := false;
       race_completed : boolean := false;
 
