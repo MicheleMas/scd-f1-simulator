@@ -13,6 +13,9 @@ use YAMI.Parameters;
 with custom_types;
 use custom_types;
 
+with Ada.Real_Time;
+use Ada.Real_Time;
+
 procedure Broker is
 
    stop : boolean := false;
@@ -22,8 +25,12 @@ procedure Broker is
    speed_avgs : array (1 .. car_number) of Integer;
    n_speed_avgs : array (1 .. car_number) of Integer;
    lap_time_avg : array (1 .. car_number) of Integer;
-   lap_completed : array (1 .. car_number) of Integer;
+   current_lap : array (1 .. car_number) of Integer;
+   retired_cars : array (1 .. car_number) of boolean; -- 1 means retired
    --status : race_status_Access;
+
+   Poll_Time : Ada.Real_Time.Time;
+   setup_done : boolean := false;
 
    type Incoming_Message_Handler is
      new YAMI.Incoming_Messages.Message_Handler
@@ -38,6 +45,12 @@ procedure Broker is
       is
          event : constant String := Content.Get_String("type");
       begin
+         if (not setup_done)
+         then
+            setup_done := true;
+            Poll_Time := Ada.Real_Time.Clock;
+         end if;
+
          Ada.Text_IO.Put_Line ("ricevuto: " & event);
          --if(event = "SP")
          --then
@@ -70,13 +83,22 @@ procedure Broker is
                lap : Integer := Integer((Float'Value(Content.Get_String("lap"))));
             begin
                lap_time_avg(car) := time / lap;
-               lap_completed(car) := lap;
+               current_lap(car) := lap;
             end;
          end if;
          if(event = "ER")
          then
             stop := true;
          end if;
+         if(event = "CA")
+         then
+            -- TODO gestire le altre azioni per l'incidente
+            if(Content.Get_Boolean("retired"))
+            then
+               retired_cars(Positive'Value(Content.Get_String("car"))) := true;
+            end if;
+         end if;
+
       end Process;
 
    begin
@@ -107,13 +129,14 @@ begin
 
    begin
 
-      --Inizialization
+      --Initialization
       for i in Positive range 1 .. car_number loop
          position_index(i) := 1;
          speed_avgs(i) := 0;
          lap_time_avg(i) := 0;
          n_speed_avgs(i) := 0;
-         lap_completed(i) := 0;
+         current_lap(i) := 1;
+         retired_cars(i) := false;
          for k in Positive range 1 .. car_number loop
             distances(i)(k) := 0;
          end loop;
@@ -128,43 +151,51 @@ begin
 
       Server_Agent.Register_Object("Event_Dispatcher", My_Handler'Unchecked_Access);
 
-      --task che interpola gli evente
+      --task che interpola gli eventi
       --devo salvarmi la velocità media di ogni macchina, e il tempo medio di giro
       while(not stop)
       loop
-         for i in Positive range 1 .. car_number loop
-            for k in Positive range i+1 .. car_number loop
-               if(position_index(i)>1 and position_index(k)>1)
-               then
-                  declare
-                     posi : Integer := position_index(i)-1;
-                     segi : Integer := position_history(i)(posi).get_segment; --segmento in cui è i
-                     posk : Ingeget := position_index(k)-1;
-                     segk : Integer := position_history(k)(posk).get_segment; --segmento in cui è k
-                     precPosK: Integer ;
-                     deltaK:Integer;
-                  begin
-                     if(lap_completed(i) = lap_completed(k))
-                     then
-                        if(segi < segk)
-                        then
-                           precPosK := posk-(segk-segi);
-                           if(precPosK <= 0)
-                           then
-                              precPosK := 100 + precPosK;
-                           end if;
-                           deltaK := position_history(k)(posk).get_time-position_history(k)(precPosK).get_time; -- tempo in cui k era al segmento i
 
-                        end if;
-                     else
+         --for i in Positive range 1 .. car_number loop
+         --   for k in Positive range i+1 .. car_number loop
+         --      if(position_index(i)>1 and position_index(k)>1)
+         --      then
+         --         declare
+         --            posi : Integer := position_index(i)-1;
+         --            segi : Integer := position_history(i)(posi).get_segment; --segmento in cui è i
+         --            posk : Integer := position_index(k)-1;
+         --            segk : Integer := position_history(k)(posk).get_segment; --segmento in cui è k
+         --            precPosK: Integer ;
+         --            deltaK:Integer;
+         --         begin
+         --            if(current_lap(i) = current_lap(k))
+         --            then
+         --               if(segi < segk)
+         --               then
+         --                  precPosK := posk-(segk-segi);
+         --                  if(precPosK <= 0)
+         --                  then
+         --                     precPosK := 100 + precPosK;
+         --                  end if;
+         --                  deltaK := position_history(k)(posk).get_time-position_history(k)(precPosK).get_time; -- tempo in cui k era al segmento i
 
-                     end if;
-                  end;
+         --               end if;
+         --            else
+         --               null;
+         --            end if;
+         --         end;
 
-               end if;
-            end loop;
-         end loop;
-         delay 1.0;
+         --      end if;
+         --   end loop;
+         --end loop;
+
+         if (setup_done)
+         then
+            -- snapshot
+            null;
+         else
+            delay 0.5;
+         end if;
          stop :=stop; -- WARNING
       end loop;
 
