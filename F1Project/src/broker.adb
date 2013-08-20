@@ -256,10 +256,13 @@ begin
             end loop;
             raceFinished:=true;
             for i in Positive range 1 .. car_number loop
-
+               if(not retired_cars(i))
+               then
+                  raceFinished:=false;
+               end if;
+            end loop;
             t := t + 500;
             delay 0.5;
-            stop :=stop; -- WARNING
             Ada.Text_IO.Put_Line("-- SNAP TIME " & Integer'Image(t) & " --");
             Ada.Text_IO.Put_Line(" ## 1: ");
             snapshot(1).print_data;
