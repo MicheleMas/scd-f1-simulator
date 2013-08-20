@@ -1,3 +1,8 @@
+with YAMI; use YAMI;
+with YAMI.Agents;
+with Ada.Text_IO;
+with Ada.Command_Line;
+with YAMI.Parameters;
 
 
 package body broker_publisher is
@@ -47,21 +52,37 @@ package body broker_publisher is
    end condition;
 
    task body updater is
-
    begin
       if(Ada.Command_Line.Argument_Count /= 2)
       then
          Ada.Text_IO.Put_Line("expecting 2 parameter, rtfm!");
+         Ada.Command_Line.Set_Exit_Status(Ada.Command_Line.Failure);
          return;
       end if;
 
+      declare
+         Publish_Address : constant String := Ada.Command_Line.Argument(2);
+         Publisher_Agent : aliased YAMI.Agents.Agent := YAMI.Agents.Make_Agent;
+         Resolved_Publisher_Address : String (1 .. YAMI.Agents.Max_Target_Length);
+         Resolved_Publisher_Address_Last : Natural;
 
-      while(not race_over)
-      loop
-         -- leggi lo stato e convertilo
-         null;
-         delay 0.5;
-      end loop;
+         Snapshot_Publisher : YAMI.Value_Publishers.Value_Publisher:=
+           YAMI.Value_Publishers.Make_Value_Publisher;
+
+         Content : YAMI.Parameters.Parameters_Collection := Yami.Parameters.Make_Parameters;
+
+      begin
+
+         Snapshot_Publisher.Register_At(Publisher_Agent'Unchecked_Access, "snapshots");
+
+         while(not race_over)
+         loop
+            -- leggi lo stato e convertilo
+            null;
+            delay 0.5;
+         end loop;
+
+      end;
 
    end updater;
 
