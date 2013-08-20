@@ -49,6 +49,12 @@ package body broker_publisher is
    task body updater is
 
    begin
+      if(Ada.Command_Line.Argument_Count /= 2)
+      then
+         Ada.Text_IO.Put_Line("expecting 2 parameter, rtfm!");
+         return;
+      end if;
+
 
       while(not race_over)
       loop
