@@ -26,7 +26,7 @@ procedure Broker is
    n_speed_avgs : array (1 .. car_number) of Integer;
    lap_time_avg : array (1 .. car_number) of Integer;
    current_lap : array (1 .. car_number) of Integer;
-   retired_cars : array (1 .. car_number) of boolean; -- 1 means retired
+   retired_cars : array (1 .. car_number) of boolean; -- true means retired
    --status : race_status_Access;
 
    Poll_Time : Ada.Real_Time.Time;
@@ -151,54 +151,51 @@ begin
 
       Server_Agent.Register_Object("Event_Dispatcher", My_Handler'Unchecked_Access);
 
-      --task che interpola gli eventi
-      --devo salvarmi la velocità media di ogni macchina, e il tempo medio di giro
-      while(not stop)
+      --Aspettiamo fino a quando non viene fatto il setup
+      while(not setup_done)
       loop
-
-         --for i in Positive range 1 .. car_number loop
-         --   for k in Positive range i+1 .. car_number loop
-         --      if(position_index(i)>1 and position_index(k)>1)
-         --      then
-         --         declare
-         --            posi : Integer := position_index(i)-1;
-         --            segi : Integer := position_history(i)(posi).get_segment; --segmento in cui è i
-         --            posk : Integer := position_index(k)-1;
-         --            segk : Integer := position_history(k)(posk).get_segment; --segmento in cui è k
-         --            precPosK: Integer ;
-         --            deltaK:Integer;
-         --         begin
-         --            if(current_lap(i) = current_lap(k))
-         --            then
-         --               if(segi < segk)
-         --               then
-         --                  precPosK := posk-(segk-segi);
-         --                  if(precPosK <= 0)
-         --                  then
-         --                     precPosK := 100 + precPosK;
-         --                  end if;
-         --                  deltaK := position_history(k)(posk).get_time-position_history(k)(precPosK).get_time; -- tempo in cui k era al segmento i
-
-         --               end if;
-         --            else
-         --               null;
-         --            end if;
-         --         end;
-
-         --      end if;
-         --   end loop;
-         --end loop;
-
-         if (setup_done)
-         then
-            -- snapshot
-            null;
-         else
-            delay 0.5;
-         end if;
-         stop :=stop; -- WARNING
+         delay 1.0;
       end loop;
 
+      --task che interpola gli eventi
+      declare
+         t:Float := 0.0;
+         indexPreEvent:Integer;
+         indexNextEvent:Integer;
+         progress:Float;
+
+         nextTime:Integer;
+         precTime:Integer;
+      begin
+         while(not stop)
+         loop
+            -- snapshot
+            for i in Positive range 1 .. car_number loop
+               if(position_index(i)-1 > 0) --se abbiamo almeno un evento per la macchina i
+               then
+                  --cerco l'evento ES immediatamente successivo al tempo t
+                  indexPreEvent := position_index(i)-1;
+                  while( indexPreEvent > 0 and Integer(t*1000.0) < position_history(i)(indexPreEvent).get_time)
+                  loop
+                     indexPreEvent := indexPreEvent - 1;
+                  end loop;
+                  indexNextEvent := indexPreEvent +  1; --indice dell'evento immediatamente successivo
+
+                  --uso il tempo segnato nell'evento per capire a che percentuale del tratto segnato è al tempo t
+                  nextTime := position_history(i)(indexNextEvent).get_time;
+                  precTime := position_history(i)(indexPreEvent).get_time;
+                  progress := 100*(t-precTime) / (nextTime - precTime);
+                  --salvo tratto e percentuale da qualche parte
+                    --set tratto = position_history(i)(indexPreEvent).get_segment
+                    --set percentuale = progress
+                  null;
+               end if;
+            end loop;
+            t := t + 0.5;
+            delay 0.5;
+            stop :=stop; -- WARNING
+         end loop;
+      end;
       Ada.Text_IO.Put_Line(Positive'Image(position_index(1)));
       -- stampa tabella posizioni
       for i in Positive range 1 .. position_index(1)-1 loop
