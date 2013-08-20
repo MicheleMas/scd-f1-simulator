@@ -24,18 +24,34 @@ package broker_race_status is
 
    --------- End Positions Array ----------
 
-
-
    type sub_cars_distances is array (1 .. car_number) of Integer;
 
    type cars_distances is array (1 .. car_number) of sub_cars_distances;
+
+   protected type car_snapshot is
+
+      procedure get_segment(seg : out Integer);
+      procedure get_progress(prog : out Integer);
+      procedure is_retired(ret : out boolean);
+
+      procedure set_segment(seg : in Integer);
+      procedure set_progress(prog : in Integer);
+      procedure car_retired;
+
+   private
+
+      segment : Integer := 1;
+      progress : Integer := 0;
+      retired : boolean := false;
+
+   end car_snapshot;
+
+   type snapshot is array (1 .. car_number) of car_snapshot;
 
    protected type race_status is
 
       procedure set_weather(new_weather : in boolean);
       procedure get_weather(current_weather : out boolean);
-      --function get_laps return Natural;
-      --function get_car_number return Natural;
 
    private
 
