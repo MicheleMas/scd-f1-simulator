@@ -46,7 +46,7 @@ package body broker_race_status is
       begin
          seg := segment;
       end get_segment;
-      procedure get_progress(prog : out Integer) is
+      procedure get_progress(prog : out Float) is
       begin
          prog := progress;
       end get_progress;
@@ -63,7 +63,7 @@ package body broker_race_status is
       begin
          segment := seg;
       end set_segment;
-      procedure set_progress(prog : in Integer) is
+      procedure set_progress(prog : in Float) is
       begin
          progress := prog;
       end set_progress;
