@@ -24,6 +24,8 @@ procedure Broker is
    last_incident : array (1 .. car_number) of incident_event_Access;
    last_box : array (1 .. car_number) of box_event_Access;
 
+   last_end : array (1 .. car_number) of end_race_event_Access;
+
    distances : cars_distances;
    speed_avgs : array (1 .. car_number) of Integer;
    n_speed_avgs : array (1 .. car_number) of Integer;
@@ -105,13 +107,28 @@ procedure Broker is
                seg : Positive := Positive'Value(Content.Get_String("seg"));
             begin
                --Ada.Text_IO.Put_Line("--------------> Setto incidente al time " & Integer'Image(time));
-               last_incident(car):=new incident_event(time,99999,damage,retired);
-            if(retired)
-            then
-               retired_cars(Positive'Value(Content.Get_String("car"))) := true;
-            end if;
+               last_incident(car):=new incident_event(time,seg,damage,retired);
             end;
          end if;
+         if(event = "EB")
+         then
+            declare
+               car : Positive := Positive'Value(Content.Get_String("car"));
+               time : Integer := Integer((Float'Value(Content.Get_String("time")))*1000.0);
+            begin
+               last_box(car):=new box_event(time);
+            end;
+         end if;
+         if(event = "CE")
+         then
+            declare
+               car : Positive := Positive'Value(Content.Get_String("car"));
+               time : Integer := Integer((Float'Value(Content.Get_String("time")))*1000.0);
+            begin
+               last_end(car):=new end_race_event(time);
+            end;
+         end if;
+
 
       end Process;
 
@@ -172,7 +189,7 @@ begin
       --Aspettiamo fino a quando non viene fatto il setup
       while(not setup_done)
       loop
-         delay 2.0;
+         delay 1.0;
       end loop;
 
       --task che interpola gli eventi
@@ -184,8 +201,9 @@ begin
 
          nextTime:Integer;
          precTime:Integer;
+         raceFinished:boolean := false;
       begin
-         while(not stop)
+         while(not raceFinished)
          loop
             -- snapshot
             for i in Positive range 1 .. car_number loop
@@ -222,16 +240,23 @@ begin
                      if(last_incident(i).car_retired) then
                         retired_cars(i):=true;
                      end if;
+                  else if(last_end(i).get_time > t)
+                  then
+                     snapshot(i).set_data(0,0.0,false,false,false);
+                     retired_cars(i):=true;
                   else
                      --sono successe cose molto strane
                      snapshot(i).set_data(-9,0.0,false,false,false);
-
                   end if;
-                     end if;
                   end if;
-               end if;
+                  end if;
+                  end if;
+                  end if;
 
             end loop;
+            raceFinished:=true;
+            for i in Positive range 1 .. car_number loop
+
             t := t + 500;
             delay 0.5;
             stop :=stop; -- WARNING

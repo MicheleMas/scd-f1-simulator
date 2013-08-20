@@ -50,6 +50,15 @@ package body broker_race_status is
 
    end box_event;
 
+   protected body end_race_event is
+
+      function get_time return Integer is
+      begin
+         return time;
+      end get_time;
+
+   end end_race_event;
+
    protected body race_status is
 
       procedure set_weather(new_weather : in boolean) is
