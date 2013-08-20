@@ -99,16 +99,17 @@ procedure Broker is
             -- TODO gestire le altre azioni per l'incidente
             declare
                car : Positive := Positive'Value(Content.Get_String("car"));
-               retired : Boolean := Boolean'Value(Content.Get_String("retired"));
-               damage : Boolean := Boolean'Value(Content.Get_String("damage"));
+               retired : Boolean := Content.Get_Boolean("retired");
+               damage : Boolean := Content.Get_Boolean("damage");
                time : Integer := Integer((Float'Value(Content.Get_String("time")))*1000.0);
                seg : Positive := Positive'Value(Content.Get_String("seg"));
             begin
-               last_incident(car):=new incident_event(time,seg,damage,retired);
+               --Ada.Text_IO.Put_Line("--------------> Setto incidente al time " & Integer'Image(time));
+               last_incident(car):=new incident_event(time,99999,damage,retired);
             if(retired)
             then
                retired_cars(Positive'Value(Content.Get_String("car"))) := true;
-               end if;
+            end if;
             end;
          end if;
 
@@ -205,21 +206,25 @@ begin
 
                      nextTime := position_history(i)(indexNextEvent).get_time;
                      progress := Float(100*(t-precTime)) / Float((nextTime - precTime));
-                     snapshot(i).set_data(position_history(i)(indexPreEvent).get_segment,progress,false,false);
+                     snapshot(i).set_data(position_history(i)(indexPreEvent).get_segment,progress,false,false,false);
                      -- casi limite, la macchina o sta facendo un incidente, o è ai box,
                   else if(last_box(i).get_time > t)
                   then
                      nextTime := last_box(i).get_time;
                      progress := Float(100*(t-precTime)) / Float((nextTime - precTime));
-                     snapshot(i).set_data(-1,progress,false,false);
+                     snapshot(i).set_data(-1,progress,false,false,false);
                   else if(last_incident(i).get_time > t)
                   then
                      --è incidentata
-                     snapshot(i).set_data(-1,9999.9,true,true);
-                     null;
+                     nextTime := last_incident(i).get_time;
+                     progress := Float(100*(t-precTime)) / Float((nextTime - precTime));
+                     snapshot(i).set_data(last_incident(i).get_segment,progress,true,last_incident(i).car_retired,false);
+                     if(last_incident(i).car_retired) then
+                        retired_cars(i):=true;
+                     end if;
                   else
                      --sono successe cose molto strane
-                     snapshot(i).set_data(-9,0.0,false,false);
+                     snapshot(i).set_data(-9,0.0,false,false,false);
 
                   end if;
                      end if;
@@ -230,7 +235,7 @@ begin
             t := t + 500;
             delay 0.5;
             stop :=stop; -- WARNING
-            Ada.Text_IO.Put_Line("---");
+            Ada.Text_IO.Put_Line("-- SNAP TIME " & Integer'Image(t) & " --");
             Ada.Text_IO.Put_Line(" ## 1: ");
             snapshot(1).print_data;
             Ada.Text_IO.Put_Line(" ## 2: ");

@@ -75,11 +75,13 @@ package broker_race_status is
 
       procedure get_data(seg : out Integer;
                          prog : out Float;
+                         inci : out boolean;
                          ret : out boolean;
                          over : out boolean);
 
       procedure set_data(seg : in Integer;
                          prog : in Float;
+                         inci : in boolean;
                          ret : in boolean;
                          over : in boolean);
       procedure print_data;
@@ -88,6 +90,7 @@ package broker_race_status is
 
       segment : Integer := 1;
       progress : Float := 0.0;
+      incident : boolean := false;
       retired : boolean := false;
       race_completed : boolean := false;
 
