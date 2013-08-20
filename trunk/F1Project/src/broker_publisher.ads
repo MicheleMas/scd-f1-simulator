@@ -31,8 +31,7 @@ package broker_publisher is
 
    type condition_Access is access condition;
 
-   task type updater (frame : condition_Access;
-                      address : Unbounded_String);
+   task type updater (frame : condition_Access);
 
    type updater_Access is access updater;
 
