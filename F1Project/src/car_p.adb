@@ -71,7 +71,7 @@ package body car_p is
             else
                event(4) := Ada.Strings.Unbounded.To_Unbounded_String("F");  -- car not retired
             end if;
-            event(5) := Ada.Strings.Unbounded.To_Unbounded_String(Positive'Image(lap));
+            event(5) := Ada.Strings.Unbounded.To_Unbounded_String(Positive'Image(previousReferee.id));
             event_buffer.insert_event(event);
          end if;
 
