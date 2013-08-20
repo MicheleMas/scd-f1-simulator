@@ -134,6 +134,7 @@ package body publisher is
                               else
                                  Content.Set_Boolean("retired", false);
                               end if;
+                              Content.Set_String("lap", Ada.Strings.Unbounded.To_String(event(5))
                               Content.Set_String("time",Ada.Strings.Unbounded.To_String(event(8)));
                            else
                               if (event(1) = "WC")

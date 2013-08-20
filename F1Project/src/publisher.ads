@@ -31,7 +31,7 @@ package Publisher is
 
    -- > Una macchina fa un incidente
    --   type = CA | car = (Pos)ID | damage = (bool) | retired = (bool) |
-   --   time = (time_span)
+   --   lap = (Pos)giro | time = (time_span)
 
    -- > Cambio meteo
    --   type = WC | rain = (bool)
