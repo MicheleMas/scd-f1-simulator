@@ -41,7 +41,7 @@ procedure Broker is
    --status : race_status_Access;
 
    snapshot_bucket : condition_Access := new condition(50);
-   snapshot_publisher : updater_Access;
+   snapshot_publisher : updater_Access := new updater(snapshot_bucket);
 
    Poll_Time : Ada.Real_Time.Time;
    setup_done : boolean := false;
@@ -175,14 +175,6 @@ begin
    begin
 
       --Initialization
-         if(publisher_as_argument)
-         then
-            snapshot_publisher := new updater(snapshot_bucket, Ada.Strings.Unbounded.To_Unbounded_String(Ada.Command_Line.Argument(2)));
-         else
-            Ada.Text_IO.Put_Line ("Monitor server local address not specified as second parameter, " &
-                                  "using tcp://localhost:123456");
-            snapshot_publisher := new updater(snapshot_bucket, Ada.Strings.Unbounded.To_Unbounded_String("tcp://localhost:12346"));
-         end if;
       for i in Positive range 1 .. car_number loop
          --we add a special ES event to each car, to show that they are on starting lane
          position_history(i)(1) := new enter_segment(0,0,0);

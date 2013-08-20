@@ -54,13 +54,13 @@ package body broker_publisher is
    end condition;
 
    task body updater is
-      default_Address : constant String := "tcp://localhost:12346";
-      default : boolean := false;
+      Address : Unbounded_String := Ada.Strings.Unbounded.To_Unbounded_String("tcp://localhost:12346");
    begin
-      if(Ada.Command_Line.Argument_Count < 2)
+      if(Ada.Command_Line.Argument_Count = 2)
       then
-         Ada.Text_IO.Put_Line("expecting 2 parameter, using default tcp://localhost:12346");
-         default := true;
+         Address := Ada.Strings.Unbounded.To_Unbounded_String(Ada.Command_Line.Argument(2));
+      else
+         Ada.Text_IO.Put_Line("expecting 2 parameter, using default tcp://localhost:12346 as monitor server");
       end if;
 
       declare
@@ -76,18 +76,9 @@ package body broker_publisher is
 
          current_snapshot : snapshot_array_Access;
       begin
-         Ada.Text_IO.Put_Line("*****************Arrivo qui*****************");
-         Publisher_Agent.Add_Listener(address, Resolved_Publish_Address,
+         Publisher_Agent.Add_Listener(Ada.Strings.Unbounded.To_String(Address), Resolved_Publisher_Address,
                                       Resolved_Publisher_Address_Last);
-         if(default)
-         then
-            Publisher_Agent.Add_Listener(default_Address, Resolved_Publisher_Address,
-                                         Resolved_Publisher_Address_Last);
-         --else
-            --Publisher_Agent.Add_Listener(Publish_Address, Resolved_Publisher_Address,
-                                        -- Resolved_Publisher_Address_Last);
-         end if;
-
+Ada.Text_IO.Put_Line("*****************Arrivo qui*****************");
          Snapshot_Publisher.Register_At(Publisher_Agent'Unchecked_Access, "snapshots");
 
          while(not race_over)
