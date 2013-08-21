@@ -87,7 +87,7 @@ package body publisher is
                   else
                      Content.Set_Boolean("tire_t", false);
                   end if;
-                  Content.Set_Integer("lap", YAMI_Integer(Integer'Value(Ada.Strings.Unbounded.To_String(event(4)))));
+                  Content.Set_String("lap", Ada.Strings.Unbounded.To_String(event(4)));
                   Content.Set_String("time",Ada.Strings.Unbounded.To_String(event(8)));
                else
                   if (event(1) = "EL")
@@ -98,6 +98,7 @@ package body publisher is
                      Content.Set_String("type", Ada.Strings.Unbounded.To_String(event(1)));
                      Content.Set_String("car", Ada.Strings.Unbounded.To_String(event(2)));
                      Content.Set_String("time",Ada.Strings.Unbounded.To_String(event(8)));
+                     Content.Set_String("lap",Ada.Strings.Unbounded.To_String(event(3)));
                   else
                      if (event(1) = "CE")
                      then

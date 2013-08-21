@@ -129,7 +129,7 @@ package body broker_race_status is
 
       procedure print_data is
       begin
-         Ada.Text_IO.Put_Line(Integer'Image(segment) & " " & Integer'Image(Integer(progress)) & " -  Incident=" & Boolean'Image(incident) & " Ret=" & Boolean'Image(retired) & " Completed=" & Boolean'Image(race_completed));
+         Ada.Text_IO.Put_Line(Integer'Image(lap) & " - " & Integer'Image(segment) & " " & Integer'Image(Integer(progress)) & " -  Incident=" & Boolean'Image(incident) & " Ret=" & Boolean'Image(retired) & " Completed=" & Boolean'Image(race_completed));
       end print_data;
 
    end car_snapshot;
