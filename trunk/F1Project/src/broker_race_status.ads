@@ -56,7 +56,7 @@ package broker_race_status is
 
    ---------
 
- protected type end_race_event (time : Integer) is
+   protected type end_race_event (time : Integer) is
 
       function get_time return Integer;
 
@@ -67,19 +67,34 @@ package broker_race_status is
 
    ---------
 
+   protected type lap_event (time : Integer;
+                             laps : Integer) is
+
+      function get_time return Integer;
+      function get_laps return Integer;
+
+   end lap_event;
+
+   type lap_event_Access is access lap_event;
+
+
+   ---------
+
    type sub_cars_distances is array (1 .. car_number) of Integer;
 
    type cars_distances is array (1 .. car_number) of sub_cars_distances;
 
    protected type car_snapshot is
 
-      procedure get_data(seg : out Integer;
+      procedure get_data(lap : out Integer;
+                         seg : out Integer;
                          prog : out Float;
                          inci : out boolean;
                          ret : out boolean;
                          over : out boolean);
 
-      procedure set_data(seg : in Integer;
+      procedure set_data(lap : in Integer;
+                         seg : in Integer;
                          prog : in Float;
                          inci : in boolean;
                          ret : in boolean;
@@ -88,6 +103,7 @@ package broker_race_status is
 
    private
 
+      lap : Integer := 0;
       segment : Integer := 1;
       progress : Float := 0.0;
       incident : boolean := false;

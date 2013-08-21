@@ -59,6 +59,21 @@ package body broker_race_status is
 
    end end_race_event;
 
+   protected body lap_event is
+
+      function get_time return Integer is
+      begin
+         return time;
+      end get_time;
+
+      function get_laps return Integer is
+      begin
+         return laps;
+      end get_laps;
+
+
+   end lap_event;
+
    protected body race_status is
 
       procedure set_weather(new_weather : in boolean) is
@@ -82,12 +97,14 @@ package body broker_race_status is
 
    protected body car_snapshot is
 
-      procedure get_data(seg : out Integer;
+      procedure get_data(lapc : out Integer;
+                         seg : out Integer;
                          prog : out Float;
                          inci : out boolean;
                          ret : out boolean;
                          over : out boolean) is
       begin
+         lapc := lap;
          seg := segment;
          prog := progress;
          inci := incident;
@@ -95,12 +112,14 @@ package body broker_race_status is
          over := race_completed;
       end get_data;
 
-      procedure set_data(seg : in Integer;
+      procedure set_data(lapc : in Integer;
+                         seg : in Integer;
                          prog : in Float;
                          inci : in boolean;
                          ret : in boolean;
                          over : in boolean) is
       begin
+         lap := lapc;
          segment := seg;
          progress := prog;
          incident := inci;
