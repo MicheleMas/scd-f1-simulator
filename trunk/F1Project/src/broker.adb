@@ -138,7 +138,10 @@ procedure Broker is
                last_end(car):=new end_race_event(time);
             end;
          end if;
-
+         if(event = "WC")
+         then
+            snapshot_bucket.set_rain(Content.Get_Boolean("rain"));
+         end if;
 
       end Process;
 
