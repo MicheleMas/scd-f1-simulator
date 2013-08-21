@@ -107,7 +107,7 @@ package body broker_publisher is
                end loop;
             end;
             Snapshot_Publisher.Publish(Content);
-            Ada.Text_IO.Put_Line("-------inviato!!-------");
+            --Ada.Text_IO.Put_Line("-------inviato!!-------");
          end loop;
 
       end;

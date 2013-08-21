@@ -68,7 +68,7 @@ procedure Broker is
             setup_done := true;
          end if;
 
-         Ada.Text_IO.Put_Line ("ricevuto: " & event & " at " & Content.Get_String("time"));
+         --Ada.Text_IO.Put_Line ("ricevuto: " & event & " at " & Content.Get_String("time"));
          --if(event = "SP")
          --then
          --   status := new race_status(Integer'Value(Content.Get_String("laps")),
@@ -85,7 +85,7 @@ procedure Broker is
                tires_status : Integer := Integer'Value(Content.Get_String("tire_s"));
                rain_tires : Boolean := Content.Get_Boolean("tire_t");
             begin
-               speed_avgs(car) := (speed_avgs(car) * Float(n_speed_avgs(car) + speed)) / Float(n_speed_avgs(car)+1);
+               speed_avgs(car) := (speed_avgs(car) * Float(n_speed_avgs(car)) + Float(speed)) / Float(n_speed_avgs(car)+1);
                n_speed_avgs(car) := n_speed_avgs(car) + 1;
                position_history(car)(position_index(car)) := new enter_segment(time,seg,speed,behaviour,tires_status,rain_tires);
                position_index(car) := position_index(car) + 1;
@@ -335,10 +335,12 @@ begin
             wake_time := wake_time + Ada.Real_Time.Milliseconds(500);
             delay until wake_time;
             Ada.Text_IO.Put_Line("-- SNAP TIME " & Integer'Image(t-500) & " --");
-            Ada.Text_IO.Put_Line(" ## 1: ");
+            Ada.Text_IO.Put_Line("### 1: ");
             snapshot(1).print_data;
-            Ada.Text_IO.Put_Line(" ## 2: ");
+            detailed_snapshot(1).print_data;
+            Ada.Text_IO.Put_Line("### 2: ");
             snapshot(2).print_data;
+            detailed_snapshot(2).print_data;
             Ada.Text_IO.Put_Line("---");
          end loop;
       end;
