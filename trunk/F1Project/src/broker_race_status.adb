@@ -88,22 +88,22 @@ package body broker_race_status is
 
    protected body race_status is
 
-      procedure set_weather(new_weather : in boolean) is
+      procedure set_over is
       begin
-         weather := new_weather;
-      end set_weather;
-      procedure get_weather(current_weather : out boolean) is
+         race_completed := true;
+      end set_over;
+      procedure is_over(over : out boolean) is
       begin
-         current_weather := weather;
-      end get_weather;
-      --function get_laps return Natural is
-      --begin
-      --   return laps;
-      --end get_laps;
-      --function get_car_number return Natural is
-      --begin
-      --   return car_number;
-      --end get_car_number;
+         over := race_completed;
+      end is_over;
+      function get_laps return Integer is
+      begin
+         return laps;
+      end get_laps;
+      function get_cars return Integer is
+      begin
+         return cars;
+      end get_cars;
 
    end race_status;
 
