@@ -7,10 +7,16 @@ package broker_race_status is
 
    protected type enter_segment (time : Integer;
                                  segment : Integer;
-                                 speed : Integer) is
+                                 speed : Integer;
+                                 behaviour : Integer;
+                                 tire_status : Integer;
+                                 rain_tire : Boolean) is
       function get_time return Integer;
       function get_segment return Integer;
       function get_speed return Integer;
+      function get_behaviour return Integer;
+      function get_tire_status return Integer;
+      function get_rain_tire return Boolean;
 
    end enter_segment;
 
@@ -78,6 +84,34 @@ package broker_race_status is
    type lap_event_Access is access lap_event;
 
 
+   ---------
+
+   protected type detailed_status is
+
+      procedure get_data(tire : out Integer;
+                         rain : out Boolean;
+                         avgspeed : out Float;
+                         beh : out Integer;
+                         speed : out Integer);
+      procedure set_data(tire : in Integer;
+                         rain : in Boolean;
+                         avgspeed : in Float;
+                         beh : in Integer;
+                         speed : in Integer);
+   private
+      tire_status : Integer := 100;
+      rain_tires : Boolean := false;
+      average_speed : Float := 0.0;
+      behaviour : Integer := 100;
+      current_speed : Integer := 0;
+
+   end detailed_status;
+
+   type detailed_status_Access is access detailed_status;
+
+   type detailed_array is array (1 .. car_number) of detailed_status_Access;
+
+   type detailed_array_Access is access detailed_array;
    ---------
 
    type sub_cars_distances is array (1 .. car_number) of Integer;
