@@ -98,7 +98,15 @@ procedure Broker is
                lap_time_avg(car) := time / lap;
                current_lap(car) := lap;
                last_lap(car) := new lap_event(time,lap);
-               Ada.Text_IO.Put_Line("DEBUG time left box " & Integer'Image(time));
+               if(event = "LB")
+               then
+                  position_history(car)(position_index(car)) := new enter_segment(time,-1,0);
+                  position_index(car) := position_index(car) + 1;
+                  if(position_index(car) > 100)
+                  then
+                     position_index(car) := 1;
+                  end if;
+               end if;
             end;
          end if;
          if(event = "ER")
@@ -107,7 +115,6 @@ procedure Broker is
          end if;
          if(event = "CA")
          then
-            -- TODO gestire le altre azioni per l'incidente
             declare
                car : Positive := Positive'Value(Content.Get_String("car"));
                retired : Boolean := Content.Get_Boolean("retired");
