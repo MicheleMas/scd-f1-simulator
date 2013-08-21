@@ -39,8 +39,8 @@ package body broker_warehouse is
 
          if(request = "S")
          then
-            Reply_params.Set_Integer("laps", YAMI.Parameters.YAMI_Integer(custom_types.laps_number));
-            Reply_params.Set_Integer("cars", YAMI.Parameters.YAMI_Integer(custom_types.laps_number));
+            Reply_params.Set_Integer("laps", YAMI.Parameters.YAMI_Integer(race_status.get_laps));
+            Reply_params.Set_Integer("cars", YAMI.Parameters.YAMI_Integer(race_status.get_cars));
             -- TODO forse qui potremmo inviare altri dati utili
          else
             null;
@@ -70,6 +70,9 @@ package body broker_warehouse is
       stop : boolean := false;
 
    begin
+
+      -- initialization
+      race_status := status;
 
       if Ada.Command_Line.Argument_Count /= 3
       then
