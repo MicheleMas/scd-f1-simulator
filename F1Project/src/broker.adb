@@ -28,8 +28,8 @@ procedure Broker is
    position_index : index_positions;
    last_incident : array (1 .. car_number) of incident_event_Access;
    last_box : array (1 .. car_number) of box_event_Access;
-
    last_end : array (1 .. car_number) of end_race_event_Access;
+   last_lap : array (1 .. car_number) of lap_event_Access;
 
    distances : cars_distances;
    speed_avgs : array (1 .. car_number) of Integer;
@@ -98,6 +98,7 @@ procedure Broker is
             begin
                lap_time_avg(car) := time / lap;
                current_lap(car) := lap;
+               last_lap(car) := new lap_event(time,lap);
             end;
          end if;
          if(event = "ER")
@@ -188,6 +189,7 @@ begin
          retired_cars(i) := false;
          snapshot(i) := new car_snapshot;
          last_end(i) := new end_race_event(999999999);
+         last_lap(i) := new lap_event(0,0);
          for k in Positive range 1 .. car_number loop
             distances(i)(k) := 0;
          end loop;
@@ -215,6 +217,7 @@ begin
          indexPreEvent:Integer;
          indexNextEvent:Integer;
          progress:Float;
+         lap:Integer;
 
          nextTime:Integer;
          precTime:Integer;
@@ -226,6 +229,12 @@ begin
             for i in Positive range 1 .. car_number loop
                if(position_index(i) > 2 and retired_cars(i) = false) --se abbiamo almeno un evento per la macchina i E non si e' ritirata
                then
+                  --segno il lap corrente
+                  lap := last_lap(i).get_laps;
+                  if(t > last_lap(i).get_time)
+                  then
+                     lap := lap+1;
+                  end if;
                   --cerco l'evento ES immediatamente successivo al tempo t
                   indexPreEvent := position_index(i)-1;
                   while( indexPreEvent > 0 and t < position_history(i)(indexPreEvent).get_time)
@@ -241,29 +250,29 @@ begin
 
                      nextTime := position_history(i)(indexNextEvent).get_time;
                      progress := Float(100*(t-precTime)) / Float((nextTime - precTime));
-                     snapshot(i).set_data(position_history(i)(indexNextEvent).get_segment,progress,false,false,false);
+                     snapshot(i).set_data(lap,position_history(i)(indexNextEvent).get_segment,progress,false,false,false);
                      -- casi limite, la macchina o sta facendo un incidente, o è ai box,
                   else if(last_box(i).get_time > t)
                   then
                      nextTime := last_box(i).get_time;
                      progress := Float(100*(t-precTime)) / Float((nextTime - precTime));
-                     snapshot(i).set_data(-1,progress,false,false,false);
+                     snapshot(i).set_data(lap,-1,progress,false,false,false);
                   else if(last_incident(i).get_time > t)
                   then
                      --è incidentata
                      nextTime := last_incident(i).get_time;
                      progress := Float(100*(t-precTime)) / Float((nextTime - precTime));
-                     snapshot(i).set_data(last_incident(i).get_segment,progress,true,last_incident(i).car_retired,false);
+                     snapshot(i).set_data(lap,last_incident(i).get_segment,progress,true,last_incident(i).car_retired,false);
                      if(last_incident(i).car_retired) then
                         retired_cars(i):=true;
                      end if;
                   else if(last_end(i).get_time < t)
                   then
-                     snapshot(i).set_data(0,0.0,false,false,true);
+                     snapshot(i).set_data(lap,0,0.0,false,false,true);
                      retired_cars(i):=true;
                   else
                      --sono successe cose molto strane
-                     snapshot(i).set_data(-9,0.0,false,false,false);
+                     snapshot(i).set_data(-9,-9,0.0,false,false,false);
                   end if;
                   end if;
                   end if;
