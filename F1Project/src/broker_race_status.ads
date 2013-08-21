@@ -153,14 +153,17 @@ package broker_race_status is
 
    type snapshot_array_Access is access snapshot_array;
 
-   protected type race_status is
+   protected type race_status(laps : Integer;
+                              cars : Integer) is
 
-      procedure set_weather(new_weather : in boolean);
-      procedure get_weather(current_weather : out boolean);
+      procedure set_over;
+      procedure is_over(over : out boolean);
+      function get_laps return Integer;
+      function get_cars return Integer;
 
    private
 
-      weather : boolean;
+      race_completed : boolean := false;
 
    end race_status;
 

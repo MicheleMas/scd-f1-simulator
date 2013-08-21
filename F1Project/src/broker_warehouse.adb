@@ -8,31 +8,10 @@ with Ada.Strings;
 with Ada.Strings.Unbounded;
 with Ada.Text_IO;
 with Ada.Command_Line;
+with custom_types;
+use custom_types;
 
 package body broker_warehouse is
-
-   protected body storage is
-      procedure set_data(Navg_speed : in Float;
-                         Ntire_status : in Integer;
-                         Nbehaviour : in Integer;
-                         Nspeed : in Integer) is
-      begin
-         avg_speed := Navg_speed;
-         tire_status := Ntire_status;
-         behaviour := Nbehaviour;
-         speed := Nspeed;
-      end set_data;
-      procedure get_data(Navg_speed : out Float;
-                         Ntire_status : out Integer;
-                         Nbehaviour : out Integer;
-                         Nspeed : out Integer) is
-      begin
-         Navg_speed := avg_speed;
-         Ntire_status := tire_status;
-         Nbehaviour := behaviour;
-         Nspeed := speed;
-      end get_data;
-   end storage;
 
    type Incoming_Message_Handler is
      new YAMI.Incoming_Messages.Message_Handler with null record;
@@ -45,15 +24,27 @@ package body broker_warehouse is
       procedure Process
         (Content : in out YAMI.Parameters.Parameters_Collection)
       is
-         request : Ada.Strings.Unbounded.Unbounded_String;
 
          Reply_params : YAMI.Parameters.Parameters_Collection :=
            YAMI.Parameters.Make_Parameters;
 
-      begin
-         request := Ada.Strings.Unbounded.To_Unbounded_String(Content.Get_String("R"));
+         request : constant String := Content.Get_String("type");
 
-         -- controlla cosa vuole il client e mandalo
+      begin
+         -- S -> setup
+         -- T -> tire_status | car = (String)ID
+         -- B -> behaviour   | car = (String)ID
+         -- V -> speed       | car = (String)ID
+         -- A -> avg_speed   | car = (String)ID
+
+         if(request = "S")
+         then
+            Reply_params.Set_Integer("laps", YAMI.Parameters.YAMI_Integer(custom_types.laps_number));
+            Reply_params.Set_Integer("cars", YAMI.Parameters.YAMI_Integer(custom_types.laps_number));
+            -- TODO forse qui potremmo inviare altri dati utili
+         else
+            null;
+         end if;
 
          Reply_params.Set_Integer("aaa", 1); -- TODO
 
@@ -76,6 +67,8 @@ package body broker_warehouse is
       Resolved_Server_Address : String (1 .. YAMI.Agents.Max_Target_Length);
       Resolved_Server_Address_Last : Natural;
 
+      stop : boolean := false;
+
    begin
 
       if Ada.Command_Line.Argument_Count /= 3
@@ -94,11 +87,11 @@ package body broker_warehouse is
 
       Server_Agent.Register_Object("warehouse", My_Handler'Unchecked_Access);
 
+      while (not stop)
       loop
-         -- TODO controlla se la gara è finita
-         delay 10.0;
+         status.is_over(stop);
+         delay 5.0;
       end loop;
-
    end;
 
 end broker_warehouse;

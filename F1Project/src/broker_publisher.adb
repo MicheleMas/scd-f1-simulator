@@ -10,17 +10,17 @@ with YAMI.Value_Publishers;
 package body broker_publisher is
 
    protected body condition is
-      procedure set_up (cars : Integer;
-                       laps : Integer) is
-      begin
-         cars_number := cars;
-         laps_number := laps;
-         set_up_completed := true;
-      end set_up;
-      procedure stop is
-      begin
-         race_over := true;
-      end stop;
+      --procedure set_up (cars : Integer;
+      --                 laps : Integer) is
+      --begin
+      --   cars_number := cars;
+      --   laps_number := laps;
+      --   set_up_completed := true;
+      --end set_up;
+      --procedure stop is
+      --begin
+      --   race_over := true;
+      --end stop;
       procedure insert_snapshot(snapshot : in snapshot_array_Access) is
          snapshot_copy : snapshot_array_Access := new snapshot_array;
       begin
@@ -108,8 +108,8 @@ package body broker_publisher is
             end;
             Snapshot_Publisher.Publish(Content);
             --Ada.Text_IO.Put_Line("-------inviato!!-------");
+            race_general_status.is_over(race_over);
          end loop;
-
       end;
 
    end updater;

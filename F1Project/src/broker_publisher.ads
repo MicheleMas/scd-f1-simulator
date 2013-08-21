@@ -11,12 +11,11 @@ package broker_publisher is
    race_over : boolean := false;
    cars_number : Integer;
    laps_number : Integer;
-   -- TODO creare un bucket
 
    protected type condition (capacity : Positive) is
-      procedure set_up (cars : Integer;
-                        laps : Integer);
-      procedure stop;
+      --procedure set_up (cars : Integer;
+      --                  laps : Integer);
+      --procedure stop;
       procedure insert_snapshot(snapshot : in snapshot_array_Access);
       entry get_snapshot(snapshot : out snapshot_array_Access);
       procedure is_bucket_empty(state : out boolean);
@@ -31,7 +30,8 @@ package broker_publisher is
 
    type condition_Access is access condition;
 
-   task type updater (frame : condition_Access);
+   task type updater (frame : condition_Access;
+                      race_general_status : race_status_Access);
 
    type updater_Access is access updater;
 

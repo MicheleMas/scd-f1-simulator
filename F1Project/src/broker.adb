@@ -17,7 +17,7 @@ with broker_publisher;
 use broker_publisher;
 
 with broker_warehouse;
-use broker_publisher;
+use broker_warehouse;
 
 with Ada.Real_Time;
 use Ada.Real_Time;
@@ -44,8 +44,10 @@ procedure Broker is
    detailed_snapshot : detailed_array_Access := new detailed_array;
    --status : race_status_Access;
 
+   race_general_stats : broker_race_status.race_status_Access := new broker_race_status.race_status(custom_types.laps_number, car_number);
    snapshot_bucket : condition_Access := new condition(50);
-   snapshot_publisher : updater_Access := new updater(snapshot_bucket);
+   snapshot_publisher : updater_Access := new updater(snapshot_bucket, race_general_stats);
+   information_handler : pull_server_Access := new pull_server(race_general_stats);
 
    Wake_Time : Ada.Real_Time.Time;
    setup_done : boolean := false;
@@ -119,6 +121,7 @@ procedure Broker is
          if(event = "ER")
          then
             stop := true;
+            --race_general_stats.set_over;
          end if;
          if(event = "CA")
          then
@@ -329,6 +332,10 @@ begin
                   raceFinished:=false;
                end if;
             end loop;
+            if raceFinished
+            then
+               race_general_stats.set_over;
+            end if;
             t := t + 500;
             -- send snapshot array to the publisher
             snapshot_bucket.insert_snapshot(snapshot);
