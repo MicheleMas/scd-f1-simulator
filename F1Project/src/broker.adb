@@ -43,7 +43,7 @@ procedure Broker is
    snapshot_bucket : condition_Access := new condition(50);
    snapshot_publisher : updater_Access := new updater(snapshot_bucket);
 
-   Poll_Time : Ada.Real_Time.Time;
+   Wake_Time : Ada.Real_Time.Time;
    setup_done : boolean := false;
 
    type Incoming_Message_Handler is
@@ -62,7 +62,6 @@ procedure Broker is
          if (not setup_done)
          then
             setup_done := true;
-            Poll_Time := Ada.Real_Time.Clock;
          end if;
 
          Ada.Text_IO.Put_Line ("ricevuto: " & event & " at " & Content.Get_String("time"));
@@ -99,6 +98,7 @@ procedure Broker is
                lap_time_avg(car) := time / lap;
                current_lap(car) := lap;
                last_lap(car) := new lap_event(time,lap);
+               Ada.Text_IO.Put_Line("DEBUG time left box " & Integer'Image(time));
             end;
          end if;
          if(event = "ER")
@@ -119,13 +119,14 @@ procedure Broker is
                last_incident(car):=new incident_event(time,seg,damage,retired);
             end;
          end if;
-         if(event = "EB")
+         if(event = "EB" or event = "LB")
          then
             declare
                car : Positive := Positive'Value(Content.Get_String("car"));
                time : Integer := Integer((Float'Value(Content.Get_String("time")))*1000.0);
             begin
                last_box(car):=new box_event(time);
+
             end;
          end if;
          if(event = "CE")
@@ -210,6 +211,7 @@ begin
          delay 1.0;
       end loop;
       --delay 2.0;
+      Wake_Time := Ada.Real_Time.Clock;
 
       --task che interpola gli eventi
       declare
@@ -291,7 +293,8 @@ begin
             t := t + 500;
             -- send snapshot array to the publisher
             snapshot_bucket.insert_snapshot(snapshot);
-            delay 0.5;
+            wake_time := wake_time + Ada.Real_Time.Milliseconds(500);
+            delay until wake_time;
             Ada.Text_IO.Put_Line("-- SNAP TIME " & Integer'Image(t-500) & " --");
             Ada.Text_IO.Put_Line(" ## 1: ");
             snapshot(1).print_data;

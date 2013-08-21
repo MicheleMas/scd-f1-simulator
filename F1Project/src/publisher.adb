@@ -69,7 +69,7 @@ package body publisher is
             then
                -- Enter Box
                Ada.Text_IO.Put_Line ("Processing event: car " & Ada.Strings.Unbounded.To_String(event(2)) &
-                                     " enter the box");
+                                     " enter the box at " & Ada.Strings.Unbounded.To_String(event(8)));
                Content.Set_String("type", Ada.Strings.Unbounded.To_String(event(1)));
                Content.Set_String("car", Ada.Strings.Unbounded.To_String(event(2)));
                Content.Set_String("time",Ada.Strings.Unbounded.To_String(event(8)));
@@ -78,7 +78,7 @@ package body publisher is
                then
                   -- Leave Box
                   Ada.Text_IO.Put_Line ("Processing event: car " & Ada.Strings.Unbounded.To_String(event(2)) &
-                                        " left the box");
+                                        " left the box at " & Ada.Strings.Unbounded.To_String(event(8)));
                   Content.Set_String("type", Ada.Strings.Unbounded.To_String(event(1)));
                   Content.Set_String("car", Ada.Strings.Unbounded.To_String(event(2)));
                   if(event(3) = "T")
