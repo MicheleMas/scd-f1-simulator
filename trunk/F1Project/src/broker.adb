@@ -89,12 +89,12 @@ procedure Broker is
                end if;
             end;
          end if;
-         if(event = "EL")
+         if(event = "EL" or event = "LB")
          then
             declare
                car : Positive := Positive'Value(Content.Get_String("car"));
                time : Integer := Integer((Float'Value(Content.Get_String("time")))*1000.0);
-               lap : Integer := Integer((Float'Value(Content.Get_String("lap"))));
+               lap : Integer := (Integer'Value(Content.Get_String("lap")));
             begin
                lap_time_avg(car) := time / lap;
                current_lap(car) := lap;
