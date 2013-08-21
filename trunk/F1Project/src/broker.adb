@@ -16,6 +16,9 @@ use custom_types;
 with broker_publisher;
 use broker_publisher;
 
+with broker_warehouse;
+use broker_publisher;
+
 with Ada.Real_Time;
 use Ada.Real_Time;
 with Ada.Strings;
