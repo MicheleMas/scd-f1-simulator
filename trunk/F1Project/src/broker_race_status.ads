@@ -86,14 +86,14 @@ package broker_race_status is
 
    protected type car_snapshot is
 
-      procedure get_data(lap : out Integer;
+      procedure get_data(lapc : out Integer;
                          seg : out Integer;
                          prog : out Float;
                          inci : out boolean;
                          ret : out boolean;
                          over : out boolean);
 
-      procedure set_data(lap : in Integer;
+      procedure set_data(lapc : in Integer;
                          seg : in Integer;
                          prog : in Float;
                          inci : in boolean;
