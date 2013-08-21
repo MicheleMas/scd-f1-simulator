@@ -32,12 +32,13 @@ procedure Broker is
    last_lap : array (1 .. car_number) of lap_event_Access;
 
    distances : cars_distances;
-   speed_avgs : array (1 .. car_number) of Integer;
+   speed_avgs : array (1 .. car_number) of Float;
    n_speed_avgs : array (1 .. car_number) of Integer;
    lap_time_avg : array (1 .. car_number) of Integer;
    current_lap : array (1 .. car_number) of Integer;
    retired_cars : array (1 .. car_number) of boolean; -- true means retired
    snapshot : snapshot_array_Access := new snapshot_array;
+   detailed_snapshot : detailed_array_Access := new detailed_array;
    --status : race_status_Access;
 
    snapshot_bucket : condition_Access := new condition(50);
@@ -81,7 +82,7 @@ procedure Broker is
                tires_status : Integer := Integer'Value(Content.Get_String("tire_s"));
                rain_tires : Boolean := Content.Get_Boolean("tire_t");
             begin
-               speed_avgs(car) := (speed_avgs(car) * n_speed_avgs(car) + speed) / (n_speed_avgs(car)+1);
+               speed_avgs(car) := (speed_avgs(car) * Float(n_speed_avgs(car) + speed)) / Float(n_speed_avgs(car)+1);
                n_speed_avgs(car) := n_speed_avgs(car) + 1;
                position_history(car)(position_index(car)) := new enter_segment(time,seg,speed,behaviour,tires_status,rain_tires);
                position_index(car) := position_index(car) + 1;
@@ -196,12 +197,13 @@ begin
          position_index(i) := 2;
          last_incident(i) := new incident_event(0,0,false,false);
          last_box(i) := new box_event(0);
-         speed_avgs(i) := 0;
+         speed_avgs(i) := 0.0;
          lap_time_avg(i) := 0;
          n_speed_avgs(i) := 0;
          current_lap(i) := 1;
          retired_cars(i) := false;
          snapshot(i) := new car_snapshot;
+         detailed_snapshot(i) := new detailed_status;
          last_end(i) := new end_race_event(999999999);
          last_lap(i) := new lap_event(0,0);
          for k in Positive range 1 .. car_number loop
@@ -266,24 +268,45 @@ begin
                      nextTime := position_history(i)(indexNextEvent).get_time;
                      progress := Float(100*(t-precTime)) / Float((nextTime - precTime));
                      snapshot(i).set_data(lap,position_history(i)(indexNextEvent).get_segment,progress,false,false,false);
+                     detailed_snapshot(i).set_data(position_history(i)(indexNextEvent).get_tire_status,
+                                                   position_history(i)(indexNextEvent).get_rain_tire,
+                                                   speed_avgs(i),
+                                                   position_history(i)(indexNextEvent).get_behaviour,
+                                                   position_history(i)(indexNextEvent).get_speed);
                      -- casi limite, la macchina o sta facendo un incidente, o è ai box,
                   else if(last_box(i).get_time > t)
                   then
+                     --è ai box
                      nextTime := last_box(i).get_time;
                      progress := Float(100*(t-precTime)) / Float((nextTime - precTime));
                      snapshot(i).set_data(lap,-1,progress,false,false,false);
+                     detailed_snapshot(i).set_data(position_history(i)(indexPreEvent).get_tire_status,
+                                                   position_history(i)(indexPreEvent).get_rain_tire,
+                                                   speed_avgs(i),
+                                                   position_history(i)(indexPreEvent).get_behaviour,
+                                                   80);
                   else if(last_incident(i).get_time > t)
                   then
                      --è incidentata
                      nextTime := last_incident(i).get_time;
                      progress := Float(100*(t-precTime)) / Float((nextTime - precTime));
                      snapshot(i).set_data(lap,last_incident(i).get_segment,progress,true,last_incident(i).car_retired,false);
+                     detailed_snapshot(i).set_data(position_history(i)(indexPreEvent).get_tire_status,
+                                                   position_history(i)(indexPreEvent).get_rain_tire,
+                                                   speed_avgs(i),
+                                                   position_history(i)(indexPreEvent).get_behaviour,
+                                                   0);
                      if(last_incident(i).car_retired) then
                         retired_cars(i):=true;
                      end if;
                   else if(last_end(i).get_time < t)
                   then
                      snapshot(i).set_data(lap,0,0.0,false,false,true);
+                     detailed_snapshot(i).set_data(0,
+                                                   position_history(i)(indexPreEvent).get_rain_tire,
+                                                   speed_avgs(i),
+                                                   position_history(i)(indexPreEvent).get_behaviour,
+                                                   0);
                      retired_cars(i):=true;
                   else
                      --sono successe cose molto strane
