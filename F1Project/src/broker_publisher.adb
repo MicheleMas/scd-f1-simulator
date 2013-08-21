@@ -78,7 +78,6 @@ package body broker_publisher is
       begin
          Publisher_Agent.Add_Listener(Ada.Strings.Unbounded.To_String(Address), Resolved_Publisher_Address,
                                       Resolved_Publisher_Address_Last);
-Ada.Text_IO.Put_Line("*****************Arrivo qui*****************");
          Snapshot_Publisher.Register_At(Publisher_Agent'Unchecked_Access, "snapshots");
 
          while(not race_over)
@@ -86,14 +85,20 @@ Ada.Text_IO.Put_Line("*****************Arrivo qui*****************");
             -- read the snapshot and convert it to a Content
             frame.get_snapshot(current_snapshot);
             declare
+               lap : Integer;
                seg : Integer;
                prog : Float;
                inci : boolean;
                ret : boolean;
                over : boolean;
+               weather : boolean;
             begin
+               -- insert weather in the content
+               frame.get_rain(weather);
+               Content.Set_Boolean("rain", weather);
                for i in Positive range 1 .. cars_number loop
-                  current_snapshot(i).get_data(seg, prog, inci, ret, over);
+                  current_snapshot(i).get_data(lap, seg, prog, inci, ret, over);
+                  Content.Set_Integer("lap" & Positive'Image(i), YAMI_Integer(lap));
                   Content.Set_Integer("seg" & Positive'Image(i), YAMI_Integer(seg));
                   Content.Set_Long_Float("prog" & Positive'Image(i), YAMI_Long_Float(prog));
                   Content.Set_Boolean("inci" & Positive'Image(i), inci);
