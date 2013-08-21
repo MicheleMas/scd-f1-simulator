@@ -132,7 +132,12 @@ package body broker_race_status is
          average_speed := avgspeed;
          behaviour := beh;
          current_speed := speed;
-         end set_data;
+      end set_data;
+
+      procedure print_data is
+      begin
+         Ada.Text_IO.Put_Line("t_s: " & Integer'Image(tire_status) & " rain: " & Boolean'Image(rain_tires) & " Avg_Speed : " & Integer'Image(Integer(average_speed)) & " -  Beh: " & Integer'Image(behaviour) & " Speed: =" & Integer'Image(current_speed));
+      end print_data;
 
    end detailed_status;
 

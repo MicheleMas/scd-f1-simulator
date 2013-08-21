@@ -98,6 +98,7 @@ package broker_race_status is
                          avgspeed : in Float;
                          beh : in Integer;
                          speed : in Integer);
+      procedure print_data;
    private
       tire_status : Integer := 100;
       rain_tires : Boolean := false;
