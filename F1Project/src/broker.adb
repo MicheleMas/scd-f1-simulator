@@ -77,10 +77,13 @@ procedure Broker is
                time : Integer := Integer((Float'Value(Content.Get_String("time")))*1000.0);
                seg : Positive := Positive'Value(Content.Get_String("seg"));
                speed : Integer := Integer'Value(Content.Get_String("vel"));
+               behaviour : Integer := Integer'Value(Content.Get_String("beh"));
+               tires_status : Integer := Integer'Value(Content.Get_String("tire_s"));
+               rain_tires : Boolean := Content.Get_Boolean("tire_t");
             begin
                speed_avgs(car) := (speed_avgs(car) * n_speed_avgs(car) + speed) / (n_speed_avgs(car)+1);
                n_speed_avgs(car) := n_speed_avgs(car) + 1;
-               position_history(car)(position_index(car)) := new enter_segment(time,seg,speed);
+               position_history(car)(position_index(car)) := new enter_segment(time,seg,speed,behaviour,tires_status,rain_tires);
                position_index(car) := position_index(car) + 1;
                if(position_index(car) > 100)
                then
@@ -100,7 +103,7 @@ procedure Broker is
                last_lap(car) := new lap_event(time,lap);
                if(event = "LB")
                then
-                  position_history(car)(position_index(car)) := new enter_segment(time,-1,0);
+                  position_history(car)(position_index(car)) := new enter_segment(time,-1,0,-1,-1,Content.Get_Boolean("tire_t"));
                   position_index(car) := position_index(car) + 1;
                   if(position_index(car) > 100)
                   then
@@ -189,7 +192,7 @@ begin
       --Initialization
       for i in Positive range 1 .. car_number loop
          --we add a special ES event to each car, to show that they are on starting lane
-         position_history(i)(1) := new enter_segment(0,0,0);
+         position_history(i)(1) := new enter_segment(0,0,0,0,0,false);
          position_index(i) := 2;
          last_incident(i) := new incident_event(0,0,false,false);
          last_box(i) := new box_event(0);

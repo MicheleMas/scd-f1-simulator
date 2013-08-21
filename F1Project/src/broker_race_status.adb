@@ -18,6 +18,18 @@ package body broker_race_status is
       begin
          return speed;
       end get_speed;
+      function get_behaviour return Integer is
+      begin
+         return behaviour;
+      end get_behaviour;
+      function get_tire_status return Integer is
+      begin
+         return tire_status;
+      end get_tire_status;
+      function get_rain_tire return Boolean is
+      begin
+         return rain_tire;
+      end get_rain_tire;
 
    end enter_segment;
 
@@ -94,6 +106,35 @@ package body broker_race_status is
       --end get_car_number;
 
    end race_status;
+
+   protected body detailed_status is
+      procedure get_data(tire : out Integer;
+                         rain : out Boolean;
+                         avgspeed : out Float;
+                         beh : out Integer;
+                         speed : out Integer) is
+      begin
+         tire := tire_status;
+         rain := rain_tires;
+         avgspeed := average_speed;
+         beh := behaviour;
+         speed := current_speed;
+      end get_data;
+
+      procedure set_data(tire : in Integer;
+                         rain : in Boolean;
+                         avgspeed : in Float;
+                         beh : in Integer;
+                         speed : in Integer) is
+      begin
+         tire_status := tire;
+         rain_tires := rain;
+         average_speed := avgspeed;
+         behaviour := beh;
+         current_speed := speed;
+         end set_data;
+
+   end detailed_status;
 
    protected body car_snapshot is
 
