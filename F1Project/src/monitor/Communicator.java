@@ -50,7 +50,7 @@ public class Communicator implements Runnable {
 				over[i-1] = content.getBoolean("over "+i);
 			}
 			data.setData(lap, seg, prog, inci, ret, over);
-			System.out.println("Aggiornamento completato con lap=" + lap[0]); // TODO remove
+			System.out.println("Aggiornamento completato"); // TODO remove
 		}
 	}
 
