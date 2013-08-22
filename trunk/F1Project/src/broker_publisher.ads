@@ -10,7 +10,7 @@ package broker_publisher is
 
    set_up_completed : boolean := false;
    race_over : boolean := false;
-   cars_number : Integer;
+   --cars_number : Integer;
    laps_number : Integer;
 
    protected type condition (capacity : Positive) is
