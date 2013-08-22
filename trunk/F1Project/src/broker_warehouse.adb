@@ -30,25 +30,37 @@ package body broker_warehouse is
 
          request : constant String := Content.Get_String("type");
 
+         tire : Integer;
+         rain : Boolean;
+         avgspeed : Float;
+         beh : Integer;
+         speed : Integer;
+
       begin
          -- S -> setup
-         -- T -> tire_status | car = (String)ID
-         -- B -> behaviour   | car = (String)ID
-         -- V -> speed       | car = (String)ID
-         -- A -> avg_speed   | car = (String)ID
+         -- D -> details | car = (String)ID
 
          if(request = "S")
          then
             Reply_params.Set_Integer("laps", YAMI.Parameters.YAMI_Integer(race_status.get_laps));
             Reply_params.Set_Integer("cars", YAMI.Parameters.YAMI_Integer(race_status.get_cars));
             -- TODO forse qui potremmo inviare altri dati utili
+            Message.Reply(Reply_params);
          else
-            null;
+            -- All other requests contains "car" parameter
+            declare
+               ID : Integer := Integer'Value(Content.Get_String("car"));
+            begin
+               detail(ID).get_data(tire, rain, avgspeed, beh, speed);
+               Reply_params.Set_Integer("tire", YAMI.Parameters.YAMI_Integer(tire));
+               Reply_params.Set_Boolean("rain", rain);
+               Reply_params.Set_Long_Float("avgspeed", YAMI.Parameters.YAMI_Long_Float(avgspeed));
+               Reply_params.Set_Integer("beh", YAMI.Parameters.YAMI_Integer(beh));
+               Reply_params.Set_Integer("speed", YAMI.Parameters.YAMI_Integer(speed));
+
+               Message.Reply(Reply_params);
+            end;
          end if;
-
-         Reply_params.Set_Integer("aaa", 1); -- TODO
-
-         Message.Reply(Reply_params);
 
       end Process;
 
@@ -73,6 +85,7 @@ package body broker_warehouse is
 
       -- initialization
       race_status := status;
+      detail := Cdetail;
 
       if Ada.Command_Line.Argument_Count /= 3
       then
