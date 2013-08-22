@@ -47,7 +47,7 @@ procedure Broker is
    race_general_stats : broker_race_status.race_status_Access := new broker_race_status.race_status(custom_types.laps_number, car_number);
    snapshot_bucket : condition_Access := new condition(50);
    snapshot_publisher : updater_Access := new updater(snapshot_bucket, race_general_stats);
-   information_handler : pull_server_Access := new pull_server(race_general_stats);
+   information_handler : pull_server_Access := new pull_server(race_general_stats, detailed_snapshot);
 
    Wake_Time : Ada.Real_Time.Time;
    setup_done : boolean := false;
