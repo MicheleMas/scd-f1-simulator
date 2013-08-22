@@ -31,7 +31,7 @@ package body car_p is
       --Ada.Text_IO.Put_Line ("-DIVERSA-> " & Duration'Image(Ada.Real_Time.To_Duration(duratiosn))); --STAMPARE TIME_SPAN
       speed := status.get_currentSpeed; -- the initial speed should be zero?
       while (not race_over) loop
-         --Ada.Text_IO.Put_Line ("sono la macchina " & Positive'Image(status.get_name) & " ed entro nel segmento " & Positive'Image(nextReferee.id));
+         --Ada.Text_IO.Put_Line ("->" & Positive'Image(status.get_name) & " ed entro nel segmento " & Positive'Image(nextReferee.id));
          previousReferee := nextReferee;
 
 	 --here, we have inadeguated tires for rain status
@@ -41,7 +41,6 @@ package body car_p is
 
          -- enterSegment need to be done as first thing, in order to compensate lag
          nextReferee.enterSegment(id, status, speed, toSleep, nextReferee, box_stop, event_buffer.isRaining, incident, last_lap);
-
          --Ada.Real_Time.Split(toSleep,secondsToSleep,durationToSleep);
          durationToSleep := toSleep - Poll_Time;
         -- Ada.Text_IO.Put_Line ("--seconds_count--> " & Ada.Real_Time.Seconds_Count'image(secondsToSleep));	--STAMPARE Seconds_Count
@@ -72,6 +71,7 @@ package body car_p is
                event(4) := Ada.Strings.Unbounded.To_Unbounded_String("F");  -- car not retired
             end if;
             event(5) := Ada.Strings.Unbounded.To_Unbounded_String(Positive'Image(previousReferee.id));
+
             event_buffer.insert_event(event);
          end if;
 
@@ -96,11 +96,13 @@ package body car_p is
                event_buffer.insert_event(event);
                delay until toSleep;
                lap := lap + 1;
-	    else
+            else
                event(1) := Ada.Strings.Unbounded.To_Unbounded_String("ES");
                event(2) := Ada.Strings.Unbounded.To_Unbounded_String(Positive'Image(id));
                event(3) := Ada.Strings.Unbounded.To_Unbounded_String(Positive'Image(previousReferee.id));
-               event(4) := Ada.Strings.Unbounded.To_Unbounded_String(Natural'Image(Natural(speed)));
+               --Ada.Text_IO.Put_Line ("->" & Positive'Image(status.get_name) & " e sono vivo");
+               event(4) := Ada.Strings.Unbounded.To_Unbounded_String(Integer'Image(Integer(speed)));
+               --Ada.Text_IO.Put_Line ("->" & Positive'Image(status.get_name) & " e sono morto");
                event(5) := Ada.Strings.Unbounded.To_Unbounded_String(Positive'Image(status.get_currentBehaviour));
                event(6) := Ada.Strings.Unbounded.To_Unbounded_String(Integer'Image(status.get_tires_state));
                if(status.get_rain_tires)
