@@ -48,6 +48,7 @@ package body broker_warehouse is
             Message.Reply(Reply_params);
          else
             -- All other requests contains "car" parameter
+            Ada.Text_IO.Put_Line("ci arrivo!*************************");
             declare
                ID : Integer := Integer'Value(Content.Get_String("car"));
             begin

@@ -10,6 +10,8 @@ public class Monitor {
 	static int carNumber;
 	static int lapNumber;
 
+	static Communicator connection;
+
 	public static void main(String[] args) {
 		if (args.length != 2) {
 			System.out.println("Expecting 2 parameters, publish server and pull server");
@@ -47,11 +49,14 @@ public class Monitor {
 				} else {
 					Thread.sleep(2000);
 				}
-			
 
-				// dovrà farlo il thread client del pull server, non il main
 				message.close();
 				clientAgent.close();
+
+				// inizializzare la classe che legge da remoto
+				connection = new Communicator(publishAddress, pullAddress, carNumber);
+				Thread updater = new Thread(connection);
+				updater.start();
 
 			} catch (Exception e) {
 				//System.out.println("error " + e.getMessage());
