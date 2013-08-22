@@ -45,7 +45,7 @@ public class Monitor {
 					carNumber = reply.getInteger("cars");
 					lapNumber = reply.getInteger("laps");
 
-					System.out.println("Connection completed");
+					System.out.println("Connection completed, cars = " + carNumber);
 				} else {
 					Thread.sleep(2000);
 				}
