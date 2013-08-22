@@ -8,8 +8,8 @@ with Ada.Strings;
 with Ada.Strings.Unbounded;
 with Ada.Text_IO;
 with Ada.Command_Line;
-with custom_types;
-use custom_types;
+with global_custom_types;
+use global_custom_types;
 
 package body broker_warehouse is
 
@@ -42,8 +42,8 @@ package body broker_warehouse is
 
          if(request = "S")
          then
-            Reply_params.Set_Integer("laps", YAMI.Parameters.YAMI_Integer(race_status.get_laps));
-            Reply_params.Set_Integer("cars", YAMI.Parameters.YAMI_Integer(race_status.get_cars));
+            Reply_params.Set_Integer("laps", YAMI.Parameters.YAMI_Integer(race_status.real_laps_number));
+            Reply_params.Set_Integer("cars", YAMI.Parameters.YAMI_Integer(race_status.real_car_number));
             -- TODO forse qui potremmo inviare altri dati utili
             Message.Reply(Reply_params);
          else
@@ -105,7 +105,8 @@ package body broker_warehouse is
 
       while (not stop)
       loop
-         status.is_over(stop);
+         --status.is_over(stop);
+         race_status.isOver(stop);
          delay 5.0;
       end loop;
    end;

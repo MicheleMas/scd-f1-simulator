@@ -17,29 +17,39 @@ package body Circuit is
    car_status_array : arrayOfCars;
    publisher : Event_Handler_Access;
 
-   car_array : array(1 .. custom_types.car_number) of Car_Access;
+   car_array : array(1 .. car_number) of Car_Access;
    ref_array : array(1 .. 3) of Referee_Access;
 
    task body bootstrap is
 
-      test : Positive := 1;
-
+      real_cnumber : Integer;
+      real_lapn : Integer;
+      event : event_array_Access := new event_array;
    begin
  	--Ada.Text_IO.Put_Line ("Inizio il boot. ");
       firstReferee := parser.readCircuit("circuit.txt");
- 	--Ada.Text_IO.Put_Line ("Letto il circuito. ");
+      Ada.Text_IO.Put_Line ("Letto il circuito. ");
       car_status_array := parser.readCars("cars.txt");
- 	--Ada.Text_IO.Put_Line ("Lette le macchine. ");
+      Ada.Text_IO.Put_Line ("Lette le macchine. ");
+      parser.readProperties("race_properties.txt",real_cnumber,real_lapn);
+
+      race_stat.set_real_car_number(real_cnumber);
 
       For_Loop :
-      for i in Integer range 1 .. custom_types.car_number loop
-         car_array(i) := new Car(i,firstReferee,car_status_array(i), Circuit.event_buffer, Circuit.race_stat);
+      for i in Integer range 1 .. race_stat.real_car_number loop
+         car_array(i) := new Car(i,firstReferee,car_status_array(i), event_buffer, race_stat);
       end loop For_Loop;
       --Ada.Text_IO.Put_Line ("Costruiti i tasks. ");
 
       publisher := new Event_Handler(event_buffer, race_stat);
 
       --let's start the race
+      event(1) := Ada.Strings.Unbounded.To_Unbounded_String("SE");
+      event(2) := Ada.Strings.Unbounded.To_Unbounded_String(Positive'Image(race_stat.real_car_number));
+      event(3) := Ada.Strings.Unbounded.To_Unbounded_String(Positive'Image(race_stat.real_laps_number));
+      event_buffer.insert_event(event);
+
+      race_stat.start_race;
       firstReferee.setStart;
 
    end bootstrap;

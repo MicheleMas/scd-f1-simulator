@@ -1,7 +1,7 @@
 --with Ada.Numerics.Generic_Elementary_Functions;
 with Ada.Real_Time;
-with custom_types;
-use custom_types;
+with global_custom_types;
+use global_custom_types;
 with car_status;
 use car_status;
 

@@ -1,7 +1,5 @@
-with event_bkt;
-use event_bkt;
-with custom_types;
-use custom_types;
+with event_bkt; use event_bkt;
+with global_custom_types; use global_custom_types;
 
 package Publisher is
 
@@ -35,6 +33,9 @@ package Publisher is
 
    -- > Cambio meteo
    --   type = WC | rain = (bool)
+
+   -- > SETUP
+   --   type = SE | ncar = (Int)real_car_number | nlap = (int)real_laps_number
 
    task type Event_Handler (event_buffer : Event_Bucket_Access;
                             race_stat : race_status_Access);

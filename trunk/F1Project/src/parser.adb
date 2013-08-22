@@ -1,6 +1,6 @@
 with Ada.Text_IO;
-with custom_types;
-use custom_types;
+with global_custom_types;
+use global_custom_types;
 with GNAT.String_Split;
 with car_status;
 use car_status;
@@ -15,6 +15,7 @@ package body parser is
       Subs : GNAT.String_Split.Slice_Set;
       Seps : String := " " & ASCII.HT;
       firstSegment : Boolean := true;
+      firstread : Boolean := true;
    begin
       Ada.Text_IO.Open (File => File,
                         Mode => Ada.Text_IO.In_File,
@@ -85,7 +86,7 @@ package body parser is
       Subs : GNAT.String_Split.Slice_Set;
       Seps : String := " " & ASCII.HT;
       car  : Car_Status_Access := null;
-      carNumber : Natural := 0;
+      carnumber: Integer := 0;
    begin
       Ada.Text_IO.Open (File => File,
                         Mode => Ada.Text_IO.In_File,
@@ -106,15 +107,44 @@ package body parser is
                                                 Positive'Value(GNAT.String_Split.Slice (Subs, 4)));
                carNumber := carNumber + 1;
                Cars_Array(carNumber):= car;
-	    end if;
+            end if;
+
             --- in ogni riga ci sono i dati di una macchina
             --- crea l'array con i dati di ogni macchina
-
          end;
       end loop;
       Ada.Text_IO.Close (File);
       return Cars_Array;
    end readCars;
+
+   procedure readProperties(Filename : in String;
+                            cnumber : out Integer;
+                            lnumber : out Integer) is
+      File       : Ada.Text_IO.File_Type;
+      Line_Count : Natural := 0;
+      Subs : GNAT.String_Split.Slice_Set;
+      Seps : String := " " & ASCII.HT;
+   begin
+      Ada.Text_IO.Open (File => File,
+                        Mode => Ada.Text_IO.In_File,
+                        Name => Filename);
+      while not Ada.Text_IO.End_Of_File (File) loop
+         declare
+            Line : String := Ada.Text_IO.Get_Line (File);
+         begin
+            Line_Count := Line_Count + 1;
+            -- Ada.Text_IO.Put_Line (Natural'Image (Line_Count) & ": " & Line);
+ 	    if (not (Line(Line'First) = '#'))
+            then
+               GNAT.String_Split.Create (Subs, Line, Seps, Mode => GNAT.String_Split.Multiple);
+               -- la riga successiva riempie i campi del Car_Status dichiarato di car_p.ads
+               cnumber := Integer'Value(GNAT.String_Split.Slice (Subs, 1));
+               lnumber := Integer'Value(GNAT.String_Split.Slice (Subs, 2));
+            end if;
+         end;
+      end loop;
+      Ada.Text_IO.Close (File);
+   end readProperties;
 
 
 end parser;

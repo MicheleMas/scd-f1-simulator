@@ -2,7 +2,7 @@ with Ada.Strings.Unbounded;
 use Ada.Strings.Unbounded;
 with Ada.Containers.Indefinite_Vectors;
 with YAMI.Parameters; use YAMI.Parameters;
-with custom_types; use custom_types;
+with global_custom_types; use global_custom_types;
 
 package event_bkt is
 
