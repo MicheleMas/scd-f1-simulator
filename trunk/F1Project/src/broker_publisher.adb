@@ -108,7 +108,8 @@ package body broker_publisher is
             end;
             Snapshot_Publisher.Publish(Content);
             --Ada.Text_IO.Put_Line("-------inviato!!-------");
-            race_general_status.is_over(race_over);
+            --race_status.is_over(race_over);
+            race_stats.isOver(race_over);
          end loop;
       end;
 

@@ -2,6 +2,7 @@ with broker_race_status;
 use broker_race_status;
 with Ada.Containers.Indefinite_Vectors;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with global_custom_types; use global_custom_types;
 
 package broker_publisher is
 
@@ -31,7 +32,7 @@ package broker_publisher is
    type condition_Access is access condition;
 
    task type updater (frame : condition_Access;
-                      race_general_status : race_status_Access);
+                      race_stats : race_status_Access);
 
    type updater_Access is access updater;
 

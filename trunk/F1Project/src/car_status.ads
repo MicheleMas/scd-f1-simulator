@@ -31,7 +31,7 @@ package car_status is
       tires_status : Integer := 10000; -- 1 to 10000
       rain_tires : Boolean := false;
       behaviour : Positive := C_behaviour; -- 1 to 10
-      currentSpeed : Float := 1.0; -- to change
+      currentSpeed : Float := 0.0; -- to change
       toWait : Positive;
       damaged : Boolean := false;
    end Car_Status;

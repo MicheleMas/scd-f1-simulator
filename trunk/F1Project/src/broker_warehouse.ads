@@ -1,6 +1,8 @@
 with broker_race_status;
 use broker_race_status;
 
+with global_custom_types; use global_custom_types;
+
 package broker_warehouse is
 
    race_status : race_status_Access;
