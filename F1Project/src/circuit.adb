@@ -34,6 +34,7 @@ package body Circuit is
       parser.readProperties("race_properties.txt",real_cnumber,real_lapn);
 
       race_stat.set_real_car_number(real_cnumber);
+      race_stat.set_real_laps_number(real_lapn);
 
       For_Loop :
       for i in Integer range 1 .. race_stat.real_car_number loop
