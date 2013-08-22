@@ -1,5 +1,5 @@
-with custom_types;
-use custom_types;
+with global_custom_types;
+use global_custom_types;
 
 package broker_race_status is
 
@@ -152,21 +152,5 @@ package broker_race_status is
    type snapshot_array is array (1 .. car_number) of car_snapshot_Access;
 
    type snapshot_array_Access is access snapshot_array;
-
-   protected type race_status(laps : Integer;
-                              cars : Integer) is
-
-      procedure set_over;
-      procedure is_over(over : out boolean);
-      function get_laps return Integer;
-      function get_cars return Integer;
-
-   private
-
-      race_completed : boolean := false;
-
-   end race_status;
-
-   type race_status_Access is access race_status;
 
 end broker_race_status;

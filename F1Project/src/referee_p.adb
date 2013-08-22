@@ -10,7 +10,7 @@ with Ada.Numerics.Discrete_Random;
 package body referee_p is
 
    package Float_Function is new Ada.Numerics.Generic_Elementary_Functions(Float);
-   carArray : array(1 .. custom_types.car_number) of Ada.Real_Time.Time;
+   carArray : array(1 .. car_number) of Ada.Real_Time.Time;
 
    -----------------------------------------------------------------------
    --------------------------- REFEREE -----------------------------------

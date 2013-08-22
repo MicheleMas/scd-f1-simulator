@@ -123,14 +123,14 @@ package body car_p is
                event(3) := Ada.Strings.Unbounded.To_Unbounded_String(Positive'Image(lap));
                event_buffer.insert_event(event);
 	       lap := lap + 1;
-               if(lap = custom_types.laps_number)
+               if(lap = race_stat.real_laps_number)
 	       then
         	  last_lap := true;
 	       end if;
             end if;
 
 	    -- check if the race is over
-            if(lap > custom_types.laps_number)
+            if(lap > race_stat.real_laps_number)
 	    then
                race_over := true;
                event(1) := Ada.Strings.Unbounded.To_Unbounded_String("CE");

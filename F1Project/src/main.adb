@@ -2,8 +2,8 @@ with System;
 with Ada.Text_IO;
 with Ada.Calendar;
 with Ada.Real_Time;
-with custom_types;
-use custom_types;
+with global_custom_types;
+use global_custom_types;
 with Circuit;
 use Circuit;
 with car_p;
@@ -13,7 +13,7 @@ use referee_p;
 
 procedure Main is
    ref_array : array(1 .. 3) of Referee_Access;
-   car_array : array(1 .. custom_types.car_number) of Car_Access;
+   car_array : array(1 .. car_number) of Car_Access;
    --test_status : Car_Status_Access;
    test_speed : Positive := 1;
    test_towait : Positive := 1;
