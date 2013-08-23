@@ -15,7 +15,7 @@ use referee_p;
 
 package Circuit is
 
-   event_buffer : Event_Bucket_Access := new Event_Bucket(10); -- maybe too little?
+   event_buffer : Event_Bucket_Access := new Event_Bucket(200); -- maybe too little?
    race_stat : race_status_Access := new race_status;
    isRaining : Boolean := false;
 

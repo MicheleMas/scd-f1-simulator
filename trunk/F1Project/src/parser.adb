@@ -96,7 +96,7 @@ package body parser is
             Line : String := Ada.Text_IO.Get_Line (File);
          begin
             Line_Count := Line_Count + 1;
-            -- Ada.Text_IO.Put_Line (Natural'Image (Line_Count) & ": " & Line);
+            Ada.Text_IO.Put_Line (Natural'Image (Line_Count) & ": " & Line);
  	    if (not (Line(Line'First) = '#'))
             then
                GNAT.String_Split.Create (Subs, Line, Seps, Mode => GNAT.String_Split.Multiple);
