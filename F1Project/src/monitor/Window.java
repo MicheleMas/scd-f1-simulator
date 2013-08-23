@@ -46,7 +46,7 @@ public class Window implements Runnable {
 				text += "</html>";
 				label.setText(text);
 				frame.pack();
-				Thread.currentThread().sleep(1000);
+				Thread.currentThread().sleep(500);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
