@@ -19,6 +19,7 @@ public class Communicator implements Runnable {
 	private static boolean[] inci;
 	private static boolean[] ret;
 	private static boolean[] over;
+	private static int[] rank;
 
 	public Communicator(String publishAddress, String pullAddress, int carNumber) {
 		this.publishAddress = publishAddress;
@@ -31,6 +32,7 @@ public class Communicator implements Runnable {
 		inci = new boolean[carNumber];
 		ret = new boolean[carNumber];
 		over = new boolean[carNumber];
+		rank = new int[carNumber];
 	}
 
 	// PUBLISH METHODS
@@ -45,12 +47,13 @@ public class Communicator implements Runnable {
 				lap[i-1] = content.getInteger("lap "+i);
 				seg[i-1] = content.getInteger("seg "+i);
 				prog[i-1] = content.getInteger("prog "+i);
-				//prog[i-1] = 50;
 				inci[i-1] = content.getBoolean("inci "+i);
 				ret[i-1] = content.getBoolean("ret "+i);
 				over[i-1] = content.getBoolean("over "+i);
+				//rank[i-1] = content.getInteger("rank "+i);
+				rank[i-1] = i;
 			}
-			data.setData(lap, seg, prog, inci, ret, over);
+			data.setData(lap, seg, prog, inci, ret, over, rank);
 			System.out.println("Aggiornamento completato"); // TODO remove
 			} catch (Exception e) {
 				e.printStackTrace();
