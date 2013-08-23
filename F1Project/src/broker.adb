@@ -259,6 +259,7 @@ begin
          nextTime:Integer;
          precTime:Integer;
          raceFinished:boolean := false;
+         ranking : array (1 .. car_number) of Integer;
       begin
          while(not raceFinished or not stop)
          loop
@@ -349,7 +350,29 @@ begin
                   end if;
 
             end loop;
-            -- calcola la classifica
+            -- calcola la classifica (male)
+            for i in Positive range 1 .. cars loop
+               if(retired_cars(i)) then
+                  ranking(i):=0; -- retired car
+               else
+                  ranking(i):=1;
+                  for k in Positive range 1 .. i -1 loop
+                     if(snapshot(i).getLap < snapshot(k).getLap or
+                          (snapshot(i).getLap = snapshot(k).getLap and snapshot(i).getSeg < snapshot(k).getSeg) or
+                          (snapshot(i).getLap = snapshot(k).getLap and snapshot(i).getSeg = snapshot(k).getSeg and snapshot(i).getProg < snapshot(k).getProg))
+                     then
+                        ranking(i) := ranking(i)+1;
+                     else
+                        ranking(k) := ranking(k)+1;
+                    end if;
+                  end loop;
+               end if;
+            end loop;
+
+            for i in Positive range 1 .. cars loop
+               snapshot(i).setRank(ranking(i));
+            end loop;
+
 
             --we put the updated data in the vault, ready to be retrieved
             snap_box.set_data(snapshot);
@@ -374,9 +397,12 @@ begin
             delay until wake_time;
             ---DEBUG
             Ada.Text_IO.Put_Line("-- SNAP TIME " & Integer'Image(t-500) & " --");
-            Ada.Text_IO.Put_Line("### 1: ");
-            snapshot(1).print_data;
-            detailed_snapshot(1).print_data;
+            for i in Positive range 1 .. cars loop
+               Ada.Text_IO.Put_Line("### " & Positive'Image(i) &": ");
+               snapshot(i).print_data;
+               --detailed_snapshot(i).print_data;
+               Ada.Text_IO.Put_Line("---");
+            end loop;
             --Ada.Text_IO.Put_Line("### 2: ");
             --snapshot(2).print_data;
             --detailed_snapshot(2).print_data;

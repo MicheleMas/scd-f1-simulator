@@ -128,7 +128,7 @@ package body broker_race_status is
                          inci : out boolean;
                          ret : out boolean;
                          over : out boolean;
-                         ranking : out Integer) is
+                         rank : out Integer) is
       begin
          lapc := lap;
          seg := segment;
@@ -136,8 +136,13 @@ package body broker_race_status is
          inci := incident;
          ret := retired;
          over := race_completed;
-         ranking := rank;
+         rank := ranking;
       end get_data;
+
+      procedure setRank(rank : in Integer) is
+      begin
+         ranking := rank;
+      end setRank;
 
       procedure set_data(lapc : in Integer;
                          seg : in Integer;
@@ -154,9 +159,22 @@ package body broker_race_status is
          race_completed := over;
       end set_data;
 
+      function getLap return Integer is
+      begin
+         return lap;
+      end getLap;
+      function getSeg return Integer is
+      begin
+         return segment;
+      end getSeg;
+      function getProg return Float is
+      begin
+         return progress;
+      end getProg;
+
       procedure print_data is
       begin
-         Ada.Text_IO.Put_Line(Integer'Image(lap) & " - " & Integer'Image(segment) & " " & Integer'Image(Integer(progress)) & " -  Incident=" & Boolean'Image(incident) & " Ret=" & Boolean'Image(retired) & " Completed=" & Boolean'Image(race_completed) & " Rank =" &Integer'Image(rank));
+         Ada.Text_IO.Put_Line(Integer'Image(lap) & " - " & Integer'Image(segment) & " " & Integer'Image(Integer(progress)) & " -  Incident=" & Boolean'Image(incident) & " Ret=" & Boolean'Image(retired) & " Completed=" & Boolean'Image(race_completed) & " Rank =" &Integer'Image(ranking));
       end print_data;
 
    end car_snapshot;

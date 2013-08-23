@@ -1,2 +1,2 @@
 #carNumber lapNumber
-1 5
+10 5

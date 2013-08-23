@@ -127,7 +127,7 @@ package broker_race_status is
                          inci : out boolean;
                          ret : out boolean;
                          over : out boolean;
-                         ranking : out Integer);
+                         rank : out Integer);
 
       procedure set_data(lapc : in Integer;
                          seg : in Integer;
@@ -135,6 +135,10 @@ package broker_race_status is
                          inci : in boolean;
                          ret : in boolean;
                          over : in boolean);
+      function getLap return Integer;
+      function getSeg return Integer;
+      function getProg return Float;
+      procedure setRank (rank: in Integer);
       procedure print_data;
 
    private
@@ -145,7 +149,7 @@ package broker_race_status is
       incident : boolean := false;
       retired : boolean := false;
       race_completed : boolean := false;
-      rank : Integer := 0;
+      ranking : Integer := 0;
 
    end car_snapshot;
 
