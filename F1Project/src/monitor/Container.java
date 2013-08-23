@@ -8,6 +8,7 @@ public class Container {
 		if(!initialized) {
 			initialized = true;
 			this.carNumber = carNumber;
+			data = new Detail[carNumber];
 		}
 	}
 
