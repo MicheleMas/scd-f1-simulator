@@ -42,6 +42,8 @@ procedure Broker is
    lap_time_avg : array (1 .. car_number) of Integer;
    current_lap : array (1 .. car_number) of Integer;
    retired_cars : array (1 .. car_number) of boolean; -- true means retired
+   completed_cars : array (1 .. car_number) of boolean; -- true means completed
+   nCompleted : Integer;
    snapshot : snapshot_array_Access := new snapshot_array;
    detailed_snapshot : detailed_array_Access := new detailed_array;
 
@@ -143,7 +145,11 @@ procedure Broker is
                seg : Positive := Positive'Value(Content.Get_String("seg"));
             begin
                --Ada.Text_IO.Put_Line("--------------> Setto incidente al time " & Integer'Image(time));
-               last_incident(car):=new incident_event(time,seg,damage,retired);
+               if(retired) then
+                  last_incident(car):=new incident_event(time+10000,seg,damage,retired);
+               else
+                  last_incident(car):=new incident_event(time,seg,damage,retired);
+               end if;
             end;
          end if;
          if(event = "EB" or event = "LB")
@@ -225,6 +231,7 @@ begin
 
       --Initialization
       race_stat.real_car_number(cars);
+      nCompleted:=0;
       for i in Positive range 1 ..cars loop
          --we add a special ES event to each car, to show that they are on starting lane
          position_history(i)(1) := new enter_segment(0,0,0,0,0,false);
@@ -236,6 +243,7 @@ begin
          n_speed_avgs(i) := 0;
          current_lap(i) := 1;
          retired_cars(i) := false;
+         completed_cars(i) := false;
          snapshot(i) := new car_snapshot;
          detailed_snapshot(i) := new detailed_status;
          last_end(i) := new end_race_event(999999999);
@@ -265,7 +273,7 @@ begin
          loop
             -- snapshot
             for i in Positive range 1 .. cars loop
-               if(position_index(i) > 2 and retired_cars(i) = false) --se abbiamo almeno un evento per la macchina i E non si e' ritirata
+               if(position_index(i) > 2 and retired_cars(i) = false and completed_cars(i) = false) --se abbiamo almeno un evento per la macchina i E non si e' ritirata
                then
                   --segno il lap corrente
                   lap := last_lap(i).get_laps;
@@ -332,14 +340,15 @@ begin
                         retired_cars(i):=true;
                      end if;
                   else if(last_end(i).get_time < t)
-                  then
+                  then --ha fatto l'ultimo giro
                      snapshot(i).set_data(lap,0,0.0,false,false,true);
                      detailed_snapshot(i).set_data(0,
                                                    position_history(i)(indexPreEvent).get_rain_tire,
                                                    speed_avgs(i),
                                                    position_history(i)(indexPreEvent).get_behaviour,
                                                    0);
-                     retired_cars(i):=true;
+                     completed_cars(i):=true;
+                     nCompleted := nCompleted +1;
                   else
                      --sono successe cose molto strane
                      snapshot(i).set_data(-9,-9,0.0,false,false,false);
@@ -355,20 +364,25 @@ begin
                if(retired_cars(i)) then
                   ranking(i):=0; -- retired car
                else
-                  ranking(i):=1;
-                  for k in Positive range 1 .. i -1 loop
-                     if(snapshot(i).getLap < snapshot(k).getLap or
-                          (snapshot(i).getLap = snapshot(k).getLap and snapshot(i).getSeg < snapshot(k).getSeg) or
-                          (snapshot(i).getLap = snapshot(k).getLap and snapshot(i).getSeg = snapshot(k).getSeg and snapshot(i).getProg < snapshot(k).getProg))
-                     then
-                        ranking(i) := ranking(i)+1;
-                     else
-                        ranking(k) := ranking(k)+1;
-                    end if;
-                  end loop;
+                  if(not completed_cars(i))
+                  then
+                     ranking(i):=nCompleted + 1;
+                     for k in Positive range 1 .. cars loop
+                        if(not completed_cars(k) and not retired_cars(k))
+                        then
+                           if(snapshot(i).getLap < snapshot(k).getLap or
+                                (snapshot(i).getLap = snapshot(k).getLap and snapshot(i).getSeg < snapshot(k).getSeg) or
+                                (snapshot(i).getLap = snapshot(k).getLap and snapshot(i).getSeg = snapshot(k).getSeg and snapshot(i).getProg < snapshot(k).getProg) or
+                                (i /= k and snapshot(i).getLap = snapshot(k).getLap and snapshot(i).getSeg = snapshot(k).getSeg and snapshot(i).getProg = snapshot(k).getProg))
+                           then
+                              ranking(i):=ranking(i) + 1;
+                           end if;
+                        end if;
+                     end loop;
+                  end if;
                end if;
             end loop;
-
+            --la parte sopra è decisamente da migliorare
             for i in Positive range 1 .. cars loop
                snapshot(i).setRank(ranking(i));
             end loop;
@@ -380,7 +394,7 @@ begin
 
             raceFinished:=true;
             for i in Positive range 1 .. cars loop
-               if(not retired_cars(i))
+               if(not retired_cars(i) and not completed_cars(i))
                then
 	          --Ada.Text_IO.Put_Line("La macchina " & Positive'Image(i) & " e' ancora in corsa");
                   raceFinished:=false;
