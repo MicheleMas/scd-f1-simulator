@@ -39,18 +39,22 @@ public class Communicator implements Runnable {
 		public void call(IncomingMessage im) throws Exception {
 			Parameters content = im.getParameters();
 			// read data from the message
+			try {
 			for (int i=1; i<=carNumber; i++) {
 				System.out.println("Aggiorno car" + i);
 				lap[i-1] = content.getInteger("lap "+i);
 				seg[i-1] = content.getInteger("seg "+i);
-				//prog[i-1] = content.getFloat("prog"+i);
-				prog[i-1] = 50;
+				prog[i-1] = content.getInteger("prog "+i);
+				//prog[i-1] = 50;
 				inci[i-1] = content.getBoolean("inci "+i);
 				ret[i-1] = content.getBoolean("ret "+i);
 				over[i-1] = content.getBoolean("over "+i);
 			}
 			data.setData(lap, seg, prog, inci, ret, over);
 			System.out.println("Aggiornamento completato"); // TODO remove
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

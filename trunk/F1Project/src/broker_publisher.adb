@@ -98,19 +98,19 @@ package body broker_publisher is
                -- insert weather in the content
                frame.get_rain(weather);
                Content.Set_Boolean("rain", weather);
-               Ada.Text_IO.Put_Line("--------------carNumber=" & Integer'Image(cars_number));
+               --Ada.Text_IO.Put_Line("--------------carNumber=" & Integer'Image(cars_number));
                for i in Positive range 1 .. cars_number loop
                   current_snapshot(i).get_data(lap, seg, prog, inci, ret, over);
                   Content.Set_Integer("lap" & Positive'Image(i), YAMI_Integer(lap));
                   Content.Set_Integer("seg" & Positive'Image(i), YAMI_Integer(seg));
-                  Content.Set_Long_Float("prog" & Positive'Image(i), YAMI_Long_Float(prog));
+                  Content.Set_Integer("prog" & Positive'Image(i), YAMI_Integer(Integer(prog)));
                   Content.Set_Boolean("inci" & Positive'Image(i), inci);
                   Content.Set_Boolean("ret" & Positive'Image(i), ret);
                   Content.Set_Boolean("over" & Positive'Image(i), over);
                end loop;
             end;
             Snapshot_Publisher.Publish(Content);
-            --Ada.Text_IO.Put_Line("-------inviato!!-------");
+            Ada.Text_IO.Put_Line("-------inviato!!-------");
             --race_status.is_over(race_over);
             race_stats.isOver(race_over);
          end loop;
