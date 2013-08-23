@@ -126,7 +126,8 @@ package broker_race_status is
                          prog : out Float;
                          inci : out boolean;
                          ret : out boolean;
-                         over : out boolean);
+                         over : out boolean;
+                         ranking : out Integer);
 
       procedure set_data(lapc : in Integer;
                          seg : in Integer;
@@ -144,6 +145,7 @@ package broker_race_status is
       incident : boolean := false;
       retired : boolean := false;
       race_completed : boolean := false;
+      rank : Integer := 0;
 
    end car_snapshot;
 
@@ -152,5 +154,34 @@ package broker_race_status is
    type snapshot_array is array (1 .. car_number) of car_snapshot_Access;
 
    type snapshot_array_Access is access snapshot_array;
+
+   ----
+
+   protected type snapshot_vault is
+      procedure get_data( snap : out snapshot_array_Access);
+      procedure set_data( snap : in snapshot_array_Access);
+   private
+
+      data_available : Boolean := false;
+      snapshot: snapshot_array_Access := new snapshot_array;
+
+   end snapshot_vault;
+
+   type snapshot_vault_Access is access snapshot_vault;
+
+   ----
+
+   protected type detailed_snapshot_vault is
+      procedure get_data(detailed_snap : out detailed_array_Access);
+      procedure set_data(detailed_snap : in detailed_array_Access);
+   private
+
+      data_available : Boolean := false;
+      detailed_snapshot : detailed_array_Access := new detailed_array;
+
+   end detailed_snapshot_vault;
+
+   type detailed_snapshot_vault_Access is access detailed_snapshot_vault;
+
 
 end broker_race_status;

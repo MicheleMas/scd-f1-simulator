@@ -6,10 +6,10 @@ with global_custom_types; use global_custom_types;
 package broker_warehouse is
 
    race_status : race_status_Access;
-   detail : detailed_array_Access;
+   detail : detailed_snapshot_vault_Access;
 
    task type pull_server(status : race_status_Access;
-                         Cdetail : detailed_array_Access);
+                         Cdetail : detailed_snapshot_vault_Access);
 
    type pull_server_Access is access pull_server;
 

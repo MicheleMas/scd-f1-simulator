@@ -127,7 +127,8 @@ package body broker_race_status is
                          prog : out Float;
                          inci : out boolean;
                          ret : out boolean;
-                         over : out boolean) is
+                         over : out boolean;
+                         ranking : out Integer) is
       begin
          lapc := lap;
          seg := segment;
@@ -135,6 +136,7 @@ package body broker_race_status is
          inci := incident;
          ret := retired;
          over := race_completed;
+         ranking := rank;
       end get_data;
 
       procedure set_data(lapc : in Integer;
@@ -154,9 +156,35 @@ package body broker_race_status is
 
       procedure print_data is
       begin
-         Ada.Text_IO.Put_Line(Integer'Image(lap) & " - " & Integer'Image(segment) & " " & Integer'Image(Integer(progress)) & " -  Incident=" & Boolean'Image(incident) & " Ret=" & Boolean'Image(retired) & " Completed=" & Boolean'Image(race_completed));
+         Ada.Text_IO.Put_Line(Integer'Image(lap) & " - " & Integer'Image(segment) & " " & Integer'Image(Integer(progress)) & " -  Incident=" & Boolean'Image(incident) & " Ret=" & Boolean'Image(retired) & " Completed=" & Boolean'Image(race_completed) & " Rank =" &Integer'Image(rank));
       end print_data;
 
    end car_snapshot;
+
+   protected body snapshot_vault is
+      procedure get_data( snap : out snapshot_array_Access) is
+      begin
+         snap := snapshot;
+      end get_data;
+
+      procedure set_data( snap : in snapshot_array_Access) is
+      begin
+         data_available := true;
+         snapshot.all := snap.all;
+      end set_data;
+   end snapshot_vault;
+
+   protected body detailed_snapshot_vault is
+      procedure get_data(detailed_snap : out detailed_array_Access) is
+      begin
+         detailed_snap := detailed_snapshot;
+      end get_data;
+
+      procedure set_data(detailed_snap : in detailed_array_Access) is
+      begin
+         data_available := true;
+         detailed_snapshot.all := detailed_snap.all;
+      end set_data;
+   end detailed_snapshot_vault;
 
 end broker_race_status;

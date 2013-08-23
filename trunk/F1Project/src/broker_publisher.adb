@@ -21,10 +21,12 @@ package body broker_publisher is
       --begin
       --   race_over := true;
       --end stop;
-      procedure insert_snapshot(snapshot : in snapshot_array_Access) is
+      procedure insert_snapshot(snapshot : in snapshot_vault_Access) is
          snapshot_copy : snapshot_array_Access := new snapshot_array;
+         snap_unboxed : snapshot_array_Access;
       begin
-         snapshot_copy.all := snapshot.all;
+         snapshot.get_data(snap_unboxed);
+         snapshot_copy.all := snap_unboxed.all;
          bucket_size := bucket_size + 1;
          bucket.Append(snapshot_copy);
       end insert_snapshot;
@@ -94,19 +96,21 @@ package body broker_publisher is
                ret : boolean;
                over : boolean;
                weather : boolean;
+               rank : Integer;
             begin
                -- insert weather in the content
                frame.get_rain(weather);
                Content.Set_Boolean("rain", weather);
                --Ada.Text_IO.Put_Line("--------------carNumber=" & Integer'Image(cars_number));
                for i in Positive range 1 .. cars_number loop
-                  current_snapshot(i).get_data(lap, seg, prog, inci, ret, over);
+                  current_snapshot(i).get_data(lap, seg, prog, inci, ret, over, rank);
                   Content.Set_Integer("lap" & Positive'Image(i), YAMI_Integer(lap));
                   Content.Set_Integer("seg" & Positive'Image(i), YAMI_Integer(seg));
                   Content.Set_Integer("prog" & Positive'Image(i), YAMI_Integer(Integer(prog)));
                   Content.Set_Boolean("inci" & Positive'Image(i), inci);
                   Content.Set_Boolean("ret" & Positive'Image(i), ret);
                   Content.Set_Boolean("over" & Positive'Image(i), over);
+                  Content.Set_Integer("rank" & Positive'Image(i), YAMI_Integer(rank));
                end loop;
             end;
             Snapshot_Publisher.Publish(Content);

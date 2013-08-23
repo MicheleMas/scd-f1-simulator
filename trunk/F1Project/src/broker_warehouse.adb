@@ -37,6 +37,7 @@ package body broker_warehouse is
          speed : Integer;
 
          cars : Integer;
+         detail_unboxed : detailed_array_Access;
 
       begin
          -- S -> setup
@@ -55,7 +56,8 @@ package body broker_warehouse is
             declare
                ID : Integer := Integer'Value(Content.Get_String("car"));
             begin
-               detail(ID).get_data(tire, rain, avgspeed, beh, speed);
+               detail.get_data(detail_unboxed);
+               detail_unboxed(ID).get_data(tire, rain, avgspeed, beh, speed);
                Reply_params.Set_Integer("tire", YAMI.Parameters.YAMI_Integer(tire));
                Reply_params.Set_Boolean("rain", rain);
                Reply_params.Set_Long_Float("avgspeed", YAMI.Parameters.YAMI_Long_Float(avgspeed));
