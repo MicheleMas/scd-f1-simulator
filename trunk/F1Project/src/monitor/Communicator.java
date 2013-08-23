@@ -43,7 +43,7 @@ public class Communicator implements Runnable {
 				System.out.println("Aggiorno car" + i);
 				lap[i-1] = content.getInteger("lap "+i);
 				seg[i-1] = content.getInteger("seg "+i);
-				//prog[i-1] = content.getInteger("prog"+i); TODO, correggere l'invio di prog come int
+				//prog[i-1] = content.getFloat("prog"+i);
 				prog[i-1] = 50;
 				inci[i-1] = content.getBoolean("inci "+i);
 				ret[i-1] = content.getBoolean("ret "+i);
@@ -94,6 +94,10 @@ public class Communicator implements Runnable {
 
 
 	public void getDetails(int carID) {
-		// TODO
+		//TODO
+	}
+
+	public int getCarNumber() {
+		return carNumber;
 	}
 }
