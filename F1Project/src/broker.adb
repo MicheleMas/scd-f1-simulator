@@ -66,13 +66,15 @@ procedure Broker is
         (Content : in out YAMI.Parameters.Parameters_Collection)
       is
          event : constant String := Content.Get_String("type");
+         cars : Integer;
       begin
          if (not setup_done and event = "SE")
          then
             setup_done := true;
             race_stat.set_real_car_number(Integer'Value(Content.Get_String("ncar")));
             race_stat.set_real_laps_number(Integer'Value(Content.Get_String("nlap")));
-            Ada.Text_IO.Put_Line("DEBUG " & Integer'Image(race_stat.real_car_number) & "   " & Integer'Image(race_stat.real_laps_number));
+            race_stat.real_car_number(cars);
+            Ada.Text_IO.Put_Line("DEBUG " & Integer'Image(cars) & "   " & Integer'Image(race_stat.real_laps_number));
          end if;
 
          --Ada.Text_IO.Put_Line ("ricevuto: " & event & " at " & Content.Get_String("time"));
@@ -199,6 +201,8 @@ begin
       Resolved_Server_Address : String (1 .. YAMI.Agents.Max_Target_Length);
       Resolved_Server_Address_Last : Natural;
 
+      cars : Integer;
+
    begin
 
       Server_Agent.Add_Listener(Server_Address,
@@ -216,8 +220,9 @@ begin
          delay 1.0;
       end loop;
 
-       --Initialization
-      for i in Positive range 1 .. race_stat.real_car_number loop
+      --Initialization
+      race_stat.real_car_number(cars);
+      for i in Positive range 1 ..cars loop
          --we add a special ES event to each car, to show that they are on starting lane
          position_history(i)(1) := new enter_segment(0,0,0,0,0,false);
          position_index(i) := 2;
@@ -232,7 +237,7 @@ begin
          detailed_snapshot(i) := new detailed_status;
          last_end(i) := new end_race_event(999999999);
          last_lap(i) := new lap_event(0,0);
-         for k in Positive range 1 .. race_stat.real_car_number loop
+         for k in Positive range 1 .. cars loop
             distances(i)(k) := 0;
          end loop;
       end loop;
@@ -255,7 +260,7 @@ begin
          while(not raceFinished or not stop)
          loop
             -- snapshot
-            for i in Positive range 1 .. race_stat.real_car_number loop
+            for i in Positive range 1 .. cars loop
                if(position_index(i) > 2 and retired_cars(i) = false) --se abbiamo almeno un evento per la macchina i E non si e' ritirata
                then
                   --segno il lap corrente
@@ -331,7 +336,7 @@ begin
 
             end loop;
             raceFinished:=true;
-            for i in Positive range 1 .. race_stat.real_car_number loop
+            for i in Positive range 1 .. cars loop
                if(not retired_cars(i))
                then
 	          --Ada.Text_IO.Put_Line("La macchina " & Positive'Image(i) & " e' ancora in corsa");

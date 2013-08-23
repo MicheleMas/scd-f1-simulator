@@ -36,19 +36,22 @@ package body broker_warehouse is
          beh : Integer;
          speed : Integer;
 
+         cars : Integer;
+
       begin
          -- S -> setup
          -- D -> details | car = (String)ID
 
+         race_status.real_car_number(cars);
+
          if(request = "S")
          then
+            Reply_params.Set_Integer("cars", YAMI.Parameters.YAMI_Integer(cars));
             Reply_params.Set_Integer("laps", YAMI.Parameters.YAMI_Integer(race_status.real_laps_number));
-            Reply_params.Set_Integer("cars", YAMI.Parameters.YAMI_Integer(race_status.real_car_number));
             -- TODO forse qui potremmo inviare altri dati utili
             Message.Reply(Reply_params);
          else
             -- All other requests contains "car" parameter
-            Ada.Text_IO.Put_Line("ci arrivo!*************************");
             declare
                ID : Integer := Integer'Value(Content.Get_String("car"));
             begin

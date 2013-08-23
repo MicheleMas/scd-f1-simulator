@@ -27,13 +27,14 @@ package global_custom_types is
    protected type race_status is
       procedure set_real_car_number ( number : in Integer);
       procedure set_real_laps_number ( number : in Integer);
-      function real_car_number return Integer;
+      entry real_car_number (cars : out Integer);
       function real_laps_number return Integer;
       procedure start_race;
       procedure finish_race;
       procedure isOver (over : out Boolean);
       procedure car_end_race;
    private
+      set_up_completed : boolean := false;
       real_laps : Integer := laps_number;
       registered_cars : Integer;
       cars_racing : Natural := car_number;
