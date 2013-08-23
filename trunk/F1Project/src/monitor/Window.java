@@ -39,7 +39,7 @@ public class Window implements Runnable {
 				for (int i=0; i<carNumber; i++) {
 					det = updater.raceUpdate(i);
 					if(det != null) {
-						text += "" + i + det.getLap() + " " + det.getSeg() + " " + det.getProg() + " " 
+						text += "macchina " + (i+1) + " " + det.getLap() + " " + det.getSeg() + " " + det.getProg() + " " 
 						+ det.getInci() + " " + det.getRet() + " " + det.getOver() + "<br>";
 					}
 				}
