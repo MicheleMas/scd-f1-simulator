@@ -6,18 +6,20 @@ public class Detail {
 	private boolean inci;
 	private boolean ret;
 	private boolean over;
+	private int rank;
 
 	/**
 	There is no setter because any useless instance of this class must be deleted, not used again
 	(race condition problem)
 	*/
-	public Detail(int lap, int seg, int prog, boolean inci, boolean ret, boolean over) {
+	public Detail(int lap, int seg, int prog, boolean inci, boolean ret, boolean over, int rank) {
 		this.lap = lap;
 		this.seg = seg;
 		this.prog = prog;
 		this.inci = inci;
 		this.ret = ret;
 		this.over = over;
+		this.rank = rank;
 	}
 
 	public int getLap() {
@@ -42,5 +44,9 @@ public class Detail {
 
 	public boolean getOver() {
 		return over;
+	}
+
+	public int getRank() {
+		return rank;
 	}
 }

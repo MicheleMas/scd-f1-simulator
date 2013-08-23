@@ -1,6 +1,7 @@
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.*;
+import java.util.*;
 
 public class Window implements Runnable {
 
@@ -32,10 +33,43 @@ public class Window implements Runnable {
 
 		Detail det;
 		String text = "";
+		List<Rank> ranking = new ArrayList<Rank>();
+
+		/*boolean wait = true; // wait for car data
+		while(!stop && wait) {
+			det = updater.raceUpdate(carNumber-1);
+			if(det != null){
+				wait = false;
+			} else {
+				try {
+					Thread.currentThread().sleep(1000);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}*/
 
 		while(!stop) {
-			try {
+			try {				
+				// create ranking
+				for (int i=0; i<carNumber; i++) {
+					det = updater.raceUpdate(i);
+					if(det != null) {
+						ranking.add(new Rank(det.getRank(), i));
+					}
+				}
+				Collections.sort(ranking);
 				text = "<html>";
+				while(!ranking.isEmpty()) {
+					int carID = ranking.remove(0).carID;
+					det = updater.raceUpdate(carID);
+					text += "macchina:" + (carID+1) + " giro:" + det.getLap() + " segmento:" + det.getSeg()
+					    + " progress:" + det.getProg() + " incidente:" + det.getInci() 
+					    + " ritirato:" + det.getRet() + " concluso:" + det.getOver() + "<br>";
+				}
+				text += "</html>";
+
+				/*text = "<html>";
 				for (int i=0; i<carNumber; i++) {
 					det = updater.raceUpdate(i);
 					if(det != null) {
@@ -43,13 +77,30 @@ public class Window implements Runnable {
 						+ det.getInci() + " " + det.getRet() + " " + det.getOver() + "<br>";
 					}
 				}
-				text += "</html>";
+				text += "</html>";*/
+
+
 				label.setText(text);
 				frame.pack();
 				Thread.currentThread().sleep(500);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		}
+	}
+
+	private class Rank implements Comparable<Rank> {
+		int rank;
+		int carID;
+
+		public Rank(int rank, int carID) {
+			this.rank = rank;
+			this.carID = carID;
+		}
+
+		@Override
+		public int compareTo(Rank o) {
+			return rank < o.rank ? -1 : rank > o.rank ? 1 : 0;
 		}
 	}
 }

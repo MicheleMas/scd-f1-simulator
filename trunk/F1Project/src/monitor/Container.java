@@ -12,9 +12,9 @@ public class Container {
 		}
 	}
 
-	public static synchronized void setData(int[] lap, int[] seg, int[] prog, boolean[] inci, boolean[] ret, boolean[] over) {
+	public static synchronized void setData(int[] lap, int[] seg, int[] prog, boolean[] inci, boolean[] ret, boolean[] over, int[] rank) {
 		for (int i=0; i<carNumber; i++) {
-			data[i] = new Detail(lap[i], seg[i], prog[i], inci[i], ret[i], over[i]);
+			data[i] = new Detail(lap[i], seg[i], prog[i], inci[i], ret[i], over[i], rank[i]);
 		}
 	}
 
