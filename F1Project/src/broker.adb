@@ -44,12 +44,15 @@ procedure Broker is
    retired_cars : array (1 .. car_number) of boolean; -- true means retired
    snapshot : snapshot_array_Access := new snapshot_array;
    detailed_snapshot : detailed_array_Access := new detailed_array;
+
+   snap_box : snapshot_vault_Access := new snapshot_vault;
+   detailed_snap_box : detailed_snapshot_vault_Access := new detailed_snapshot_vault;
    --status : race_status_Access;
 
    --race_general_stats : broker_race_status.race_status_Access := new broker_race_status.race_status(global_custom_types.laps_number, car_number);
    snapshot_bucket : condition_Access := new condition(50);
    snapshot_publisher : updater_Access := new updater(snapshot_bucket, race_stat);
-   information_handler : pull_server_Access := new pull_server(race_stat, detailed_snapshot);
+   information_handler : pull_server_Access := new pull_server(race_stat, detailed_snap_box);
 
    Wake_Time : Ada.Real_Time.Time;
    setup_done : boolean := false;
@@ -346,6 +349,12 @@ begin
                   end if;
 
             end loop;
+            -- calcola la classifica
+
+            --we put the updated data in the vault, ready to be retrieved
+            snap_box.set_data(snapshot);
+            detailed_snap_box.set_data(detailed_snapshot);
+
             raceFinished:=true;
             for i in Positive range 1 .. cars loop
                if(not retired_cars(i))
@@ -360,7 +369,7 @@ begin
             end if;
             t := t + 500;
             -- send snapshot array to the publisher
-            snapshot_bucket.insert_snapshot(snapshot);
+            snapshot_bucket.insert_snapshot(snap_box);
             wake_time := wake_time + Ada.Real_Time.Milliseconds(500);
             delay until wake_time;
             ---DEBUG

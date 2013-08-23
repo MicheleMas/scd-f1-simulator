@@ -17,7 +17,7 @@ package broker_publisher is
       --procedure set_up (cars : Integer;
       --                  laps : Integer);
       --procedure stop;
-      procedure insert_snapshot(snapshot : in snapshot_array_Access);
+      procedure insert_snapshot(snapshot : in snapshot_vault_Access);
       entry get_snapshot(snapshot : out snapshot_array_Access);
       procedure is_bucket_empty(state : out boolean);
       procedure set_rain(rain : in boolean);
