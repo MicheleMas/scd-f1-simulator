@@ -96,8 +96,10 @@ package body Circuit is
             Rand_Int.Reset(seed);
             Num := Rand_Int.Random(seed);
             numRandom := Positive(Num);
+            --Ada.Text_IO.Put_Line("-DEBUG-> " & Positive'Image(numRandom));
          else
-            numRandom := numRandom - 50;
+            numRandom := numRandom - 5;
+            --Ada.Text_IO.Put_Line("--> " & Positive'Image(numRandom));
          end if;
 
          Period := Ada.Real_Time.Milliseconds (5000);

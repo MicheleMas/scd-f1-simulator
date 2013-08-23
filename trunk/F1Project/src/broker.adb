@@ -270,12 +270,23 @@ begin
                      lap := lap+1;
                   end if;
                   --cerco l'evento ES immediatamente successivo al tempo t
-                  indexPreEvent := position_index(i)-1;
+                  indexPreEvent := position_index(i) - 1;
+
+                  if(indexPreEvent < 1) then
+                     indexPreEvent := 100 - indexPreEvent;
+                  end if;
+
                   while( indexPreEvent > 0 and t < position_history(i)(indexPreEvent).get_time)
                   loop
                      indexPreEvent := indexPreEvent - 1;
+                     if(indexPreEvent < 1) then
+                        indexPreEvent := 100 - indexPreEvent;
+                     end if;
                   end loop;
                   indexNextEvent := indexPreEvent +  1; --indice dell'evento immediatamente successivo
+                  if(indexNextEvent > 100) then
+                     indexNextEvent := indexNextEvent - 100;
+                  end if;
 
                   --uso il tempo segnato nell'evento per capire a che percentuale del tratto segnato è al tempo t
                   precTime := position_history(i)(indexPreEvent).get_time;
