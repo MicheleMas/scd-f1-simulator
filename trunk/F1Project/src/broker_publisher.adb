@@ -55,8 +55,9 @@ package body broker_publisher is
 
    task body updater is
       Address : Unbounded_String := Ada.Strings.Unbounded.To_Unbounded_String("tcp://localhost:12346");
-      cars_number : Integer := race_stats.real_car_number;
+      cars_number : Integer;
    begin
+      race_stats.real_car_number(cars_number);
       if(Ada.Command_Line.Argument_Count = 2)
       then
          Address := Ada.Strings.Unbounded.To_Unbounded_String(Ada.Command_Line.Argument(2));

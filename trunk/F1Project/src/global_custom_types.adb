@@ -4,6 +4,7 @@ package body global_custom_types is
       procedure set_real_car_number ( number : in Integer) is
       begin
          registered_cars := number;
+         set_up_completed := true;
       end set_real_car_number;
 
       procedure set_real_laps_number ( number : in Integer) is
@@ -11,9 +12,9 @@ package body global_custom_types is
          real_laps := number;
       end set_real_laps_number;
 
-      function real_car_number return Integer is
+      entry real_car_number (cars : out Integer) when set_up_completed is
       begin
-         return registered_cars;
+         cars := registered_cars;
       end real_car_number;
 
       function real_laps_number return Integer is
