@@ -35,13 +35,15 @@ public class Window implements Runnable {
 
 		while(!stop) {
 			try {
-				text = "";
+				text = "<html>";
 				for (int i=0; i<carNumber; i++) {
 					det = updater.raceUpdate(i);
 					if(det != null) {
-						text += "" + i + det.getLap() + " " + det.getSeg() + " " + det.getProg() + "\n";
+						text += "" + i + det.getLap() + " " + det.getSeg() + " " + det.getProg() + " " 
+						+ det.getInci() + " " + det.getRet() + " " + det.getOver() + "<br>";
 					}
 				}
+				text += "</html>";
 				label.setText(text);
 				frame.pack();
 				Thread.currentThread().sleep(1000);
