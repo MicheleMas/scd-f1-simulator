@@ -50,8 +50,8 @@ public class Communicator implements Runnable {
 				inci[i-1] = content.getBoolean("inci "+i);
 				ret[i-1] = content.getBoolean("ret "+i);
 				over[i-1] = content.getBoolean("over "+i);
-				//rank[i-1] = content.getInteger("rank "+i);
-				rank[i-1] = i;
+				rank[i-1] = content.getInteger("rank "+i);
+				//rank[i-1] = i;
 			}
 			data.setData(lap, seg, prog, inci, ret, over, rank);
 			System.out.println("Aggiornamento completato"); // TODO remove
