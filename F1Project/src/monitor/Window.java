@@ -1,19 +1,28 @@
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.BorderLayout;
+import java.awt.RenderingHints;
 import javax.swing.*;
 import java.util.*;
 
-public class Window implements Runnable {
+public class Window extends JPanel implements Runnable {
 
 	static JFrame frame;
 	static Communicator updater;
 	static boolean stop = false;
 	static int carNumber;
+	static int[] x;
+	static int[] y;
+	static boolean ready = false;
 
 	public Window (Communicator updater, JFrame frame) {
 		this.frame = frame;
 		this.updater = updater;
 		this.carNumber = updater.getCarNumber();
+		x = new int[carNumber];
+		y = new int[carNumber];
 	}
 
 	public static void stop() {
@@ -21,14 +30,29 @@ public class Window implements Runnable {
 		updater.stop();
 	}
 
+	@Override
+	public void paint(Graphics g) {
+		super.paint(g);
+		Graphics g2d = (Graphics2D) g;
+		//g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		if(ready) {
+			for (int i=0; i<carNumber; i++) {
+				g2d.fillOval(x[i], y[i], 10, 10);
+			}
+		}
+	}
+
 	public void run() {
 
 		JPanel panel = (JPanel) frame.getContentPane();
+		//frame.setContentPane(panel);
 		JLabel label = new JLabel();
-		panel.add(label);
+		panel.add(label, BorderLayout.SOUTH);
+		JPanel race = this;
+		panel.add(race, BorderLayout.CENTER);
 		label.setText("prova");
 		frame.setLocationRelativeTo(null);
-		frame.pack();
+		frame.setSize(700, 480);
 		frame.setVisible(true);
 
 		Detail det;
@@ -49,6 +73,14 @@ public class Window implements Runnable {
 			}
 		}*/
 
+		// setup
+		for (int i=0; i<carNumber; i++) {
+			x[i] = 0;
+			y[i] = i*10;
+		}
+
+		ready = true;
+
 		while(!stop) {
 			try {				
 				// create ranking
@@ -59,16 +91,20 @@ public class Window implements Runnable {
 					}
 				}
 				Collections.sort(ranking);
-				text = "<html>";
+				int counter = 1;
+				text = "<html>Classifica<br>";
 				while(!ranking.isEmpty()) {
 					int carID = ranking.remove(0).carID;
 					det = updater.raceUpdate(carID);
-					text += "macchina:" + (carID+1) + " giro:" + det.getLap() + " segmento:" + det.getSeg()
-					    + " progress:" + det.getProg() + " incidente:" + det.getInci() 
+					text += counter + "° " + "macchina:" + (carID+1) + " giro:" + det.getLap() + " segmento:" 
+					    + det.getSeg() + " progress:" + det.getProg() + " incidente:" + det.getInci() 
 					    + " ritirato:" + det.getRet() + " concluso:" + det.getOver() + "<br>";
+					counter++;
+					// update position
+					x[carID] = (100 * (det.getLap()-1)) + (10 * (det.getSeg()-1)) + (det.getProg() / 10);
 				}
 				text += "</html>";
-
+				race.repaint();
 				/*text = "<html>";
 				for (int i=0; i<carNumber; i++) {
 					det = updater.raceUpdate(i);
@@ -81,7 +117,7 @@ public class Window implements Runnable {
 
 
 				label.setText(text);
-				frame.pack();
+				//frame.pack();
 				Thread.currentThread().sleep(500);
 			} catch (Exception e) {
 				e.printStackTrace();
