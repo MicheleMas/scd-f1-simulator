@@ -58,9 +58,10 @@ package body broker_warehouse is
             begin
                detail.get_data(detail_unboxed);
                detail_unboxed(ID).get_data(tire, rain, avgspeed, beh, speed);
+               Ada.Text_IO.Put_Line("***************CI ARRIVO!**************");
                Reply_params.Set_Integer("tire", YAMI.Parameters.YAMI_Integer(tire));
                Reply_params.Set_Boolean("rain", rain);
-               Reply_params.Set_Long_Float("avgspeed", YAMI.Parameters.YAMI_Long_Float(avgspeed));
+               Reply_params.Set_Integer("avgspeed", YAMI.Parameters.YAMI_Integer(Integer(avgspeed)));
                Reply_params.Set_Integer("beh", YAMI.Parameters.YAMI_Integer(beh));
                Reply_params.Set_Integer("speed", YAMI.Parameters.YAMI_Integer(speed));
 
