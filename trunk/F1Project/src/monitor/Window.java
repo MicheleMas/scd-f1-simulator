@@ -45,14 +45,23 @@ public class Window extends JPanel implements Runnable {
 	public void run() {
 
 		JPanel panel = (JPanel) frame.getContentPane();
-		//frame.setContentPane(panel);
-		JLabel label = new JLabel();
-		panel.add(label, BorderLayout.SOUTH);
+		JPanel container = new JPanel();
+		JPanel buttonContainer = new JPanel();
+		// create buttons
+		JButton[] buttonArray = new JButton[carNumber];
+		for (int i=0; i<carNumber; i++) {
+			buttonArray[i] = new JButton("Car " + (i+1));
+			buttonContainer.add(buttonArray[i], BorderLayout.WEST);
+		}
+		container.add(buttonContainer, BorderLayout.WEST);
+		JLabel rankLabel = new JLabel();
+		container.add(rankLabel, BorderLayout.EAST);
+		panel.add(container, BorderLayout.SOUTH);
 		JPanel race = this;
 		panel.add(race, BorderLayout.CENTER);
-		label.setText("prova");
+		rankLabel.setText("prova");
 		frame.setLocationRelativeTo(null);
-		frame.setSize(700, 480);
+		frame.setSize(700, 560);
 		frame.setVisible(true);
 
 		Status stat;
@@ -111,6 +120,7 @@ public class Window extends JPanel implements Runnable {
 				//}
 
 				text += "</html>";
+				race.validate();
 				race.repaint();
 				/*text = "<html>";
 				for (int i=0; i<carNumber; i++) {
@@ -123,7 +133,7 @@ public class Window extends JPanel implements Runnable {
 				text += "</html>";*/
 
 
-				label.setText(text);
+				rankLabel.setText(text);
 				//frame.pack();
 				Thread.currentThread().sleep(500);
 			} catch (Exception e) {
