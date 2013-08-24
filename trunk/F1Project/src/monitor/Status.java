@@ -1,4 +1,4 @@
-public class Detail {
+public class Status {
 
 	private int lap;
 	private int seg;
@@ -12,7 +12,7 @@ public class Detail {
 	There is no setter because any useless instance of this class must be deleted, not used again
 	(race condition problem)
 	*/
-	public Detail(int lap, int seg, int prog, boolean inci, boolean ret, boolean over, int rank) {
+	public Status(int lap, int seg, int prog, boolean inci, boolean ret, boolean over, int rank) {
 		this.lap = lap;
 		this.seg = seg;
 		this.prog = prog;
