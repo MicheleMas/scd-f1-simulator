@@ -55,14 +55,15 @@ public class Window extends JPanel implements Runnable {
 		frame.setSize(700, 480);
 		frame.setVisible(true);
 
-		Status det;
+		Status stat;
+		Detail det;
 		String text = "";
 		List<Rank> ranking = new ArrayList<Rank>();
 
 		/*boolean wait = true; // wait for car data
 		while(!stop && wait) {
-			det = updater.raceUpdate(carNumber-1);
-			if(det != null){
+			stat = updater.raceUpdate(carNumber-1);
+			if(stat != null){
 				wait = false;
 			} else {
 				try {
@@ -85,9 +86,9 @@ public class Window extends JPanel implements Runnable {
 			try {				
 				// create ranking
 				for (int i=0; i<carNumber; i++) {
-					det = updater.raceUpdate(i);
-					if(det != null) {
-						ranking.add(new Rank(det.getRank(), i));
+					stat = updater.raceUpdate(i);
+					if(stat != null) {
+						ranking.add(new Rank(stat.getRank(), i));
 					}
 				}
 				Collections.sort(ranking);
@@ -95,14 +96,20 @@ public class Window extends JPanel implements Runnable {
 				text = "<html>Classifica<br>";
 				while(!ranking.isEmpty()) {
 					int carID = ranking.remove(0).carID;
-					det = updater.raceUpdate(carID);
-					text += counter + "° " + "macchina:" + (carID+1) + " giro:" + det.getLap() + " segmento:" 
-					    + det.getSeg() + " progress:" + det.getProg() + " incidente:" + det.getInci() 
-					    + " ritirato:" + det.getRet() + " concluso:" + det.getOver() + "<br>";
+					stat = updater.raceUpdate(carID);
+					text += counter + "° " + "macchina:" + (carID+1) + " giro:" + stat.getLap() + " segmento:" 
+					    + stat.getSeg() + " progress:" + stat.getProg() + " incidente:" + stat.getInci() 
+					    + " ritirato:" + stat.getRet() + " concluso:" + stat.getOver() + "<br>";
 					counter++;
 					// update position
-					x[carID] = (100 * (det.getLap()-1)) + (10 * (det.getSeg()-1)) + (det.getProg() / 10);
+					x[carID] = (100 * (stat.getLap()-1)) + (10 * (stat.getSeg()-1)) + (stat.getProg() / 10);
 				}
+				//stampa i dettagli della prima macchina per testare il pull
+				//det = updater.getDetails(0);
+				//if(det != null) {
+					//text += "TEST dettagli macchina 1: velocità: " + det.getSpeed();
+				//}
+
 				text += "</html>";
 				race.repaint();
 				/*text = "<html>";

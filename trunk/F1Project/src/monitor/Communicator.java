@@ -102,20 +102,31 @@ public class Communicator implements Runnable {
 
 	// PULL METHODS
 
-	public void getDetails(int carID) {
+	public Detail getDetails(int carID) {
+		Detail details = null;
 		try {
 			if (pullAgent == null || pullParams == null) {
 				pullAgent = new Agent();
 				pullParams = new Parameters();
 			}
 			pullParams.setString("type", "D");
+			pullParams.setString("car", (carID+1)+"");
 			OutgoingMessage message = pullAgent.send(pullAddress, "warehouse", "details", pullParams);
 			message.waitForCompletion();
 			OutgoingMessage.MessageState state = message.getState();
-
+			if (state == OutgoingMessage.MessageState.REPLIED) {
+				Parameters reply = message.getReply();
+				int tireStatus = reply.getInteger("tire");
+				boolean rainTire = reply.getBoolean("rain");
+				int avgSpeed = reply.getInteger("avgspeed");
+				int behaviour = reply.getInteger("beh");
+				int speed = reply.getInteger("speed");
+				details = new Detail(tireStatus, rainTire, avgSpeed,behaviour, speed);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return details;
 	}
 
 	public int getCarNumber() {
