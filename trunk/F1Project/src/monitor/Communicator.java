@@ -1,5 +1,6 @@
 import com.inspirel.yami.Agent;
 import com.inspirel.yami.IncomingMessage;
+import com.inspirel.yami.OutgoingMessage;
 import com.inspirel.yami.IncomingMessageCallback;
 import com.inspirel.yami.Parameters;
 import java.util.*;
@@ -11,6 +12,8 @@ public class Communicator implements Runnable {
 	private static int carNumber;
 	private static Container data;
 	private static boolean stop = false;
+	private static Agent pullAgent;
+	private static Parameters pullParams;
 
 	//Publisher reader tmp variables
 	private static int[] lap;
@@ -99,9 +102,20 @@ public class Communicator implements Runnable {
 
 	// PULL METHODS
 
-
 	public void getDetails(int carID) {
-		//TODO
+		try {
+			if (pullAgent == null || pullParams == null) {
+				pullAgent = new Agent();
+				pullParams = new Parameters();
+			}
+			pullParams.setString("type", "D");
+			OutgoingMessage message = pullAgent.send(pullAddress, "warehouse", "details", pullParams);
+			message.waitForCompletion();
+			OutgoingMessage.MessageState state = message.getState();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public int getCarNumber() {
