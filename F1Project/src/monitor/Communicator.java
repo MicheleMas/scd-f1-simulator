@@ -95,7 +95,7 @@ public class Communicator implements Runnable {
 	/**
 	Return the last status received by the broker (in mutex)
 	*/
-	public Detail raceUpdate(int carID) {
+	public Status raceUpdate(int carID) {
 		return data.getData(carID);
 	}
 

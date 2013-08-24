@@ -55,7 +55,7 @@ public class Window extends JPanel implements Runnable {
 		frame.setSize(700, 480);
 		frame.setVisible(true);
 
-		Detail det;
+		Status det;
 		String text = "";
 		List<Rank> ranking = new ArrayList<Rank>();
 
