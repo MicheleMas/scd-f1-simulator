@@ -4,6 +4,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.BorderLayout;
 import java.awt.RenderingHints;
+//import java.awt.GridBagLayout;
+//import java.awt.GridBagConstraints;
+import java.awt.GridLayout;
 import javax.swing.*;
 import java.util.*;
 
@@ -45,13 +48,18 @@ public class Window extends JPanel implements Runnable {
 	public void run() {
 
 		JPanel panel = (JPanel) frame.getContentPane();
-		JPanel container = new JPanel();
-		JPanel buttonContainer = new JPanel();
+		Box container = Box.createHorizontalBox();
+		//container.setLayout(new GridLayout(1, 2));
+		//JPanel buttonContainer = new JPanel();
+		Box buttonContainer = Box.createVerticalBox();
+
 		// create buttons
 		JButton[] buttonArray = new JButton[carNumber];
+		//buttonContainer.setLayout(new GridLayout(carNumber, 1));
+		//GridBagConstraints gbc = new GridBagConstraints();
 		for (int i=0; i<carNumber; i++) {
 			buttonArray[i] = new JButton("Car " + (i+1));
-			buttonContainer.add(buttonArray[i], BorderLayout.WEST);
+			buttonContainer.add(buttonArray[i]);
 		}
 		container.add(buttonContainer, BorderLayout.WEST);
 		JLabel rankLabel = new JLabel();
@@ -61,7 +69,7 @@ public class Window extends JPanel implements Runnable {
 		panel.add(race, BorderLayout.CENTER);
 		rankLabel.setText("prova");
 		frame.setLocationRelativeTo(null);
-		frame.setSize(700, 560);
+		frame.setSize(750, 560);
 		frame.setVisible(true);
 
 		Status stat;
