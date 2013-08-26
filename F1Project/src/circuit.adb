@@ -14,7 +14,7 @@ package body Circuit is
 
    -- place for global variables
    firstReferee : Referee_Access;
-   car_status_array : arrayOfCars;
+   car_status_array : arrayOfCarsAccess;
    publisher : Event_Handler_Access;
 
    car_array : array(1 .. car_number) of Car_Access;

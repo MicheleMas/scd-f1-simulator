@@ -79,10 +79,10 @@ package body parser is
    end readCircuit;
 
    --- funzione che legge le macchine
-   function readCars (Filename : in String) return arrayOfCars is
+   function readCars (Filename : in String) return arrayOfCarsAccess is
       File       : Ada.Text_IO.File_Type;
       Line_Count : Natural := 0;
-      Cars_Array : arrayOfCars;
+      Cars_Array : arrayOfCarsAccess := new arrayOfCars;
       Subs : GNAT.String_Split.Slice_Set;
       Seps : String := " " & ASCII.HT;
       car  : Car_Status_Access := null;
