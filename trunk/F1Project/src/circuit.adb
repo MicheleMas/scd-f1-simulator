@@ -9,6 +9,7 @@ with Ada.Numerics;
 with Ada.Numerics.Discrete_Random;
 with Publisher;
 use Publisher;
+with controller_server;
 
 package body Circuit is
 
