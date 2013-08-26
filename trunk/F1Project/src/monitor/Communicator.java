@@ -139,7 +139,7 @@ public class Communicator implements Runnable {
 			Agent overrideAgent = new Agent();
 			Parameters params = new Parameters();
 			params.setString("type", "Obeh");
-			params.setString("car", carID+1);
+			params.setString("car", ""+carID+1);
 			params.setString("beh", ""+behaviour);
 			overrideAgent.sendOneWay(overrideAddress, "override", "behaviour", params);
 		} catch (Exception e) {
@@ -152,7 +152,7 @@ public class Communicator implements Runnable {
 			Agent overrideAgent = new Agent();
 			Parameters params = new Parameters();
 			params.setString("type", "Obox");
-			params.setString("car", carID);
+			params.setString("car", ""+carID);
 			overrideAgent.sendOneWay(overrideAddress, "override", "box", params);
 		} catch (Exception e) {
 			e.printStackTrace();
