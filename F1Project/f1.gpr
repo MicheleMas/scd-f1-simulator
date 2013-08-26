@@ -15,7 +15,7 @@ project F1 is
       when "POSIX" =>
          for Source_Files use ("broker.adb", "broker_publisher.adb", "broker_publisher.ads", "broker_race_status.adb", "broker_race_status.ads", "broker_warehouse.adb", "broker_warehouse.ads", "car_p.adb", "car_p.ads", "car_status.adb", 
             "car_status.ads", "circuit.adb", "circuit.ads", "event_bkt.adb", "event_bkt.ads", "global_custom_types.adb", "global_custom_types.ads", "main.adb", "parser.adb", "parser.ads", "publisher.adb", "publisher.ads", "referee_p.adb", 
-            "referee_p.ads");
+            "referee_p.ads", "controller_server.ads", "controller_server.adb");
 
       when "Linux" =>
 

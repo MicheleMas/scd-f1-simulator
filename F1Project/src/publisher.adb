@@ -23,7 +23,7 @@ package body publisher is
 
       race_stat.isOver(raceOver);
 
-      if Ada.Command_Line.Argument_Count /= 1 then
+      if Ada.Command_Line.Argument_Count < 1 then
          Ada.Text_IO.Put_Line
            ("No endpoint specified, running locally");
          local := true;
