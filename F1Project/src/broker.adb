@@ -147,6 +147,12 @@ procedure Broker is
                --Ada.Text_IO.Put_Line("--------------> Setto incidente al time " & Integer'Image(time));
                if(retired) then
                   last_incident(car):=new incident_event(time+10000,seg,damage,retired);
+                  position_history(car)(position_index(car)) := new enter_segment(time,seg,0,0,0,false);
+                  position_index(car) := position_index(car) + 1;
+                  if(position_index(car) > 100)
+                  then
+                     position_index(car) := 1;
+                  end if;
                else
                   last_incident(car):=new incident_event(time,seg,damage,retired);
                end if;
@@ -302,7 +308,7 @@ begin
 
                   --uso il tempo segnato nell'evento per capire a che percentuale del tratto segnato è al tempo t
                   precTime := position_history(i)(indexPreEvent).get_time;
-                  if(position_index(i) > indexNextEvent)
+                  if(position_index(i) > indexNextEvent and last_incident(i).get_time < t)
                   then
 
                      nextTime := position_history(i)(indexNextEvent).get_time;
