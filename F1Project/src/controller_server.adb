@@ -11,6 +11,7 @@ with Ada.Text_IO;
 
 package body controller_server is
 
+   cars_status : arrayOfCarsAccess;
 
    type Incoming_Message_Handler is
      new YAMI.Incoming_Messages.Message_Handler
@@ -19,17 +20,20 @@ package body controller_server is
    overriding procedure Call(H : in out Incoming_Message_Handler;
                              Message : in out YAMI.Incoming_Messages.Incoming_Message'Class) is
       procedure Process(Content : in out YAMI.Parameters.Parameters_Collection) is
-        kind : String := Content.Get_String("type");
+         kind : String := Content.Get_String("type");
+         carID : Integer := Integer'Value(Content.Get_String("car"));
+         beh : Positive;
       begin
          if(kind = "Obeh")
          then
-            -- TODO aggiornare il behaviour
-            null;
+            -- Update behaviour
+            beh := Positive'Value(Content.Get_String("beh"));
+            cars_status(carID).Change_Behaviour(beh);
          else
             if(kind = "Obox")
             then
-            -- TODO forzare il rientro ai box
-               null;
+               -- Force box entrance
+               cars_status(carID).Change_Tires(true);
             end if;
          end if;
       end Process;
@@ -48,6 +52,8 @@ package body controller_server is
 
       stop : boolean := false;
    begin
+      cars_status := car_status;
+
       if(Ada.Command_Line.Argument_Count < 2)
       then
          Ada.Text_IO.Put_Line("No controller address specified, using tcp://localhost:12348");
@@ -63,7 +69,7 @@ package body controller_server is
 
       while(not stop)
       loop
-         status.isOver(stop);
+         race_status.isOver(stop);
          --Ada.Text_IO.Put_Line("sono vivo!!****!*!**!*!*!*!*");
          delay 2.0;
       end loop;

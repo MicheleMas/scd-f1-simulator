@@ -43,6 +43,11 @@ package body car_p is
          if (status.get_tires_state < 100)
          then
             status.Change_Tires(true);
+            -- if the status is below 0% the car is damaged
+            if (status.get_tires_state < 0)
+            then
+               status.set_damage(true);
+            end if;
          end if;
 
          -- enterSegment need to be done as first thing, in order to compensate lag
