@@ -10,6 +10,7 @@ with Ada.Numerics.Discrete_Random;
 with Publisher;
 use Publisher;
 with controller_server;
+use controller_server;
 
 package body Circuit is
 
@@ -17,6 +18,7 @@ package body Circuit is
    firstReferee : Referee_Access;
    car_status_array : arrayOfCarsAccess;
    publisher : Event_Handler_Access;
+   controller : controller_listener_Access;
 
    car_array : array(1 .. car_number) of Car_Access;
    ref_array : array(1 .. 3) of Referee_Access;
@@ -43,6 +45,7 @@ package body Circuit is
       end loop For_Loop;
       --Ada.Text_IO.Put_Line ("Costruiti i tasks. ");
 
+      controller := new controller_listener(race_stat, car_status_array);
       publisher := new Event_Handler(event_buffer, race_stat);
 
       --let's start the race
