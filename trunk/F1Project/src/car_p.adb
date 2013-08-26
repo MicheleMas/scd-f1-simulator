@@ -39,6 +39,12 @@ package body car_p is
             status.Change_Tires(true);
          end if;
 
+         -- check if tire status is below 10%
+         if (status.get_tires_state < 100)
+         then
+            status.Change_Tires(true);
+         end if;
+
          -- enterSegment need to be done as first thing, in order to compensate lag
          nextReferee.enterSegment(id, status, speed, toSleep, nextReferee, box_stop, event_buffer.isRaining, incident, last_lap);
          --Ada.Real_Time.Split(toSleep,secondsToSleep,durationToSleep);

@@ -9,6 +9,7 @@ public class Communicator implements Runnable {
 
 	private static String publishAddress;
 	private static String pullAddress;
+	private static String overrideAddress;
 	private static int carNumber;
 	private static Container data;
 	private static boolean stop = false;
@@ -24,9 +25,10 @@ public class Communicator implements Runnable {
 	private static boolean[] over;
 	private static int[] rank;
 
-	public Communicator(String publishAddress, String pullAddress, int carNumber) {
+	public Communicator(String publishAddress, String pullAddress, String overrideAddress, int carNumber) {
 		this.publishAddress = publishAddress;
 		this.pullAddress = pullAddress;
+		this.overrideAddress = overrideAddress;
 		this.carNumber = carNumber;
 		data = new Container(carNumber);
 		lap = new int[carNumber];
@@ -100,7 +102,7 @@ public class Communicator implements Runnable {
 	}
 
 
-	// PULL METHODS
+	// PULL METHOD
 
 	public Detail getDetails(int carID) {
 		Detail details = null;
@@ -127,6 +129,31 @@ public class Communicator implements Runnable {
 			e.printStackTrace();
 		}
 		return details;
+	}
+
+	// OVERRIDE METHOD
+
+	public void overrideBehaviour(int carID, int behaviour) {
+		try {
+			Agent overrideAgent = new Agent();
+			Parameters params = new Parameters();
+			params.setString("type", "Obeh");
+			params.setString("beh", ""+behaviour);
+			overrideAgent.sendOneWay(overrideAddress, "override", "behaviour", params);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void overrideBoxEntrance(int carID) {
+		try {
+			Agent overrideAgent = new Agent();
+			Parameters params = new Parameters();
+			params.setString("type", "Obox");
+			overrideAgent.sendOneWay(overrideAddress, "override", "box", params);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public int getCarNumber() {
