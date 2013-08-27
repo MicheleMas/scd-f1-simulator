@@ -199,7 +199,7 @@ package body referee_p is
             carArray(car_ID) := toSleep;
          else
             -- box
-            toSleep := initialTime + Ada.Real_Time.Milliseconds (10000);
+            toSleep := initialTime + Ada.Real_Time.Milliseconds (15000);
             if (c_status.pitStop4tires) -- cambio gomme
             then
                c_status.Change_Tires(false);
@@ -223,6 +223,8 @@ package body referee_p is
             box_stop := true;
             speed := 80.0;
             nextReferee := First_Referee.getNext;
+            nextReferee := nextReferee.getNext;
+            nextReferee := nextReferee.getNext;
          end if;
 
       end enterSegment;
