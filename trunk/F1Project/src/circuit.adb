@@ -43,7 +43,7 @@ package body Circuit is
       for i in Integer range 1 .. real_cnumber loop
          car_array(i) := new Car(i,firstReferee,car_status_array(i), event_buffer, race_stat);
       end loop For_Loop;
-      --Ada.Text_IO.Put_Line ("Costruiti i tasks. ");
+      Ada.Text_IO.Put_Line ("Costruiti i tasks. ");
 
       controller := new controller_listener(race_stat, car_status_array);
       publisher := new Event_Handler(event_buffer, race_stat);
