@@ -30,6 +30,10 @@ package body broker_race_status is
       begin
          return rain_tire;
       end get_rain_tire;
+      function get_require_box return Boolean is
+      begin
+         return require_box;
+      end get_require_box;
 
    end enter_segment;
 
@@ -91,31 +95,35 @@ package body broker_race_status is
                          rain : out Boolean;
                          avgspeed : out Float;
                          beh : out Integer;
-                         speed : out Integer) is
+                         speed : out Integer;
+                         r_box : out Boolean) is
       begin
          tire := tire_status;
          rain := rain_tires;
          avgspeed := average_speed;
          beh := behaviour;
          speed := current_speed;
+         r_box := require_box;
       end get_data;
 
       procedure set_data(tire : in Integer;
                          rain : in Boolean;
                          avgspeed : in Float;
                          beh : in Integer;
-                         speed : in Integer) is
+                         speed : in Integer;
+                         r_box : in Boolean) is
       begin
          tire_status := tire;
          rain_tires := rain;
          average_speed := avgspeed;
          behaviour := beh;
          current_speed := speed;
+         require_box := r_box;
       end set_data;
 
       procedure print_data is
       begin
-         Ada.Text_IO.Put_Line("t_s: " & Integer'Image(tire_status) & " rain: " & Boolean'Image(rain_tires) & " Avg_Speed : " & Integer'Image(Integer(average_speed)) & " -  Beh: " & Integer'Image(behaviour) & " Speed: =" & Integer'Image(current_speed));
+         Ada.Text_IO.Put_Line("t_s: " & Integer'Image(tire_status) & " rain: " & Boolean'Image(rain_tires) & " Avg_Speed : " & Integer'Image(Integer(average_speed)) & " -  Beh: " & Integer'Image(behaviour) & " Speed: =" & Integer'Image(current_speed) & " r_box=" & Boolean'Image(require_box));
       end print_data;
 
    end detailed_status;

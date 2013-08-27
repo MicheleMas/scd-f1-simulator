@@ -98,10 +98,11 @@ procedure Broker is
                behaviour : Integer := Integer'Value(Content.Get_String("beh"));
                tires_status : Integer := Integer'Value(Content.Get_String("tire_s"));
                rain_tires : Boolean := Content.Get_Boolean("tire_t");
+               require_box : Boolean := Content.Get_Boolean("r_box");
             begin
                speed_avgs(car) := (speed_avgs(car) * Float(n_speed_avgs(car)) + Float(speed)) / Float(n_speed_avgs(car)+1);
                n_speed_avgs(car) := n_speed_avgs(car) + 1;
-               position_history(car)(position_index(car)) := new enter_segment(time,seg,speed,behaviour,tires_status,rain_tires);
+               position_history(car)(position_index(car)) := new enter_segment(time,seg,speed,behaviour,tires_status,rain_tires,require_box);
                position_index(car) := position_index(car) + 1;
                if(position_index(car) > 100)
                then
@@ -121,7 +122,7 @@ procedure Broker is
                last_lap(car) := new lap_event(time,lap);
                if(event = "LB")
                then
-                  position_history(car)(position_index(car)) := new enter_segment(time,-1,0,-1,-1,Content.Get_Boolean("tire_t"));
+                  position_history(car)(position_index(car)) := new enter_segment(time,-1,0,-1,-1,Content.Get_Boolean("tire_t"),false);
                   position_index(car) := position_index(car) + 1;
                   if(position_index(car) > 100)
                   then
@@ -147,7 +148,7 @@ procedure Broker is
                --Ada.Text_IO.Put_Line("--------------> Setto incidente al time " & Integer'Image(time));
                if(retired) then
                   last_incident(car):=new incident_event(time+10000,seg,damage,retired);
-                  position_history(car)(position_index(car)) := new enter_segment(time,seg,0,0,0,false);
+                  position_history(car)(position_index(car)) := new enter_segment(time,seg,0,0,0,false,false);
                   position_index(car) := position_index(car) + 1;
                   if(position_index(car) > 100)
                   then
@@ -229,18 +230,20 @@ begin
 
       Server_Agent.Register_Object("Event_Dispatcher", My_Handler'Unchecked_Access);
 
+      Ada.text_io.Put_Line("Aspetto il setup");
       --Aspettiamo fino a quando non viene fatto il setup
       while(not setup_done)
       loop
          delay 1.0;
       end loop;
+      Ada.text_io.Put_Line("Faccio l'inizializzazione");
 
       --Initialization
       race_stat.real_car_number(cars);
       nCompleted:=0;
       for i in Positive range 1 ..cars loop
          --we add a special ES event to each car, to show that they are on starting lane
-         position_history(i)(1) := new enter_segment(0,0,0,0,0,false);
+         position_history(i)(1) := new enter_segment(0,0,0,0,0,false,false);
          position_index(i) := 2;
          last_incident(i) := new incident_event(0,0,false,false);
          last_box(i) := new box_event(0);
@@ -275,6 +278,7 @@ begin
          raceFinished:boolean := false;
          ranking : array (1 .. car_number) of Integer;
       begin
+         Ada.text_io.Put_Line("Inizio l'interpolazione");
          while(not raceFinished or not stop)
          loop
             -- snapshot
@@ -318,7 +322,8 @@ begin
                                                    position_history(i)(indexNextEvent).get_rain_tire,
                                                    speed_avgs(i),
                                                    position_history(i)(indexNextEvent).get_behaviour,
-                                                   position_history(i)(indexNextEvent).get_speed);
+                                                   position_history(i)(indexNextEvent).get_speed,
+                                                   position_history(i)(indexNextEvent).get_require_box);
                      -- casi limite, la macchina o sta facendo un incidente, o è ai box,
                   else if(last_box(i).get_time > t)
                   then
@@ -330,7 +335,8 @@ begin
                                                    position_history(i)(indexPreEvent).get_rain_tire,
                                                    speed_avgs(i),
                                                    position_history(i)(indexPreEvent).get_behaviour,
-                                                   80);
+                                                   80,
+                                                   true);
                   else if(last_incident(i).get_time > t)
                   then
                      --è incidentata
@@ -341,7 +347,8 @@ begin
                                                    position_history(i)(indexPreEvent).get_rain_tire,
                                                    speed_avgs(i),
                                                    position_history(i)(indexPreEvent).get_behaviour,
-                                                   0);
+                                                   0,
+                                                   position_history(i)(indexPreEvent).get_require_box);
                      if(last_incident(i).car_retired) then
                         retired_cars(i):=true;
                      end if;
@@ -352,11 +359,12 @@ begin
                                                    position_history(i)(indexPreEvent).get_rain_tire,
                                                    speed_avgs(i),
                                                    position_history(i)(indexPreEvent).get_behaviour,
-                                                   0);
+                                                   0,
+                                                   position_history(i)(indexPreEvent).get_require_box);
                      completed_cars(i):=true;
                      nCompleted := nCompleted +1;
                   else
-                     --sono successe cose molto strane
+                     --sono successe cose molto strane TODO da togliere
                      snapshot(i).set_data(-9,-9,0.0,false,false,false);
                   end if;
                   end if;
@@ -402,7 +410,7 @@ begin
             for i in Positive range 1 .. cars loop
                if(not retired_cars(i) and not completed_cars(i))
                then
-	          --Ada.Text_IO.Put_Line("La macchina " & Positive'Image(i) & " e' ancora in corsa");
+	          Ada.Text_IO.Put_Line("La macchina " & Positive'Image(i) & " e' ancora in corsa");
                   raceFinished:=false;
                end if;
             end loop;
@@ -420,7 +428,7 @@ begin
             for i in Positive range 1 .. cars loop
                Ada.Text_IO.Put_Line("### " & Positive'Image(i) &": ");
                snapshot(i).print_data;
-               --detailed_snapshot(i).print_data;
+               detailed_snapshot(i).print_data;
                Ada.Text_IO.Put_Line("---");
             end loop;
             --Ada.Text_IO.Put_Line("### 2: ");

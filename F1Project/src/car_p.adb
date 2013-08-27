@@ -16,6 +16,7 @@ package body car_p is
       lap : Positive := 1;
       last_lap : Boolean := false;
       race_over : Boolean := false;
+      request_box : Boolean := false;
 
       use type Ada.Real_Time.Time_Span;
       Poll_Time :          Ada.Real_Time.Time := Ada.Real_Time.Clock; -- time to start polling
@@ -58,6 +59,7 @@ package body car_p is
          --Ada.Text_IO.Put_Line ("----time_span----> " & Duration'Image(Ada.Real_Time.To_Duration(durationToSleep))); --STAMPARE TIME_SPAN
 
          status.set_currentSpeed(speed); -- set new speed on status
+         request_box := status.is_damaged or status.pitStop4tires;
 
          event (8) := Ada.Strings.Unbounded.To_Unbounded_String
            (Duration'Image(Ada.Real_Time.To_Duration(durationToSleep)));
@@ -121,6 +123,12 @@ package body car_p is
                   event(7) :=  Ada.Strings.Unbounded.To_Unbounded_String("T");
                else
                   event(7) :=  Ada.Strings.Unbounded.To_Unbounded_String("F");
+               end if;
+               if(request_box)
+               then
+                  event(9) :=  Ada.Strings.Unbounded.To_Unbounded_String("T");
+               else
+                  event(9) :=  Ada.Strings.Unbounded.To_Unbounded_String("F");
                end if;
                event_buffer.insert_event(event);
                delay until toSleep;

@@ -12,19 +12,19 @@ with referee_p;
 use referee_p;
 
 procedure Main is
-   ref_array : array(1 .. 3) of Referee_Access;
-   car_array : array(1 .. car_number) of Car_Access;
+   --ref_array : array(1 .. 3) of Referee_Access;
+   --car_array : array(1 .. car_number) of Car_Access;
    --test_status : Car_Status_Access;
-   test_speed : Positive := 1;
-   test_towait : Positive := 1;
-   test_next : Referee_Access := null;
-   test_car : Car_Access := null;
-   test_car2 : Car_Access := null;
-   test_car3 : Car_Access := null;
+   --test_speed : Positive := 1;
+   --test_towait : Positive := 1;
+   --test_next : Referee_Access := null;
+   --test_car : Car_Access := null;
+   --test_car2 : Car_Access := null;
+   --test_car3 : Car_Access := null;
 
-   use type Ada.Real_Time.Time_Span;
-   Poll_Time :          Ada.Real_Time.Time := Ada.Real_Time.Clock; -- time to start polling
-   Period    : constant Ada.Real_Time.Time_Span := Ada.Real_Time.Milliseconds (1000);
+   --use type Ada.Real_Time.Time_Span;
+   --Poll_Time :          Ada.Real_Time.Time := Ada.Real_Time.Clock; -- time to start polling
+   --Period    : constant Ada.Real_Time.Time_Span := Ada.Real_Time.Milliseconds (1000);
 
 begin
 

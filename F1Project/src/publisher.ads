@@ -7,7 +7,7 @@ package Publisher is
    -- > Fine Segmento
    --   type = ES | car = (Pos)ID | seg = (Pos)Seg_ID | vel = (Int)speed |
    --   beh = (Pos)behaviour | tire_s = (Int) tire_status |
-   --   tire_t = (bool)rain_tire | time = (time_span)
+   --   tire_t = (bool)rain_tire | time = (time_span) | r_box = (bool)request_box
 
    -- > Rientro ai box
    --   type = EB | car = (Pos)ID | time = (time_span)

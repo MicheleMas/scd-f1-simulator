@@ -43,7 +43,7 @@ package global_custom_types is
 
    type race_status_Access is access race_status;
 
-   type event_array is array (1 .. 8) of Unbounded_String;
+   type event_array is array (1 .. 9) of Unbounded_String;
 
    type event_array_Access is access event_array;
 
