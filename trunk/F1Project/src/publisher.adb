@@ -70,6 +70,12 @@ package body publisher is
             else
                Content.Set_Boolean("tire_t", false);
             end if;
+            if(event(9) = "T")
+            then
+               Content.Set_Boolean("r_box", true);
+            else
+               Content.Set_Boolean("r_box", false);
+            end if;
             Content.Set_String("time",Ada.Strings.Unbounded.To_String(event(8)));
          end if;
 

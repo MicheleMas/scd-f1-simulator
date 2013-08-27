@@ -10,13 +10,15 @@ package broker_race_status is
                                  speed : Integer;
                                  behaviour : Integer;
                                  tire_status : Integer;
-                                 rain_tire : Boolean) is
+                                 rain_tire : Boolean;
+                                 require_box : Boolean) is
       function get_time return Integer;
       function get_segment return Integer;
       function get_speed return Integer;
       function get_behaviour return Integer;
       function get_tire_status return Integer;
       function get_rain_tire return Boolean;
+      function get_require_box return Boolean;
 
    end enter_segment;
 
@@ -92,19 +94,22 @@ package broker_race_status is
                          rain : out Boolean;
                          avgspeed : out Float;
                          beh : out Integer;
-                         speed : out Integer);
+                         speed : out Integer;
+                         r_box : out Boolean);
       procedure set_data(tire : in Integer;
                          rain : in Boolean;
                          avgspeed : in Float;
                          beh : in Integer;
-                         speed : in Integer);
+                         speed : in Integer;
+                         r_box : in Boolean);
       procedure print_data;
    private
-      tire_status : Integer := 100;
+      tire_status : Integer := 0;
       rain_tires : Boolean := false;
       average_speed : Float := 0.0;
-      behaviour : Integer := 100;
+      behaviour : Integer := 0;
       current_speed : Integer := 0;
+      require_box : Boolean := false;
 
    end detailed_status;
 

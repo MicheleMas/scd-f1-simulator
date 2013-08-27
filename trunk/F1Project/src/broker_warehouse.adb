@@ -35,6 +35,7 @@ package body broker_warehouse is
          avgspeed : Float;
          beh : Integer;
          speed : Integer;
+         r_box : Boolean;
 
          cars : Integer;
          detail_unboxed : detailed_array_Access;
@@ -57,14 +58,14 @@ package body broker_warehouse is
                ID : Integer := Integer'Value(Content.Get_String("car"));
             begin
                detail.get_data(detail_unboxed);
-               detail_unboxed(ID).get_data(tire, rain, avgspeed, beh, speed);
-               Ada.Text_IO.Put_Line("***************CI ARRIVO!**************");
+               detail_unboxed(ID).get_data(tire, rain, avgspeed, beh, speed,r_box);
+               --Ada.Text_IO.Put_Line("***************CI ARRIVO!**************");
                Reply_params.Set_Integer("tire", YAMI.Parameters.YAMI_Integer(tire));
                Reply_params.Set_Boolean("rain", rain);
                Reply_params.Set_Integer("avgspeed", YAMI.Parameters.YAMI_Integer(Integer(avgspeed)));
                Reply_params.Set_Integer("beh", YAMI.Parameters.YAMI_Integer(beh));
                Reply_params.Set_Integer("speed", YAMI.Parameters.YAMI_Integer(speed));
-
+               Reply_params.Set_Boolean("r_box", r_box);
                Message.Reply(Reply_params);
             end;
          end if;

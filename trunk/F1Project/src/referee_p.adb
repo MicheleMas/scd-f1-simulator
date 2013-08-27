@@ -166,6 +166,10 @@ package body referee_p is
                      Incident_Chance := Incident_Chance + 20;
                   end if;
                end if;
+               if(c_status.get_tires_state > 9950)
+               then
+                  Incident_Chance := 1;
+               end if;
                if (Incident_Chance > numRandom)
                then
                   -- incident occurs
