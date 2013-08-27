@@ -80,6 +80,7 @@ package body car_p is
                race_over := true;
                race_stat.car_end_race;
                event(4) := Ada.Strings.Unbounded.To_Unbounded_String("T");  -- car retired
+               previousReferee.leaveSegment(id, box_stop);
             else
                event(4) := Ada.Strings.Unbounded.To_Unbounded_String("F");  -- car not retired
             end if;
