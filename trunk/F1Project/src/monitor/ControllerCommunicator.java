@@ -69,7 +69,7 @@ public class ControllerCommunicator {
 			Agent overrideAgent = new Agent();
 			Parameters params = new Parameters();
 			params.setString("type", "Obox");
-			params.setString("car", ""+carID);
+			params.setString("car", ""+carID+1);
 			overrideAgent.sendOneWay(overrideAddress, "override", "box", params);
 		} catch (Exception e) {
 			e.printStackTrace();
