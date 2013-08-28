@@ -133,9 +133,10 @@ package body broker_race_status is
       procedure get_data(lapc : out Integer;
                          seg : out Integer;
                          prog : out Float;
-                         inci : out boolean;
-                         ret : out boolean;
-                         over : out boolean;
+                         inci : out Boolean;
+                         dama : out Boolean;
+                         ret : out Boolean;
+                         over : out Boolean;
                          rank : out Integer) is
       begin
          lapc := lap;
@@ -143,6 +144,7 @@ package body broker_race_status is
          prog := progress;
          inci := incident;
          ret := retired;
+         dama := damaged;
          over := race_completed;
          rank := ranking;
       end get_data;
@@ -155,14 +157,16 @@ package body broker_race_status is
       procedure set_data(lapc : in Integer;
                          seg : in Integer;
                          prog : in Float;
-                         inci : in boolean;
-                         ret : in boolean;
-                         over : in boolean) is
+                         inci : in Boolean;
+                         dama : in Boolean;
+                         ret : in Boolean;
+                         over : in Boolean) is
       begin
          lap := lapc;
          segment := seg;
          progress := prog;
          incident := inci;
+         damaged := dama;
          retired := ret;
          race_completed := over;
       end set_data;
@@ -182,7 +186,7 @@ package body broker_race_status is
 
       procedure print_data is
       begin
-         Ada.Text_IO.Put_Line(Integer'Image(lap) & " - " & Integer'Image(segment) & " " & Integer'Image(Integer(progress)) & " -  Incident=" & Boolean'Image(incident) & " Ret=" & Boolean'Image(retired) & " Completed=" & Boolean'Image(race_completed) & " Rank =" &Integer'Image(ranking));
+         Ada.Text_IO.Put_Line(Integer'Image(lap) & " - " & Integer'Image(segment) & " " & Integer'Image(Integer(progress)) & " -  Incident=" & Boolean'Image(incident) & " Damaged=" & Boolean'Image(damaged) & " Ret=" & Boolean'Image(retired) & " Completed=" & Boolean'Image(race_completed) & " Rank =" &Integer'Image(ranking));
       end print_data;
 
    end car_snapshot;

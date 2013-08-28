@@ -129,17 +129,19 @@ package broker_race_status is
       procedure get_data(lapc : out Integer;
                          seg : out Integer;
                          prog : out Float;
-                         inci : out boolean;
-                         ret : out boolean;
-                         over : out boolean;
+                         inci : out Boolean;
+                         dama : out Boolean;
+                         ret : out Boolean;
+                         over : out Boolean;
                          rank : out Integer);
 
       procedure set_data(lapc : in Integer;
                          seg : in Integer;
                          prog : in Float;
-                         inci : in boolean;
-                         ret : in boolean;
-                         over : in boolean);
+                         inci : in Boolean;
+                         dama : in Boolean;
+                         ret : in Boolean;
+                         over : in Boolean);
       function getLap return Integer;
       function getSeg return Integer;
       function getProg return Float;
@@ -152,6 +154,7 @@ package broker_race_status is
       segment : Integer := 1;
       progress : Float := 0.0;
       incident : boolean := false;
+      damaged : boolean := false;
       retired : boolean := false;
       race_completed : boolean := false;
       ranking : Integer := 0;
