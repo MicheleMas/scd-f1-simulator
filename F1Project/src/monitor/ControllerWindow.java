@@ -7,14 +7,13 @@ public class ControllerWindow extends JPanel implements Runnable {
 
 	static JFrame frame;
 	static boolean stop = false;
-	static int carNumber;
 	static String[] names;
 	static String[] colors;
 	static ControllerCommunicator connection;
 	static int WIDTH = 300;
 	static int HEIGHT = 400;
 	static int driverSelected = 0;
-	static boolean selected = false;
+	static boolean driverSet = false;
 
 	public ControllerWindow(ControllerCommunicator connection, JFrame frame, String[] names, String[] colors) {
 		this.frame = frame;
@@ -28,7 +27,11 @@ public class ControllerWindow extends JPanel implements Runnable {
 	}
 
 	public void setSelectedDriver(int driv) {
-		// TODO
+		driverSelected = driv;
+		System.out.println("Selezionato pilota "+(driv+1));
+		if (!driverSet) {
+			driverSet = true;
+		}
 	}
 
 	public void run() {
@@ -40,8 +43,8 @@ public class ControllerWindow extends JPanel implements Runnable {
 		title.setBounds(100, 5, 100, 20);
 		JComboBox driversList = new JComboBox(names);
 		driversList.setBounds(50, 40, 200, 30);
-		JLabel infoLabel = new JLabel("<html>Speed = 200<br>AVG Speed = 200<br>Tire Status = 10000<br>Tyre type = rain<br>Behaviour = 10</html>");
-		//JLabel infoLabel = new JLabel("");
+		//JLabel infoLabel = new JLabel("<html>Speed = 200<br>AVG Speed = 200<br>Tire Status = 10000<br>Tyre type = rain<br>Behaviour = 10</html>");
+		JLabel infoLabel = new JLabel("");
 		infoLabel.setBounds(30, 80, 240, 130);
 		JLabel box = new JLabel("Schedule box entrance:");
 		box.setBounds(20, 222, 260, 20);
@@ -58,8 +61,16 @@ public class ControllerWindow extends JPanel implements Runnable {
 		driversList.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e) {
-				// TODO
-				setSelectedDriver(2);
+				JComboBox cb = (JComboBox)e.getSource();
+				String selected = (String)cb.getSelectedItem();
+				int result = 0;
+				for (int i=0; i<names.length; i++) {
+					if (selected.equals(names[i])) {
+						result = i;
+						break;
+					}
+				}
+				setSelectedDriver(result);
 			}
 		});
 		boxButton.addActionListener(new ActionListener() {
@@ -83,9 +94,22 @@ public class ControllerWindow extends JPanel implements Runnable {
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 
+		String text;
+		Detail det;
 		while(!stop) {
 			try {
-				Thread.currentThread().sleep(2000);
+				if (driverSet) {
+					det = connection.getDetails(driverSelected);
+					text = "<html><table><tr><td><b>Speed</b></td><td>"+det.getSpeed()+"</td></tr>";
+					text += "<tr><td><b>AVG Speed</b></td><td>"+det.getAvgSpeed()+"</td></tr>";
+					text += "<tr><td><b>Tire Status</b></td><td>"+det.getTireStatus()+"</td></tr>";
+					text += "<tr><td><b>Tire Type</b></td><td>"+det.getRainTire()+"</td></tr>";
+					text += "<tr><td><b>Behaviour</b></td><td>"+det.getBehaviour()+"</td></tr>";
+					text += "<tr><td><b>Box Schedule</b></td><td>"+" TODO "+"</td></tr>";
+					text += "</table></html>";
+					infoLabel.setText(text);
+				}
+				Thread.currentThread().sleep(1000);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
