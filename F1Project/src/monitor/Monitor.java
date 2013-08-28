@@ -65,9 +65,18 @@ public class Monitor {
 				Thread updater = new Thread(connection);
 				updater.start();
 
+				// leggere le info sui piloti
+				String[] names, colors;
+				Drivers driv = new Drivers(carNumber);
+				names = driv.getNames();
+				colors = driv.getColors();
+
+				// leggere la pista
+				Drawer map = new Drawer();
+
 				// inizializzazione finestra
 				final JFrame frame = new JFrame("Monitor");
-				GUI = new Window(connection, frame);
+				GUI = new Window(connection, frame, map, names, colors);
 				frame.addWindowListener(new WindowAdapter() {
 					@Override
 					public void windowClosing(WindowEvent e) {
