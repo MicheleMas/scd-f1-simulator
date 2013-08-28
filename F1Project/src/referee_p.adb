@@ -59,8 +59,41 @@ package body referee_p is
          --Ada.Text_IO.Put_Line ("Initial speed = " & Float'Image(speed));
          --Ada.Text_IO.Put_Line ("Initial acceleration = " & Positive'Image(acceleration));
 
-         if (not ((c_status.pitStop4tires or c_status.is_damaged) and seg.isBoxEntrance and (not last_lap))) -- TODO non deve entrare ai box all'ultimo giro!
+         if ((c_status.pitStop4tires or c_status.is_damaged) and seg.isBoxEntrance and (not last_lap)) -- TODO non deve entrare ai box all'ultimo giro!
          then
+            --if(last_lap)
+            --then
+            --   Ada.Text_IO.Put_Line("DEBUG questo non viene mai stampato");
+            --end if;
+
+            -- box
+            toSleep := initialTime + Ada.Real_Time.Milliseconds (15000);
+            if (c_status.pitStop4tires) -- cambio gomme
+            then
+               c_status.Change_Tires(false);
+               toSleep := toSleep + Ada.Real_Time.Milliseconds (3500);
+               c_status.set_tires_status(10000);
+               if(isRaining)
+               then
+                  c_status.set_rain_tires(true);
+                  Ada.Text_IO.Put_Line ("macchina " & Positive'Image(car_ID) & " monta gomme da pioggia");
+               else
+                  c_status.set_rain_tires(false);
+                  Ada.Text_IO.Put_Line ("macchina " & Positive'Image(car_ID) & " monta gomme da asciutto");
+               end if;
+            end if;
+            if(c_status.is_damaged) -- riparazione
+            then
+               c_status.set_damage(false);
+               c_status.Change_Behaviour(8);
+               toSleep := toSleep + Ada.Real_Time.Milliseconds (6000);
+            end if;
+            box_stop := true;
+            speed := 80.0;
+            nextReferee := First_Referee.getNext;
+            nextReferee := nextReferee.getNext;
+            nextReferee := nextReferee.getNext;
+         else
             -- check if the car is broken
             if(c_status.is_damaged)
             then
@@ -197,34 +230,6 @@ package body referee_p is
             -- update counter and status
             carCounter := carCounter + 1;
             carArray(car_ID) := toSleep;
-         else
-            -- box
-            toSleep := initialTime + Ada.Real_Time.Milliseconds (15000);
-            if (c_status.pitStop4tires) -- cambio gomme
-            then
-               c_status.Change_Tires(false);
-               toSleep := toSleep + Ada.Real_Time.Milliseconds (3500);
-               c_status.set_tires_status(10000);
-               if(isRaining)
-               then
-                  c_status.set_rain_tires(true);
-                  Ada.Text_IO.Put_Line ("macchina " & Positive'Image(car_ID) & " monta gomme da pioggia");
-               else
-                  c_status.set_rain_tires(false);
-                  Ada.Text_IO.Put_Line ("macchina " & Positive'Image(car_ID) & " monta gomme da asciutto");
-               end if;
-            end if;
-            if(c_status.is_damaged) -- riparazione
-            then
-               c_status.set_damage(false);
-               c_status.Change_Behaviour(8);
-               toSleep := toSleep + Ada.Real_Time.Milliseconds (6000);
-            end if;
-            box_stop := true;
-            speed := 80.0;
-            nextReferee := First_Referee.getNext;
-            nextReferee := nextReferee.getNext;
-            nextReferee := nextReferee.getNext;
          end if;
 
       end enterSegment;
