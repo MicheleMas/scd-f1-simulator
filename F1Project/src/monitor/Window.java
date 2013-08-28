@@ -63,36 +63,17 @@ public class Window extends JPanel implements Runnable {
 	}
 
 	public void run() {
-		// Modifico!!!!!!
 		frame.setSize(WIDTH, HEIGHT);
 		JPanel panel = (JPanel) frame.getContentPane();
 		panel.setLayout(null);
 		Box container = Box.createHorizontalBox();
-		//container.setLayout(new GridLayout(1, 2));
-		//JPanel buttonContainer = new JPanel();
-		//Box buttonContainer = Box.createVerticalBox();
-		
-		// create buttons
-		//JButton[] buttonArray = new JButton[carNumber];
-		//buttonContainer.setLayout(new GridLayout(carNumber, 1));
-		//GridBagConstraints gbc = new GridBagConstraints();
-		//for (int i=0; i<carNumber; i++) {
-		//	buttonArray[i] = new JButton("Car " + (i+1));
-		//	buttonContainer.add(buttonArray[i]);
-		//}
-		//container.add(buttonContainer, BorderLayout.WEST);
 		JLabel rankLabel = new JLabel();
-
-		//container.add(rankLabel, BorderLayout.SOUTH);
-		//panel.add(container, BorderLayout.SOUTH);
+		JLabel title = new JLabel("<html><h1>F1 Simulator</h1></html>");
 		JPanel race = this;
-		race.setBounds(0,0, RACE_W, RACE_H);
+		title.setBounds((WIDTH/2)-110, 10, (WIDTH/2), 30);
+		race.setBounds(0,110, RACE_W, RACE_H+110);
 		rankLabel.setBounds(RACE_W, 0, WIDTH, HEIGHT);
-		//JLabel prova = new JLabel("prova");
-		//prova.setBounds(RACE_W+1,20, RACE_W+21, 30);
-		//container.add(race);
-		//container.add(rankLabel);
-		//container.add(new JLabel("prova"));
+		panel.add(title);
 		panel.add(race);
 		panel.add(rankLabel);
 		rankLabel.setText("prova");
@@ -104,20 +85,6 @@ public class Window extends JPanel implements Runnable {
 		Detail det;
 		String text = "";
 		List<Rank> ranking = new ArrayList<Rank>();
-
-		/*boolean wait = true; // wait for car data
-		while(!stop && wait) {
-			stat = updater.raceUpdate(carNumber-1);
-			if(stat != null){
-				wait = false;
-			} else {
-				try {
-					Thread.currentThread().sleep(1000);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}*/
 
 		// setup
 		for (int i=0; i<carNumber; i++) {
@@ -147,9 +114,6 @@ public class Window extends JPanel implements Runnable {
 				while(!ranking.isEmpty()) {
 					int carID = ranking.remove(0).carID;
 					stat = updater.raceUpdate(carID);
-					/*text += counter + "° " + "macchina:" + (carID+1) + " giro:" + stat.getLap() + " segmento:" 
-					    + stat.getSeg() + " progress:" + stat.getProg() + " incidente:" + stat.getInci() 
-					    + " ritirato:" + stat.getRet() + " concluso:" + stat.getOver() + "<br>";*/
 					text += "<tr><td>";
 					if(stat.getRet())
 						text += " *RET*";
@@ -161,8 +125,6 @@ public class Window extends JPanel implements Runnable {
 					}
 					text += "</td><td><font color='"+colors[carID]+"'>"+names[carID]+"</font></td>"+"<td>"+stat.getLap()+"</td></tr>";
 					counter++;
-					// update position
-					//x[carID] = (100 * (stat.getLap()-1)) + (10 * (stat.getSeg()-1)) + (stat.getProg() / 10);
 					if(!stat.getRet()) {
 						p = map.getPosition(stat.getSeg(), stat.getProg());
 						x[carID] = (int)p.getX();
@@ -172,29 +134,11 @@ public class Window extends JPanel implements Runnable {
 						y[carID] = -10;
 					}
 				}
-				//stampa i dettagli della prima macchina per testare il pull
-				//det = updater.getDetails(0);
-				//if(det != null) {
-					//text += "TEST dettagli macchina 1: velocità: " + det.getSpeed();
-				//}
 
 				text += "</table></html>";
 				//race.validate();
 
-				// Aggiorna le macchine
-
-
 				race.repaint();
-				/*text = "<html>";
-				for (int i=0; i<carNumber; i++) {
-					det = updater.raceUpdate(i);
-					if(det != null) {
-						text += "macchina " + (i+1) + " " + det.getLap() + " " + det.getSeg() + " " + det.getProg() + " " 
-						+ det.getInci() + " " + det.getRet() + " " + det.getOver() + "<br>";
-					}
-				}
-				text += "</html>";*/
-
 
 				rankLabel.setText(text);
 				//frame.pack();
