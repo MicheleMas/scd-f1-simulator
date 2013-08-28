@@ -104,7 +104,7 @@ package body broker_publisher is
                Content.Set_Boolean("rain", weather);
                --Ada.Text_IO.Put_Line("--------------carNumber=" & Integer'Image(cars_number));
                for i in Positive range 1 .. cars_number loop
-                  current_snapshot(i).get_data(lap, seg, prog, inci, ret, dama ,over, rank);
+                  current_snapshot(i).get_data(lap, seg, prog, inci, dama, ret ,over, rank);
                   Content.Set_Integer("lap" & Positive'Image(i), YAMI_Integer(lap));
                   Content.Set_Integer("seg" & Positive'Image(i), YAMI_Integer(seg));
                   Content.Set_Integer("prog" & Positive'Image(i), YAMI_Integer(Integer(prog)));

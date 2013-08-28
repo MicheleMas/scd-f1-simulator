@@ -151,10 +151,12 @@ procedure Broker is
                   last_incident(car):=new incident_event(time+10000,seg,damage,retired);
                   position_history(car)(position_index(car)) := new enter_segment(time,seg,0,0,0,false,false);
                   position_index(car) := position_index(car) + 1;
-                  if(position_index(car) > 100)
+                  if(position_index(car)=2)
                   then
-                     position_index(car) := 1;
+                      position_history(car)(position_index(car)) := new enter_segment(time,seg,0,0,0,false,false);
+                      position_index(car) := position_index(car) + 1;
                   end if;
+
                else
                   last_incident(car):=new incident_event(time,seg,damage,retired);
                end if;
@@ -326,11 +328,16 @@ begin
                                                    position_history(i)(indexNextEvent).get_behaviour,
                                                    position_history(i)(indexNextEvent).get_speed,
                                                    position_history(i)(indexNextEvent).get_require_box);
+                     if(position_history(i)(indexNextEvent).get_segment = -1 and damaged_cars(i))
+                     then
+                        damaged_cars(i):=false;
+                     end if;
                      -- casi limite, la macchina o sta facendo un incidente, o è ai box,
                   else if(last_box(i).get_time > t)
                   then
-                     --è ai box
+                        --è ai box
                      nextTime := last_box(i).get_time;
+
                      progress := Float(100*(t-precTime)) / Float((nextTime - precTime));
                      snapshot(i).set_data(lap,-1,progress,false,damaged_cars(i),false,false);
                      detailed_snapshot(i).set_data(position_history(i)(indexPreEvent).get_tire_status,
@@ -339,7 +346,10 @@ begin
                                                    position_history(i)(indexPreEvent).get_behaviour,
                                                    80,
                                                    true);
-                      damaged_cars(i):=false;
+                        if(damaged_cars(i))
+                        then
+                           damaged_cars(i):=false;
+                        end if;
                   else if(last_incident(i).get_time > t)
                   then
                      --è incidentata
