@@ -5,32 +5,24 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.*;
 
-public class Monitor {
+public class Controller {
 
-	static String publishAddress;
 	static String pullAddress;
 	static String overrideAddress;
 
 	static int carNumber;
-	static int lapNumber;
-
-	static Communicator connection;
-	static Window GUI;
 
 	public static void main(String[] args) {
 		if (args.length != 2) {
-			System.out.println("Expecting 3 parameters, publish server, pull server, override server");
-			System.out.println("Using default tcp://localhost:12346 / tcp://localhost:12347 / tcp://localhost:12348");
-			publishAddress = "tcp://localhost:12346";
+			System.out.println("Expecting 2 parameters, override address and broker(pull) address");
+			System.out.println("Using default tcp://localhost:12348 / tcp://localhost:12347");
 			pullAddress = "tcp://localhost:12347";
 			overrideAddress = "tcp://localhost:12348";
 		} else {
-			publishAddress = args[0];
 			pullAddress = args[1];
-			overrideAddress = args[2];
+			overrideAddress = args[0];
 		}
 
-		// setup
 		String request = "S";
 		System.out.println("Waiting for the connection");
 		boolean setupCompleted = false;
@@ -50,7 +42,6 @@ public class Monitor {
 					Parameters reply = message.getReply();
 
 					carNumber = reply.getInteger("cars");
-					lapNumber = reply.getInteger("laps");
 
 					System.out.println("Connection completed, cars = " + carNumber);
 				} else {
@@ -60,45 +51,33 @@ public class Monitor {
 				message.close();
 				clientAgent.close();
 
-				// inizializzare la classe che legge da remoto
-				connection = new Communicator(publishAddress, carNumber);
-				Thread updater = new Thread(connection);
-				updater.start();
-
-				// leggere le info sui piloti
+				// get drivers informations
 				String[] names, colors;
 				Drivers driv = new Drivers(carNumber);
 				names = driv.getNames();
 				colors = driv.getColors();
 
-				// leggere la pista
-				Drawer map = new Drawer();
-
-				// inizializzazione finestra
-				final JFrame frame = new JFrame("Monitor");
-				GUI = new Window(connection, frame, map, names, colors);
+				final JFrame frame = new JFrame("Controller");
+				// TODO dai frame alla classe che la gestisce
 				frame.addWindowListener(new WindowAdapter() {
 					@Override
 					public void windowClosing(WindowEvent e) {
-						GUI.stop();
+						// TODO stop the panel thread
 						frame.setVisible(false);
 						try {
 							Thread.currentThread().sleep(2000);
 						} catch (Exception ex) {
 							ex.printStackTrace();
 						}
-						System.exit(0);
 					}
 				});
-				Thread window = new Thread(GUI);
-				window.start();
+				// TODO far partire il thread del panel
 
 			} catch (Exception e) {
-				//System.out.println("error " + e.getMessage());
 				try {
 					Thread.sleep(2000);
 				} catch (Exception e1) {
-					System.out.println("error " + e.getMessage());
+					e1.printStackTrace();
 				}
 			}
 		}

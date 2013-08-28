@@ -4,6 +4,7 @@ public class Status {
 	private int seg;
 	private int prog;
 	private boolean inci;
+	private boolean dama;
 	private boolean ret;
 	private boolean over;
 	private int rank;
@@ -12,11 +13,12 @@ public class Status {
 	There is no setter because any useless instance of this class must be deleted, not used again
 	(race condition problem)
 	*/
-	public Status(int lap, int seg, int prog, boolean inci, boolean ret, boolean over, int rank) {
+	public Status(int lap, int seg, int prog, boolean inci, boolean dama, boolean ret, boolean over, int rank) {
 		this.lap = lap;
 		this.seg = seg;
 		this.prog = prog;
 		this.inci = inci;
+		this.dama = dama;
 		this.ret = ret;
 		this.over = over;
 		this.rank = rank;
@@ -36,6 +38,10 @@ public class Status {
 
 	public boolean getInci() {
 		return inci;
+	}
+
+	public boolean getDama() {
+		return dama;
 	}
 
 	public boolean getRet() {

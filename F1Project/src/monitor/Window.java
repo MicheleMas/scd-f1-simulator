@@ -122,11 +122,15 @@ public class Window extends JPanel implements Runnable {
 							text += " *BOX*";
 						} else {
 							text += counter+"°";
-							if(stat.getInci()) {
-								text += " <font color='red'>*INC*</font>";
+							if(stat.getInci() && !stat.getDama()) {
+								text += " <font color='orange'>*INC*</font>";
 							} else {
 								if (stat.getOver()) {
 									text += " <font color='green'>*END*</font>";
+								} else {
+									if (stat.getDama()) {
+										text += " <font color='red'>*DMG*</font>";
+									}
 								}
 							}
 						}
