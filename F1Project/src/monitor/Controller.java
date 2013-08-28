@@ -9,7 +9,7 @@ public class Controller {
 
 	static String pullAddress;
 	static String overrideAddress;
-
+	static ControllerWindow GUI;
 	static int carNumber;
 
 	public static void main(String[] args) {
@@ -57,12 +57,17 @@ public class Controller {
 				names = driv.getNames();
 				colors = driv.getColors();
 
+				// inizializzare la classe che comunica con le altre parti
+				ControllerCommunicator connection = new ControllerCommunicator(pullAddress, overrideAddress);
+
+				// inizializzare finestra
 				final JFrame frame = new JFrame("Controller");
+				GUI = new ControllerWindow(connection, frame, names, colors);
 				// TODO dai frame alla classe che la gestisce
 				frame.addWindowListener(new WindowAdapter() {
 					@Override
 					public void windowClosing(WindowEvent e) {
-						// TODO stop the panel thread
+						GUI.stop();
 						frame.setVisible(false);
 						try {
 							Thread.currentThread().sleep(2000);
@@ -71,7 +76,8 @@ public class Controller {
 						}
 					}
 				});
-				// TODO far partire il thread del panel
+				Thread window = new Thread(GUI);
+				window.start();
 
 			} catch (Exception e) {
 				try {
