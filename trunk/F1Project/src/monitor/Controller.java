@@ -74,6 +74,7 @@ public class Controller {
 						} catch (Exception ex) {
 							ex.printStackTrace();
 						}
+						System.exit(0);
 					}
 				});
 				Thread window = new Thread(GUI);

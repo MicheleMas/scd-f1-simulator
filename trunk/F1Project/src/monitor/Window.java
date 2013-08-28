@@ -66,7 +66,7 @@ public class Window extends JPanel implements Runnable {
 		frame.setSize(WIDTH, HEIGHT);
 		JPanel panel = (JPanel) frame.getContentPane();
 		panel.setLayout(null);
-		Box container = Box.createHorizontalBox();
+		//Box container = Box.createHorizontalBox();
 		JLabel rankLabel = new JLabel();
 		JLabel title = new JLabel("<html><h1>F1 Simulator</h1></html>");
 		JPanel race = this;
