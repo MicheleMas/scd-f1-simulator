@@ -1,4 +1,6 @@
 import javax.swing.*;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import java.util.*;
 
 public class ControllerWindow extends JPanel implements Runnable {
@@ -25,6 +27,10 @@ public class ControllerWindow extends JPanel implements Runnable {
 		stop = true;
 	}
 
+	public void setSelectedDriver(int driv) {
+		// TODO
+	}
+
 	public void run() {
 		frame.setSize(WIDTH, HEIGHT);
 		JPanel panel = (JPanel) frame.getContentPane();
@@ -49,7 +55,23 @@ public class ControllerWindow extends JPanel implements Runnable {
 		JButton behButton = new JButton("Set");
 		behButton.setBounds(160, 310, 80, 20);
 
-		// TODO aggiungere il listener della lista
+		driversList.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e) {
+				// TODO
+				setSelectedDriver(2);
+			}
+		});
+		boxButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// TODO
+			}
+		});
+		behButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// TODO
+			}
+		});
 		panel.add(title);
 		panel.add(driversList);
 		panel.add(infoLabel);
