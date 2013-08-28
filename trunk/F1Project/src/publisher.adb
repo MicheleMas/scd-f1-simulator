@@ -42,9 +42,9 @@ package body publisher is
 
       while ((not raceOver) or else (not bucket_empty))
       loop
-         Ada.Text_IO.Put_Line("Prendo evento dal bucket.");
+         --Ada.Text_IO.Put_Line("Prendo evento dal bucket.");
          event_buffer.get_event(event);
-         Ada.Text_IO.Put_Line("Preso.");
+         --Ada.Text_IO.Put_Line("Preso.");
 
          -- check the kind of the message
          if (event(1) = "SE")
@@ -172,12 +172,12 @@ package body publisher is
 
          if(not local)
          then
-            Ada.Text_IO.Put_Line("Sending..");
+            --Ada.Text_IO.Put_Line("Sending..");
             Client_Agent.Send_One_Way(Ada.Command_Line.Argument (1),
                                       "Event_Dispatcher",
                                       "event",
                                       Content);
-            Ada.Text_IO.Put_Line("Sent..");
+            --Ada.Text_IO.Put_Line("Sent..");
          end if;
 
          --Publisher.Publish(Content);

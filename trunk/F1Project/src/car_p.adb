@@ -110,6 +110,10 @@ package body car_p is
                event_buffer.insert_event(event);
                delay until toSleep;
                lap := lap + 1;
+               if(lap = race_stat.real_laps_number)
+	       then
+        	  last_lap := true;
+	       end if;
             else
                event(1) := Ada.Strings.Unbounded.To_Unbounded_String("ES");
                event(2) := Ada.Strings.Unbounded.To_Unbounded_String(Positive'Image(id));
