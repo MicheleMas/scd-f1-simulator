@@ -42,6 +42,7 @@ procedure Broker is
    lap_time_avg : array (1 .. car_number) of Integer;
    current_lap : array (1 .. car_number) of Integer;
    retired_cars : array (1 .. car_number) of boolean; -- true means retired
+   damaged_cars : array (1 .. car_number) of boolean; -- true means.. ok, you know
    completed_cars : array (1 .. car_number) of boolean; -- true means completed
    nCompleted : Integer;
    snapshot : snapshot_array_Access := new snapshot_array;
@@ -252,6 +253,7 @@ begin
          n_speed_avgs(i) := 0;
          current_lap(i) := 1;
          retired_cars(i) := false;
+         damaged_cars(i) := false;
          completed_cars(i) := false;
          snapshot(i) := new car_snapshot;
          detailed_snapshot(i) := new detailed_status;
@@ -317,7 +319,7 @@ begin
 
                      nextTime := position_history(i)(indexNextEvent).get_time;
                      progress := Float(100*(t-precTime)) / Float((nextTime - precTime));
-                     snapshot(i).set_data(lap,position_history(i)(indexNextEvent).get_segment,progress,false,false,false);
+                     snapshot(i).set_data(lap,position_history(i)(indexNextEvent).get_segment,progress,false,damaged_cars(i),false,false);
                      detailed_snapshot(i).set_data(position_history(i)(indexNextEvent).get_tire_status,
                                                    position_history(i)(indexNextEvent).get_rain_tire,
                                                    speed_avgs(i),
@@ -330,19 +332,20 @@ begin
                      --è ai box
                      nextTime := last_box(i).get_time;
                      progress := Float(100*(t-precTime)) / Float((nextTime - precTime));
-                     snapshot(i).set_data(lap,-1,progress,false,false,false);
+                     snapshot(i).set_data(lap,-1,progress,false,damaged_cars(i),false,false);
                      detailed_snapshot(i).set_data(position_history(i)(indexPreEvent).get_tire_status,
                                                    position_history(i)(indexPreEvent).get_rain_tire,
                                                    speed_avgs(i),
                                                    position_history(i)(indexPreEvent).get_behaviour,
                                                    80,
                                                    true);
+                      damaged_cars(i):=false;
                   else if(last_incident(i).get_time > t)
                   then
                      --è incidentata
                      nextTime := last_incident(i).get_time;
                      progress := Float(100*(t-precTime)) / Float((nextTime - precTime));
-                     snapshot(i).set_data(lap,last_incident(i).get_segment,progress,true,last_incident(i).car_retired,false);
+                     snapshot(i).set_data(lap,last_incident(i).get_segment,progress,true,last_incident(i).is_damaged,last_incident(i).car_retired,false);
                      detailed_snapshot(i).set_data(position_history(i)(indexPreEvent).get_tire_status,
                                                    position_history(i)(indexPreEvent).get_rain_tire,
                                                    speed_avgs(i),
@@ -352,9 +355,12 @@ begin
                      if(last_incident(i).car_retired) then
                         retired_cars(i):=true;
                      end if;
+                     if(last_incident(i).is_damaged) then
+                        damaged_cars(i):= true;
+                     end if;
                   else if(last_end(i).get_time < t)
                   then --ha fatto l'ultimo giro
-                     snapshot(i).set_data(lap,0,0.0,false,false,true);
+                     snapshot(i).set_data(lap,0,0.0,false,damaged_cars(i),false,true);
                      detailed_snapshot(i).set_data(0,
                                                    position_history(i)(indexPreEvent).get_rain_tire,
                                                    speed_avgs(i),
@@ -365,7 +371,8 @@ begin
                      nCompleted := nCompleted +1;
                   else
                      --sono successe cose molto strane TODO da togliere
-                     snapshot(i).set_data(-9,-9,0.0,false,false,false);
+                     snapshot(i).set_data(-9,-9,0.0,false,false,false,false);
+                     Ada.Text_IO.Put_Line("DEBUG COSE STRANE!");
                   end if;
                   end if;
                   end if;
@@ -410,7 +417,7 @@ begin
             for i in Positive range 1 .. cars loop
                if(not retired_cars(i) and not completed_cars(i))
                then
-	          Ada.Text_IO.Put_Line("La macchina " & Positive'Image(i) & " e' ancora in corsa");
+	          --Ada.Text_IO.Put_Line("La macchina " & Positive'Image(i) & " e' ancora in corsa");
                   raceFinished:=false;
                end if;
             end loop;
@@ -428,7 +435,7 @@ begin
             for i in Positive range 1 .. cars loop
                Ada.Text_IO.Put_Line("### " & Positive'Image(i) &": ");
                snapshot(i).print_data;
-               detailed_snapshot(i).print_data;
+               --detailed_snapshot(i).print_data;
                Ada.Text_IO.Put_Line("---");
             end loop;
             --Ada.Text_IO.Put_Line("### 2: ");

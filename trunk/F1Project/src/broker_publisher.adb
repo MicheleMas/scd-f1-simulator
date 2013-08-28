@@ -92,10 +92,11 @@ package body broker_publisher is
                lap : Integer;
                seg : Integer;
                prog : Float;
-               inci : boolean;
-               ret : boolean;
-               over : boolean;
-               weather : boolean;
+               inci : Boolean;
+               ret : Boolean;
+               dama : Boolean;
+               over : Boolean;
+               weather : Boolean;
                rank : Integer;
             begin
                -- insert weather in the content
@@ -103,12 +104,13 @@ package body broker_publisher is
                Content.Set_Boolean("rain", weather);
                --Ada.Text_IO.Put_Line("--------------carNumber=" & Integer'Image(cars_number));
                for i in Positive range 1 .. cars_number loop
-                  current_snapshot(i).get_data(lap, seg, prog, inci, ret, over, rank);
+                  current_snapshot(i).get_data(lap, seg, prog, inci, ret, dama ,over, rank);
                   Content.Set_Integer("lap" & Positive'Image(i), YAMI_Integer(lap));
                   Content.Set_Integer("seg" & Positive'Image(i), YAMI_Integer(seg));
                   Content.Set_Integer("prog" & Positive'Image(i), YAMI_Integer(Integer(prog)));
                   Content.Set_Boolean("inci" & Positive'Image(i), inci);
                   Content.Set_Boolean("ret" & Positive'Image(i), ret);
+                  Content.Set_Boolean("dama" & Positive'Image(i), dama);
                   Content.Set_Boolean("over" & Positive'Image(i), over);
                   Content.Set_Integer("rank" & Positive'Image(i), YAMI_Integer(rank));
                end loop;
