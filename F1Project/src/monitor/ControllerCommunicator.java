@@ -39,7 +39,8 @@ public class ControllerCommunicator {
 				int avgSpeed = reply.getInteger("avgspeed");
 				int behaviour = reply.getInteger("beh");
 				int speed = reply.getInteger("speed");
-				details = new Detail(tireStatus, rainTire, avgSpeed,behaviour, speed);
+				boolean r_box = reply.getBoolean("r_box");
+				details = new Detail(tireStatus, rainTire, avgSpeed,behaviour, speed, r_box);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
