@@ -21,11 +21,12 @@ public class Communicator implements Runnable {
 	private static int[] seg;
 	private static int[] prog;
 	private static boolean[] inci;
+	private static boolean[] dama;
 	private static boolean[] ret;
 	private static boolean[] over;
 	private static int[] rank;
 
-	public Communicator(String publishAddress, String pullAddress, String overrideAddress, int carNumber) {
+	public Communicator(String publishAddress, int carNumber) {
 		this.publishAddress = publishAddress;
 		this.pullAddress = pullAddress;
 		this.overrideAddress = overrideAddress;
@@ -35,6 +36,7 @@ public class Communicator implements Runnable {
 		seg = new int[carNumber];
 		prog = new int[carNumber];
 		inci = new boolean[carNumber];
+		dama = new boolean[carNumber];
 		ret = new boolean[carNumber];
 		over = new boolean[carNumber];
 		rank = new int[carNumber];
@@ -53,12 +55,13 @@ public class Communicator implements Runnable {
 				seg[i-1] = content.getInteger("seg "+i);
 				prog[i-1] = content.getInteger("prog "+i);
 				inci[i-1] = content.getBoolean("inci "+i);
+				dama[i-1] = content.getBoolean("dama "+i);
 				ret[i-1] = content.getBoolean("ret "+i);
 				over[i-1] = content.getBoolean("over "+i);
 				rank[i-1] = content.getInteger("rank "+i);
 				//rank[i-1] = i;
 			}
-			data.setData(lap, seg, prog, inci, ret, over, rank);
+			data.setData(lap, seg, prog, inci, dama, ret, over, rank);
 			System.out.println("Aggiornamento completato"); // TODO remove
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -100,64 +103,7 @@ public class Communicator implements Runnable {
 	public Status raceUpdate(int carID) {
 		return data.getData(carID);
 	}
-
-
-	// PULL METHOD
-
-	public Detail getDetails(int carID) {
-		Detail details = null;
-		try {
-			if (pullAgent == null || pullParams == null) {
-				pullAgent = new Agent();
-				pullParams = new Parameters();
-			}
-			pullParams.setString("type", "D");
-			pullParams.setString("car", (carID+1)+"");
-			OutgoingMessage message = pullAgent.send(pullAddress, "warehouse", "details", pullParams);
-			message.waitForCompletion();
-			OutgoingMessage.MessageState state = message.getState();
-			if (state == OutgoingMessage.MessageState.REPLIED) {
-				Parameters reply = message.getReply();
-				int tireStatus = reply.getInteger("tire");
-				boolean rainTire = reply.getBoolean("rain");
-				int avgSpeed = reply.getInteger("avgspeed");
-				int behaviour = reply.getInteger("beh");
-				int speed = reply.getInteger("speed");
-				details = new Detail(tireStatus, rainTire, avgSpeed,behaviour, speed);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return details;
-	}
-
-	// OVERRIDE METHOD
-
-	// carID è inteso da 0 a car_number-1
-	public void overrideBehaviour(int carID, int behaviour) {
-		try {
-			Agent overrideAgent = new Agent();
-			Parameters params = new Parameters();
-			params.setString("type", "Obeh");
-			params.setString("car", ""+carID+1);
-			params.setString("beh", ""+behaviour);
-			overrideAgent.sendOneWay(overrideAddress, "override", "behaviour", params);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void overrideBoxEntrance(int carID) {
-		try {
-			Agent overrideAgent = new Agent();
-			Parameters params = new Parameters();
-			params.setString("type", "Obox");
-			params.setString("car", ""+carID);
-			overrideAgent.sendOneWay(overrideAddress, "override", "box", params);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+	
 
 	public int getCarNumber() {
 		return carNumber;
