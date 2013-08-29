@@ -32,6 +32,7 @@ package body controller_server is
          else
             if(kind = "Obox")
             then
+               Ada.Text_IO.Put_Line("BOX!!!!!!!! " & Integer'Image(carID));
                -- Force box entrance
                cars_status(carID).Change_Tires(true);
             end if;
