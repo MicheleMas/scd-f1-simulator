@@ -322,7 +322,7 @@ begin
 
                   --uso il tempo segnato nell'evento per capire a che percentuale del tratto segnato è al tempo t
                   precTime := position_history(i)(indexPreEvent).get_time;
-                  if(last_incident(i).get_time < t) -- position_index(i) > indexNextEvent  <-- condizione che per ora non capisco
+                  if(position_index(i) /= indexNextEvent and last_incident(i).get_time < t) -- position_index(i) > indexNextEvent  <-- condizione che per ora non capisco
                   then
 
                      nextTime := position_history(i)(indexNextEvent).get_time;
