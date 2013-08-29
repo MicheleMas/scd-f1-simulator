@@ -19,6 +19,7 @@ public class Window extends JPanel implements Runnable {
 	static Communicator updater;
 	static boolean stop = false;
 	static int carNumber;
+	static int lapNumber;
 	static int[] x;
 	static int[] y;
 	static boolean ready = false;
@@ -35,6 +36,7 @@ public class Window extends JPanel implements Runnable {
 		this.frame = frame;
 		this.updater = updater;
 		this.carNumber = updater.getCarNumber();
+		this.lapNumber = updater.getLapNumber();
 		this.names = names;
 		this.colors = colors;
 		this.map = map;
@@ -67,13 +69,16 @@ public class Window extends JPanel implements Runnable {
 		JPanel panel = (JPanel) frame.getContentPane();
 		panel.setLayout(null);
 		//Box container = Box.createHorizontalBox();
-		JLabel rankLabel = new JLabel();
+		JLabel rankLabel = new JLabel("");
+		JLabel statusLabel = new JLabel("");
 		JLabel title = new JLabel("<html><h1>F1 Simulator</h1></html>");
 		JPanel race = this;
-		title.setBounds((WIDTH/2)-110, 10, (WIDTH/2), 30);
+		title.setBounds((WIDTH/2)-110, 10, (WIDTH/2), 20);
+		statusLabel.setBounds(600, 30, 200, 120);
 		race.setBounds(0,110, RACE_W, RACE_H+110);
 		rankLabel.setBounds(RACE_W, 0, WIDTH, HEIGHT);
 		panel.add(title);
+		panel.add(statusLabel);
 		panel.add(race);
 		panel.add(rankLabel);
 		rankLabel.setText("prova");
@@ -110,6 +115,14 @@ public class Window extends JPanel implements Runnable {
 				Collections.sort(ranking);
 				Point p;
 				int counter = 1;
+
+				text = "<html><h2>Laps: "+lapNumber+"<br>Weather: ";
+				if (updater.isRaining()) 
+					text += "Raining";
+				else
+					text += "Clear";
+				statusLabel.setText(text);
+
 				text = "<html><h2>Ranking:</h2><table border='1'><tr><td><b>Position</b></td><td><b>Pilot</b></td><td><b>Lap</b></td></tr>";
 				while(!ranking.isEmpty()) {
 					int carID = ranking.remove(0).carID;

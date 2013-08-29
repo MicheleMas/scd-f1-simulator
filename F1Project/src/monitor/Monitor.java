@@ -61,7 +61,7 @@ public class Monitor {
 				clientAgent.close();
 
 				// inizializzare la classe che legge da remoto
-				connection = new Communicator(publishAddress, carNumber);
+				connection = new Communicator(publishAddress, carNumber, lapNumber);
 				Thread updater = new Thread(connection);
 				updater.start();
 

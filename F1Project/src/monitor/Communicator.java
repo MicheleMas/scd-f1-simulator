@@ -11,6 +11,8 @@ public class Communicator implements Runnable {
 	private static String pullAddress;
 	private static String overrideAddress;
 	private static int carNumber;
+	private static int lapNumber;
+	private static boolean raining = false;
 	private static Container data;
 	private static boolean stop = false;
 	private static Agent pullAgent;
@@ -26,11 +28,12 @@ public class Communicator implements Runnable {
 	private static boolean[] over;
 	private static int[] rank;
 
-	public Communicator(String publishAddress, int carNumber) {
+	public Communicator(String publishAddress, int carNumber, int lapNumber) {
 		this.publishAddress = publishAddress;
 		this.pullAddress = pullAddress;
 		this.overrideAddress = overrideAddress;
 		this.carNumber = carNumber;
+		this.lapNumber = lapNumber;
 		data = new Container(carNumber);
 		lap = new int[carNumber];
 		seg = new int[carNumber];
@@ -49,17 +52,17 @@ public class Communicator implements Runnable {
 			Parameters content = im.getParameters();
 			// read data from the message
 			try {
-			for (int i=1; i<=carNumber; i++) {
-				System.out.println("Aggiorno car" + i);
-				lap[i-1] = content.getInteger("lap "+i);
-				seg[i-1] = content.getInteger("seg "+i);
-				prog[i-1] = content.getInteger("prog "+i);
-				inci[i-1] = content.getBoolean("inci "+i);
-				dama[i-1] = content.getBoolean("dama "+i);
-				ret[i-1] = content.getBoolean("ret "+i);
-				over[i-1] = content.getBoolean("over "+i);
-				rank[i-1] = content.getInteger("rank "+i);
-				//rank[i-1] = i;
+				raining = content.getBoolean("rain");
+				for (int i=1; i<=carNumber; i++) {
+					System.out.println("Aggiorno car" + i);
+					lap[i-1] = content.getInteger("lap "+i);
+					seg[i-1] = content.getInteger("seg "+i);
+					prog[i-1] = content.getInteger("prog "+i);
+					inci[i-1] = content.getBoolean("inci "+i);
+					dama[i-1] = content.getBoolean("dama "+i);
+					ret[i-1] = content.getBoolean("ret "+i);
+					over[i-1] = content.getBoolean("over "+i);
+					rank[i-1] = content.getInteger("rank "+i);
 			}
 			data.setData(lap, seg, prog, inci, dama, ret, over, rank);
 			System.out.println("Aggiornamento completato"); // TODO remove
@@ -104,8 +107,15 @@ public class Communicator implements Runnable {
 		return data.getData(carID);
 	}
 	
-
 	public int getCarNumber() {
 		return carNumber;
+	}
+
+	public int getLapNumber() {
+		return lapNumber;
+	}
+
+	public boolean isRaining() {
+		return raining;
 	}
 }
