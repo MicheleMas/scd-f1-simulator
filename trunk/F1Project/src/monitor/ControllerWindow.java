@@ -137,7 +137,10 @@ public class ControllerWindow extends JPanel implements Runnable {
 						text += "<tr><td><b>Tire Status</b></td><td>"+"BOX"+"</td></tr>";
 					else
 						text += "<tr><td><b>Tire Status</b></td><td>"+det.getTireStatus()+"</td></tr>";
-					text += "<tr><td><b>Tire Type</b></td><td>"+det.getRainTire()+"</td></tr>";
+					if (det.getRainTire())
+						text += "<tr><td><b>Tire Type</b></td><td>"+"Rain"+"</td></tr>";
+					else
+						text += "<tr><td><b>Tire Type</b></td><td>"+"Dry"+"</td></tr>";
 					if (det.getBehaviour() == -1) 
 						text += "<tr><td><b>Behaviour</b></td><td>"+"BOX"+"</td></tr>";
 					else
