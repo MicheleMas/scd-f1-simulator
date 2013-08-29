@@ -70,7 +70,6 @@ public class ControllerWindow extends JPanel implements Runnable {
 		title.setBounds(100, 5, 100, 20);
 		JComboBox driversList = new JComboBox(names);
 		driversList.setBounds(50, 40, 200, 30);
-		//JLabel infoLabel = new JLabel("<html>Speed = 200<br>AVG Speed = 200<br>Tire Status = 10000<br>Tyre type = rain<br>Behaviour = 10</html>");
 		JLabel infoLabel = new JLabel("");
 		infoLabel.setBounds(60, 80, 240, 130);
 		JLabel box = new JLabel("Schedule box entrance:");
@@ -146,7 +145,15 @@ public class ControllerWindow extends JPanel implements Runnable {
 				}
 				Thread.currentThread().sleep(1000);
 			} catch (Exception e) {
-				e.printStackTrace();
+				//e.printStackTrace();
+				System.out.println("Connection closed");
+				stop = true;
+				text = "<html><h2>Connection<br>Closed</h2></html>";
+				infoLabel.setText(text);
+				boxButton.setEnabled(false);
+				behButton.setEnabled(false);
+				driversList.setEnabled(false);
+				behInput.setEnabled(false);
 			}
 		}
 	}
