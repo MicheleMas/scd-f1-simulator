@@ -36,6 +36,7 @@ public class ControllerWindow extends JPanel implements Runnable {
 			driverSet = true;
 			boxButton.setEnabled(true);
 			behButton.setEnabled(true);
+			behInput.setEnabled(true);
 		}
 	}
 
@@ -58,6 +59,7 @@ public class ControllerWindow extends JPanel implements Runnable {
 			connection.overrideBehaviour(driverSelected, newBehaviour);
 		} catch (NumberFormatException e) {
 			System.out.println("behaviour: not a number");
+			behInput.setText(""+8);
 		}
 	}
 
@@ -82,6 +84,7 @@ public class ControllerWindow extends JPanel implements Runnable {
 		behInput = new JFormattedTextField();
 		behInput.setColumns(2);
 		behInput.setBounds(60, 310, 40, 20);
+		behInput.setEnabled(false);
 		behButton = new JButton("Set");
 		behButton.setBounds(160, 310, 80, 20);
 		behButton.setEnabled(false);
