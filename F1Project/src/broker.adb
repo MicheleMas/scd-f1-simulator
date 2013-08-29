@@ -44,6 +44,7 @@ procedure Broker is
    retired_cars : array (1 .. car_number) of boolean; -- true means retired
    damaged_cars : array (1 .. car_number) of boolean; -- true means.. ok, you know
    completed_cars : array (1 .. car_number) of boolean; -- true means completed
+   started_cars : array (1 .. car_number) of boolean; -- true means.. yeah. started
    nCompleted : Integer;
    snapshot : snapshot_array_Access := new snapshot_array;
    detailed_snapshot : detailed_array_Access := new detailed_array;
@@ -108,6 +109,10 @@ procedure Broker is
                if(position_index(car) > 100)
                then
                   position_index(car) := 1;
+               end if;
+               if(not started_cars(car))
+               then
+                  started_cars(car) := true;
                end if;
             end;
          end if;
@@ -257,6 +262,7 @@ begin
          retired_cars(i) := false;
          damaged_cars(i) := false;
          completed_cars(i) := false;
+         started_cars(i) := false;
          snapshot(i) := new car_snapshot;
          detailed_snapshot(i) := new detailed_status;
          last_end(i) := new end_race_event(999999999);
@@ -287,7 +293,7 @@ begin
          loop
             -- snapshot
             for i in Positive range 1 .. cars loop
-               if(position_index(i) > 2 and retired_cars(i) = false and completed_cars(i) = false) --se abbiamo almeno un evento per la macchina i E non si e' ritirata
+               if(started_cars(i) and retired_cars(i) = false and completed_cars(i) = false) --se abbiamo almeno un evento per la macchina i E non si e' ritirata
                then
                   --segno il lap corrente
                   lap := last_lap(i).get_laps;
@@ -301,8 +307,8 @@ begin
                   if(indexPreEvent < 1) then
                      indexPreEvent := 100 - indexPreEvent;
                   end if;
-
-                  while( indexPreEvent > 0 and t < position_history(i)(indexPreEvent).get_time)
+                  --indexPreEvent è l'evento che è successo appena prima del tempo t
+                  while(t < position_history(i)(indexPreEvent).get_time)
                   loop
                      indexPreEvent := indexPreEvent - 1;
                      if(indexPreEvent < 1) then
@@ -316,7 +322,7 @@ begin
 
                   --uso il tempo segnato nell'evento per capire a che percentuale del tratto segnato è al tempo t
                   precTime := position_history(i)(indexPreEvent).get_time;
-                  if(position_index(i) > indexNextEvent and last_incident(i).get_time < t)
+                  if(last_incident(i).get_time < t) -- position_index(i) > indexNextEvent  <-- condizione che per ora non capisco
                   then
 
                      nextTime := position_history(i)(indexNextEvent).get_time;
