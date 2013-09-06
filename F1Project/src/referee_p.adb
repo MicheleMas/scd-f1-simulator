@@ -190,13 +190,13 @@ package body referee_p is
                Rand_Incident.Reset(seed);
                Num := Rand_Incident.Random(seed);
                numRandom := Positive(Num);
-               Incident_Chance := (car_behaviour * 2) + (seg.difficulty * 2);
+               Incident_Chance := (car_behaviour/2) + (seg.difficulty/2);
                if (isRaining)
                then
-                  Incident_Chance := Incident_Chance + 20;
+                  Incident_Chance := Incident_Chance + 5;
                   if (not c_status.get_rain_tires)
                   then
-                     Incident_Chance := Incident_Chance + 20;
+                     Incident_Chance := Incident_Chance + 5;
                   end if;
                end if;
                if(c_status.get_tires_state > 9950)
@@ -210,13 +210,13 @@ package body referee_p is
                   incident := 1;
                   Ada.Text_IO.Put_Line ("Macchina " & Positive'Image(car_ID) & " perde " & Integer'Image(3000 + (numRandom)*150));
                   toSleep := toSleep + Ada.Real_Time.Milliseconds (3000 + ((numRandom)*150));
-                  if(numRandom < 15) -- 15% di prob. di danneggiare il veicolo nell'uscita
+                  if(numRandom < 3)
                   then
                      incident := 2;
                      c_status.set_damage(true);
                      c_status.Change_Behaviour(4);
                   end if;
-		  if(numRandom < 5) -- 5% prob. di danneggiare il veicolo irrimediabilmente
+		  if(numRandom < 2)
                   then
                      incident := 3;
                   end if;
