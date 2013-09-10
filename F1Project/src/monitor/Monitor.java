@@ -9,7 +9,6 @@ public class Monitor {
 
 	static String publishAddress;
 	static String pullAddress;
-	static String overrideAddress;
 
 	static int carNumber;
 	static int lapNumber;
@@ -20,14 +19,12 @@ public class Monitor {
 	public static void main(String[] args) {
 		if (args.length != 2) {
 			System.out.println("Expecting 3 parameters, publish server, pull server, override server");
-			System.out.println("Using default tcp://localhost:12346 / tcp://localhost:12347 / tcp://localhost:12348");
+			System.out.println("Using default tcp://localhost:12346 / tcp://localhost:12347");
 			publishAddress = "tcp://localhost:12346";
 			pullAddress = "tcp://localhost:12347";
-			overrideAddress = "tcp://localhost:12348";
 		} else {
 			publishAddress = args[0];
 			pullAddress = args[1];
-			overrideAddress = args[2];
 		}
 
 		// setup
