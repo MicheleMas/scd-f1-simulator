@@ -19,8 +19,8 @@ public class Controller {
 			pullAddress = "tcp://localhost:12347";
 			overrideAddress = "tcp://localhost:12348";
 		} else {
-			pullAddress = args[1];
-			overrideAddress = args[0];
+			pullAddress = args[0];
+			overrideAddress = args[1];
 		}
 
 		String request = "S";
@@ -44,27 +44,21 @@ public class Controller {
 					carNumber = reply.getInteger("cars");
 
 					System.out.println("Connection completed, cars = " + carNumber);
-				} else {
-					Thread.sleep(2000);
-				}
 
-				message.close();
-				clientAgent.close();
+					// get drivers informations
+					String[] names, colors;
+					Drivers driv = new Drivers(carNumber);
+					names = driv.getNames();
+					colors = driv.getColors();
 
-				// get drivers informations
-				String[] names, colors;
-				Drivers driv = new Drivers(carNumber);
-				names = driv.getNames();
-				colors = driv.getColors();
+					// inizializzare la classe che comunica con le altre parti
+					ControllerCommunicator connection = new ControllerCommunicator(pullAddress, overrideAddress);
 
-				// inizializzare la classe che comunica con le altre parti
-				ControllerCommunicator connection = new ControllerCommunicator(pullAddress, overrideAddress);
-
-				// inizializzare finestra
-				final JFrame frame = new JFrame("Controller");
-				GUI = new ControllerWindow(connection, frame, names, colors);
-				// TODO dai frame alla classe che la gestisce
-				frame.addWindowListener(new WindowAdapter() {
+					// inizializzare finestra
+					final JFrame frame = new JFrame("Controller");
+					GUI = new ControllerWindow(connection, frame, names, colors);
+					// TODO dai frame alla classe che la gestisce
+					frame.addWindowListener(new WindowAdapter() {
 					@Override
 					public void windowClosing(WindowEvent e) {
 						GUI.stop();
@@ -76,9 +70,15 @@ public class Controller {
 						}
 						System.exit(0);
 					}
-				});
-				Thread window = new Thread(GUI);
-				window.start();
+					});
+					Thread window = new Thread(GUI);
+					window.start();
+				} else {
+					Thread.sleep(2000);
+				}
+
+				message.close();
+				clientAgent.close();
 
 			} catch (Exception e) {
 				try {
