@@ -18,7 +18,7 @@ public class Monitor {
 
 	public static void main(String[] args) {
 		if (args.length != 2) {
-			System.out.println("Expecting 3 parameters, publish server, pull server, override server");
+			System.out.println("Expecting 2 parameters, publish server, pull server");
 			System.out.println("Using default tcp://localhost:12346 / tcp://localhost:12347");
 			publishAddress = "tcp://localhost:12346";
 			pullAddress = "tcp://localhost:12347";
@@ -50,31 +50,25 @@ public class Monitor {
 					lapNumber = reply.getInteger("laps");
 
 					System.out.println("Connection completed, cars = " + carNumber);
-				} else {
-					Thread.sleep(2000);
-				}
 
-				message.close();
-				clientAgent.close();
+					// inizializzare la classe che legge da remoto
+				        connection = new Communicator(publishAddress, carNumber, lapNumber);
+					Thread updater = new Thread(connection);
+					updater.start();
 
-				// inizializzare la classe che legge da remoto
-				connection = new Communicator(publishAddress, carNumber, lapNumber);
-				Thread updater = new Thread(connection);
-				updater.start();
+					// leggere le info sui piloti
+					String[] names, colors;
+					Drivers driv = new Drivers(carNumber);
+					names = driv.getNames();
+					colors = driv.getColors();
 
-				// leggere le info sui piloti
-				String[] names, colors;
-				Drivers driv = new Drivers(carNumber);
-				names = driv.getNames();
-				colors = driv.getColors();
+					// leggere la pista
+					Drawer map = new Drawer();
 
-				// leggere la pista
-				Drawer map = new Drawer();
-
-				// inizializzazione finestra
-				final JFrame frame = new JFrame("Monitor");
-				GUI = new Window(connection, frame, map, names, colors);
-				frame.addWindowListener(new WindowAdapter() {
+					// inizializzazione finestra
+					final JFrame frame = new JFrame("Monitor");
+					GUI = new Window(connection, frame, map, names, colors);
+					frame.addWindowListener(new WindowAdapter() {
 					@Override
 					public void windowClosing(WindowEvent e) {
 						GUI.stop();
@@ -86,9 +80,17 @@ public class Monitor {
 						}
 						System.exit(0);
 					}
-				});
-				Thread window = new Thread(GUI);
-				window.start();
+					});
+					Thread window = new Thread(GUI);
+					window.start();
+				} else {
+					Thread.sleep(2000);
+				}
+
+				message.close();
+				clientAgent.close();
+
+				
 
 			} catch (Exception e) {
 				//System.out.println("error " + e.getMessage());
