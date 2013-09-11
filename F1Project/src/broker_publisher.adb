@@ -60,7 +60,7 @@ package body broker_publisher is
       cars_number : Integer;
    begin
       race_stats.real_car_number(cars_number);
-      if(Ada.Command_Line.Argument_Count = 2)
+      if(Ada.Command_Line.Argument_Count > 1)
       then
          Address := Ada.Strings.Unbounded.To_Unbounded_String(Ada.Command_Line.Argument(2));
       else

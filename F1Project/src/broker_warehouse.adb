@@ -95,11 +95,11 @@ package body broker_warehouse is
       race_status := status;
       detail := Cdetail;
 
-      if Ada.Command_Line.Argument_Count /= 2
+      if Ada.Command_Line.Argument_Count > 2
       then
-         Ada.Text_IO.Put_Line("No server address specified, using tcp://localhost:12347");
+         Address := Ada.Strings.Unbounded.To_Unbounded_String(Ada.Command_Line.Argument(3));
       else
-         Address := Ada.Strings.Unbounded.To_Unbounded_String(Ada.Command_Line.Argument(2));
+         Ada.Text_IO.Put_Line("No server address specified, using tcp://localhost:12347");
       end if;
 
       Server_Agent.Add_Listener(Ada.Strings.Unbounded.To_String(Address),
