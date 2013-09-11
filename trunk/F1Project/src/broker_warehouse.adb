@@ -99,7 +99,7 @@ package body broker_warehouse is
       then
          Ada.Text_IO.Put_Line("No server address specified, using tcp://localhost:12347");
       else
-         Address := Ada.Strings.Unbounded.To_Unbounded_String(Ada.Command_Line.Argument(3));
+         Address := Ada.Strings.Unbounded.To_Unbounded_String(Ada.Command_Line.Argument(2));
       end if;
 
       Server_Agent.Add_Listener(Ada.Strings.Unbounded.To_String(Address),
