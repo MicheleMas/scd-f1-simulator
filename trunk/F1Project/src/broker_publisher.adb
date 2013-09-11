@@ -120,38 +120,8 @@ package body broker_publisher is
             --race_status.is_over(race_over);
             race_stats.isOver(race_over);
          end loop;
-         -- send the last snapshot
-         Ada.Text_IO.Put_Line("Arrivo qua!!!!!!!!");
-         -- TODO capire perchè non si chiude
-         frame.get_snapshot(current_snapshot);
-         declare
-            lap : Integer;
-            seg : Integer;
-            prog : Float;
-            inci : Boolean;
-            ret : Boolean;
-            dama : Boolean;
-            over : Boolean;
-            weather : Boolean;
-            rank : Integer;
-         begin
-            -- insert weather in the content
-            frame.get_rain(weather);
-            Content.Set_Boolean("rain", weather);
-            for i in Positive range 1 .. cars_number loop
-               current_snapshot(i).get_data(lap, seg, prog, inci, dama, ret ,over, rank);
-               Content.Set_Integer("lap" & Positive'Image(i), YAMI_Integer(lap));
-               Content.Set_Integer("seg" & Positive'Image(i), YAMI_Integer(seg));
-               Content.Set_Integer("prog" & Positive'Image(i), YAMI_Integer(Integer(prog)));
-               Content.Set_Boolean("inci" & Positive'Image(i), inci);
-               Content.Set_Boolean("ret" & Positive'Image(i), ret);
-               Content.Set_Boolean("dama" & Positive'Image(i), dama);
-               Content.Set_Boolean("over" & Positive'Image(i), over);
-               Content.Set_Integer("rank" & Positive'Image(i), YAMI_Integer(rank));
-            end loop;
-         end;
-         Snapshot_Publisher.Publish(Content);
-         Ada.Text_IO.Put_Line("-------inviato!!-------ultimo!!!!!!!!");
+         -- take some time to send the last snapshot
+         delay 2.0;
       end;
 
    end updater;

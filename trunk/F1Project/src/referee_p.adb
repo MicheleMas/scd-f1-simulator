@@ -52,7 +52,7 @@ package body referee_p is
          deltaTime : Ada.Real_Time.Time_Span;
          blockingCar : Positive := car_ID;
          initialSpeed : Float;
-         Incident_Chance : Positive := 1;
+         Incident_Chance : Integer := 1;
          numRandom : Positive := 1;
       begin
          incident := 0;
