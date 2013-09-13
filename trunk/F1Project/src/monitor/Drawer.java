@@ -39,6 +39,10 @@ public class Drawer {
 		in.close();
 	}
 
+	public int getSegmentNumber() {
+		return segmentNumber-1;
+	}
+
 	public Point getPosition(int segment, int progress) {
 		if (segment == -1) {
 			// box

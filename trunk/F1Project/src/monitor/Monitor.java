@@ -51,8 +51,11 @@ public class Monitor {
 
 					System.out.println("Connection completed, cars = " + carNumber);
 
+					// leggere la pista
+					Drawer map = new Drawer();
+
 					// inizializzare la classe che legge da remoto
-				        connection = new Communicator(publishAddress, carNumber, lapNumber);
+				    connection = new Communicator(publishAddress, carNumber, lapNumber, map.getSegmentNumber());
 					Thread updater = new Thread(connection);
 					updater.start();
 
@@ -61,9 +64,6 @@ public class Monitor {
 					Drivers driv = new Drivers(carNumber);
 					names = driv.getNames();
 					colors = driv.getColors();
-
-					// leggere la pista
-					Drawer map = new Drawer();
 
 					// inizializzazione finestra
 					final JFrame frame = new JFrame("Monitor");
