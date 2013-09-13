@@ -17,6 +17,7 @@ public class Communicator implements Runnable {
 	private static boolean stop = false;
 	private static Agent pullAgent;
 	private static Parameters pullParams;
+	private static boolean firstRun = true;
 
 	//Publisher reader tmp variables
 	private static int[] lap;
@@ -52,6 +53,34 @@ public class Communicator implements Runnable {
 			Parameters content = im.getParameters();
 			// read data from the message
 			try {
+				if (!firstRun && false) {
+					// interpolate from old to new
+					int[] progress1 = new int[carNumber];
+					int[] progress2 = new int[carNumber];
+					int[] step = new int[carNumber];
+					for (int i=1; i<=carNumber; i++) {
+						progress1[i-1] = prog[i-1];
+						progress2[i-1] = (content.getInteger("prog "+i) * (1 + content.getInteger("lap "+i) - lap[i-1]));
+						step[i-1] = (progress2[i-1] - progress1[i-1]) / 10;
+					}
+					int[] progTemp = new int[carNumber];
+					int[] segTemp = new int[carNumber];
+					for (int j=0; j<carNumber; j++) {
+						progTemp[j] = progress1[j];
+						segTemp[j] = seg[j];
+					}
+					for (int run=0; run<10; run++) {
+						for (int car=0; car<carNumber; car++) {
+							progTemp[car] += step[car];
+							while (progTemp[car] > 99) {
+								progTemp[car] -= 100;
+								segTemp[car]++;
+							}
+						}
+						//TODO salva i dati
+						Thread.currentThread().sleep(50);
+					}
+				}
 				raining = content.getBoolean("rain");
 				for (int i=1; i<=carNumber; i++) {
 					System.out.println("Aggiorno car" + i);
@@ -65,6 +94,7 @@ public class Communicator implements Runnable {
 					rank[i-1] = content.getInteger("rank "+i);
 			}
 			data.setData(lap, seg, prog, inci, dama, ret, over, rank);
+			firstRun = false;
 			System.out.println("Aggiornamento completato"); // TODO remove
 			} catch (Exception e) {
 				e.printStackTrace();
