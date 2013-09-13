@@ -18,7 +18,7 @@ public class Communicator implements Runnable {
 	private static Agent pullAgent;
 	private static Parameters pullParams;
 	private static boolean firstRun = true;
-	private static int segNumber = 48;
+	private static int segNumber;
 
 	//Publisher reader tmp variables
 	private static int[] lap;
@@ -30,12 +30,13 @@ public class Communicator implements Runnable {
 	private static boolean[] over;
 	private static int[] rank;
 
-	public Communicator(String publishAddress, int carNumber, int lapNumber) {
+	public Communicator(String publishAddress, int carNumber, int lapNumber, int segmentNumber) {
 		this.publishAddress = publishAddress;
 		this.pullAddress = pullAddress;
 		this.overrideAddress = overrideAddress;
 		this.carNumber = carNumber;
 		this.lapNumber = lapNumber;
+		this.segNumber = segmentNumber;
 		data = new Container(carNumber);
 		lap = new int[carNumber];
 		seg = new int[carNumber];
@@ -58,7 +59,7 @@ public class Communicator implements Runnable {
 					// interpolate from old to new
 					int[] progress1 = new int[carNumber];
 					int[] progress2 = new int[carNumber];
-					int[] step = new int[carNumber];
+					float[] step = new float[carNumber];
 					for (int i=1; i<=carNumber; i++) {
 						int segment = content.getInteger("seg "+i);
 						if (content.getInteger("lap "+i) > lap[i-1]) {
@@ -66,9 +67,10 @@ public class Communicator implements Runnable {
 						}
 						progress1[i-1] = prog[i-1];
 						progress2[i-1] = (content.getInteger("prog "+i) + (100 * (segment - seg[i-1])));
-						step[i-1] = (progress2[i-1] - progress1[i-1]) / 10;
+						step[i-1] = ((float)(progress2[i-1] - progress1[i-1])) / 10;
 					}
-					int[] progTemp = new int[carNumber];
+					float[] progTemp = new float[carNumber];
+					int[] progTempInt = new int[carNumber];
 					int[] segTemp = new int[carNumber];
 					int[] lapTemp = new int[carNumber];
 					for (int j=0; j<carNumber; j++) {
@@ -91,8 +93,9 @@ public class Communicator implements Runnable {
 									}
 								}
 							}
+							progTempInt[car] = (int)progTemp[car];
 						}
-						data.setData(lapTemp, segTemp, progTemp, inci, dama, ret, over, rank);
+						data.setData(lapTemp, segTemp, progTempInt, inci, dama, ret, over, rank);
 						Thread.currentThread().sleep(50);
 					}
 				}
