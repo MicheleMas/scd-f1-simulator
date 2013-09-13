@@ -167,7 +167,7 @@ public class Window extends JPanel implements Runnable {
 
 				rankLabel.setText(text);
 				//frame.pack();
-				Thread.currentThread().sleep(500);
+				Thread.currentThread().sleep(50);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
