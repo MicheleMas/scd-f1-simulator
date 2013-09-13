@@ -18,6 +18,7 @@ public class Communicator implements Runnable {
 	private static Agent pullAgent;
 	private static Parameters pullParams;
 	private static boolean firstRun = true;
+	private static int segNumber = 48;
 
 	//Publisher reader tmp variables
 	private static int[] lap;
@@ -53,31 +54,44 @@ public class Communicator implements Runnable {
 			Parameters content = im.getParameters();
 			// read data from the message
 			try {
-				if (!firstRun && false) {
+				if (!firstRun) {
 					// interpolate from old to new
 					int[] progress1 = new int[carNumber];
 					int[] progress2 = new int[carNumber];
 					int[] step = new int[carNumber];
 					for (int i=1; i<=carNumber; i++) {
+						int segment = content.getInteger("seg "+i);
+						if (content.getInteger("lap "+i) > lap[i-1]) {
+							segment += segNumber;
+						}
 						progress1[i-1] = prog[i-1];
-						progress2[i-1] = (content.getInteger("prog "+i) * (1 + content.getInteger("lap "+i) - lap[i-1]));
+						progress2[i-1] = (content.getInteger("prog "+i) + (100 * (segment - seg[i-1])));
 						step[i-1] = (progress2[i-1] - progress1[i-1]) / 10;
 					}
 					int[] progTemp = new int[carNumber];
 					int[] segTemp = new int[carNumber];
+					int[] lapTemp = new int[carNumber];
 					for (int j=0; j<carNumber; j++) {
 						progTemp[j] = progress1[j];
 						segTemp[j] = seg[j];
+						lapTemp[j] = lap[j];
 					}
 					for (int run=0; run<10; run++) {
 						for (int car=0; car<carNumber; car++) {
-							progTemp[car] += step[car];
-							while (progTemp[car] > 99) {
-								progTemp[car] -= 100;
-								segTemp[car]++;
+							if (seg[car] != -1) {
+								progTemp[car] += step[car];
+								System.out.println("step: " + step[car]);
+								while (progTemp[car] > 100) {
+									progTemp[car] -= 100;
+									segTemp[car]++;
+									if (segTemp[car] > segNumber) {
+										segTemp[car] = 1;
+										lapTemp[car]++;
+									}
+								}
 							}
 						}
-						//TODO salva i dati
+						data.setData(lapTemp, segTemp, progTemp, inci, dama, ret, over, rank);
 						Thread.currentThread().sleep(50);
 					}
 				}
