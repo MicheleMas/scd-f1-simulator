@@ -56,19 +56,13 @@ package body referee_p is
          numRandom : Positive := 1;
       begin
          incident := 0;
-         --Ada.Text_IO.Put_Line ("Initial speed = " & Float'Image(speed));
-         --Ada.Text_IO.Put_Line ("Initial acceleration = " & Positive'Image(acceleration));
 
          if ((c_status.pitStop4tires or c_status.is_damaged) and seg.isBoxEntrance and (not last_lap)) -- TODO non deve entrare ai box all'ultimo giro!
          then
-            --if(last_lap)
-            --then
-            --   Ada.Text_IO.Put_Line("DEBUG questo non viene mai stampato");
-            --end if;
 
             -- box
             toSleep := initialTime + Ada.Real_Time.Milliseconds (15000);
-            if (c_status.pitStop4tires) -- cambio gomme
+            if (c_status.pitStop4tires)
             then
                c_status.Change_Tires(false);
                toSleep := toSleep + Ada.Real_Time.Milliseconds (3500);
@@ -76,13 +70,11 @@ package body referee_p is
                if(isRaining)
                then
                   c_status.set_rain_tires(true);
-                  Ada.Text_IO.Put_Line ("macchina " & Positive'Image(car_ID) & " monta gomme da pioggia");
                else
                   c_status.set_rain_tires(false);
-                  Ada.Text_IO.Put_Line ("macchina " & Positive'Image(car_ID) & " monta gomme da asciutto");
                end if;
             end if;
-            if(c_status.is_damaged) -- riparazione
+            if(c_status.is_damaged)
             then
                c_status.set_damage(false);
                c_status.Change_Behaviour(8);
@@ -110,28 +102,24 @@ package body referee_p is
                 currentAcceleration) * 1000.0);
             Period := Ada.Real_Time.Milliseconds (toWait);
             toSleep := toSleep + Period;
-            --Ada.Text_IO.Put_Line ("molteplicita' segmento " & Positive'Image(seg.id) & ": " & Positive'Image(seg.multiplicity));
 
             -- check segment multiplicity
             if (carCounter >= seg.multiplicity)
             then
-               --Ada.Text_IO.Put_Line ("macchina " & Positive'Image(car_ID) & " trova occupato");
                -- segment full, the car will exit 100ms after the last one
                maxWait := toSleep;
                for i in carArray'Range loop
                   if (maxWait < (carArray(i) + Ada.Real_Time.Milliseconds (100)))
                   then
-                     --Ada.Text_IO.Put_Line ("sono " & Positive'Image(car_ID) & " e " & Positive'Image(i) & " mi intralcia");
                      maxWait := carArray(i);
                      blockingCar := i;
                   end if;
                end loop;
 
-               toSleep := maxWait + Ada.Real_Time.Milliseconds (100); -- TODO insert a variable time based on speed
+               toSleep := maxWait + Ada.Real_Time.Milliseconds (100);
 
                if(blockingCar = car_ID)
                then
-                  --Ada.Text_IO.Put_Line ("macchina " & Positive'Image(car_ID) & " ha una accelerazione di " & Float'Image(currentAcceleration));
                   speed := ((currentAcceleration * (Float(toWait)/1000.0)) + speed) * 3.6;
                else
                   deltaTime := toSleep - initialTime;
@@ -139,13 +127,10 @@ package body referee_p is
 
                   --update speed
                   speed := (Float(seg.length) / (Float(toWait) / 1000.0)); -- average speed
-                  --Ada.Text_IO.Put_Line ("macchina " & Positive'Image(car_ID) & " ha una media di " & Float'Image(speed));
                   currentAcceleration := (2.0*(Float(seg.length) - (initialSpeed*(Float(toWait)/1000.0)))) / ((Float(toWait)/1000.0)**2);
-                  --Ada.Text_IO.Put_Line ("macchina " & Positive'Image(car_ID) & " ha una accelerazione di " & Float'Image(currentAcceleration));
                   speed := (initialSpeed + (currentAcceleration * (Float(toWait)/1000.0))) * 3.6;
                end if;
             else
-               --Ada.Text_IO.Put_Line ("macchina " & Positive'Image(car_ID) & " trova libero");
 
                -- update speed
                speed := ((currentAcceleration * (Float(toWait)/1000.0)) + speed) * 3.6;
@@ -176,10 +161,9 @@ package body referee_p is
                Num := Rand_Tire.Random(seed);
                numRandom := Positive(Num);
                c_status.set_tires_status(c_status.get_tires_state - (car_behaviour/2) - (seg.difficulty/2) - numRandom);
-               --Ada.Text_IO.Put_Line ("New tires status for car " & Positive'Image(car_ID) & " = " & Integer'Image(c_status.get_tires_state));
             end;
 
-            -- calculate if incident occur
+            -- calculate if incident occur, based
             -- on difficulty, rain, tires_status, rain_tires, car_behaviour
             declare
                type Rand_Incident_Limit is range 1..1000;
@@ -206,9 +190,7 @@ package body referee_p is
                if (Incident_Chance > numRandom)
                then
                   -- incident occurs
-                  Ada.Text_IO.Put_Line ("######## car " & Positive'Image(car_ID) & " - incident ###### ");
                   incident := 1;
-                  Ada.Text_IO.Put_Line ("Macchina " & Positive'Image(car_ID) & " perde " & Integer'Image(3000 + (numRandom)*150));
                   toSleep := toSleep + Ada.Real_Time.Milliseconds (3000 + ((numRandom)*150));
                   if(numRandom < 3)
                   then

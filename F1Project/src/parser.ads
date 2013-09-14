@@ -1,11 +1,7 @@
-with global_custom_types;
-use global_custom_types;
-with car_status;
-use car_status;
-with car_p;
-use car_p;
-with referee_p;
-use referee_p;
+with global_custom_types; use global_custom_types;
+with car_status; use car_status;
+with car_p; use car_p;
+with referee_p; use referee_p;
 
 package parser is
 

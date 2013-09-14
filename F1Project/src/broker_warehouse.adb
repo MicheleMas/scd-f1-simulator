@@ -41,16 +41,12 @@ package body broker_warehouse is
          detail_unboxed : detailed_array_Access;
 
       begin
-         -- S -> setup
-         -- D -> details | car = (String)ID
-
          race_status.real_car_number(cars);
 
          if(request = "S")
          then
             Reply_params.Set_Integer("cars", YAMI.Parameters.YAMI_Integer(cars));
             Reply_params.Set_Integer("laps", YAMI.Parameters.YAMI_Integer(race_status.real_laps_number));
-            -- TODO forse qui potremmo inviare altri dati utili
             Message.Reply(Reply_params);
          else
             -- All other requests contains "car" parameter
@@ -59,7 +55,6 @@ package body broker_warehouse is
             begin
                detail.get_data(detail_unboxed);
                detail_unboxed(ID).get_data(tire, rain, avgspeed, beh, speed,r_box);
-               --Ada.Text_IO.Put_Line("***************CI ARRIVO!**************");
                Reply_params.Set_Integer("tire", YAMI.Parameters.YAMI_Integer(tire));
                Reply_params.Set_Boolean("rain", rain);
                Reply_params.Set_Integer("avgspeed", YAMI.Parameters.YAMI_Integer(Integer(avgspeed)));
@@ -113,7 +108,6 @@ package body broker_warehouse is
 
       while (not stop)
       loop
-         --status.is_over(stop);
          race_status.isOver(stop);
          delay 5.0;
       end loop;

@@ -29,11 +29,10 @@ package body Circuit is
       real_lapn : Integer;
       event : event_array_Access := new event_array;
    begin
- 	--Ada.Text_IO.Put_Line ("Inizio il boot. ");
       firstReferee := parser.readCircuit("circuit.txt");
-      Ada.Text_IO.Put_Line ("Letto il circuito. ");
+      Ada.Text_IO.Put_Line ("Circuit parsed.");
       car_status_array := parser.readCars("cars.txt");
-      Ada.Text_IO.Put_Line ("Lette le macchine. ");
+      Ada.Text_IO.Put_Line ("Cars parsed.");
       parser.readProperties("race_properties.txt",real_cnumber,real_lapn);
 
       race_stat.set_real_car_number(real_cnumber);
@@ -43,7 +42,7 @@ package body Circuit is
       for i in Integer range 1 .. real_cnumber loop
          car_array(i) := new Car(i,firstReferee,car_status_array(i), event_buffer, race_stat);
       end loop For_Loop;
-      Ada.Text_IO.Put_Line ("Costruiti i tasks. ");
+      Ada.Text_IO.Put_Line ("Tasks built. ");
 
       controller := new controller_listener(race_stat, car_status_array);
       publisher := new Event_Handler(event_buffer, race_stat);
@@ -100,10 +99,8 @@ package body Circuit is
             Rand_Int.Reset(seed);
             Num := Rand_Int.Random(seed);
             numRandom := Positive(Num);
-            --Ada.Text_IO.Put_Line("-DEBUG-> " & Positive'Image(numRandom));
          else
             numRandom := numRandom - 5;
-            --Ada.Text_IO.Put_Line("--> " & Positive'Image(numRandom));
          end if;
 
          Period := Ada.Real_Time.Milliseconds (5000);
@@ -111,44 +108,7 @@ package body Circuit is
          delay until Sveglia;
          race_stat.isOver(raceOver);
       end loop;
-      Ada.Text_IO.Put_Line ("task meteo concluso");
-      --event_buffer.insert_event(Ada.Strings.Unbounded.To_Unbounded_String("La gara è conclusa"));
+      Ada.Text_IO.Put_Line ("Task weather closed");
    end weather_forecast;
-
-   -----------------------------------------------------------------------
-   --------------------------- TASK EVENT HANDLER ------------------------
-   -----------------------------------------------------------------------
-
-   --task body Event_Handler is
-
-      -- timer to simulate a remote communication 50ms of latency
-   --   use type Ada.Real_Time.Time_Span;
-   --   Poll_Time :          Ada.Real_Time.Time := Ada.Real_Time.Clock; -- time to start polling
-   --   Period    : constant Ada.Real_Time.Time_Span := Ada.Real_Time.Milliseconds (50);
-   --   Sveglia   :          Ada.Real_Time.Time;
-
-   --   event : Unbounded_String;
-   --   raceOver : Boolean := false;
-   --   bucket_empty : Boolean := false;
-
-   --begin
-   --   race_stat.isOver(raceOver);
-   --   while ((not raceOver) or else (not bucket_empty))
-   --   loop
-   --      event_buffer.get_event(event);
-   --      Poll_Time := Ada.Real_Time.Clock;
-   --      Sveglia := Poll_Time + Period;
-   --      -- Ada.Text_IO.Put_Line ("ho mangiato l'evento " & Ada.Strings.Unbounded.To_String(event));
-   --      delay until Sveglia;
-
-	 --filtro per stampare solo quello che ci serve
-         -- if Ada.Strings.Unbounded.To_String(event)(Ada.Strings.Unbounded.To_String(event)'First) = 'W' then
-   --         Ada.Text_IO.Put_Line ("Processed event " & Ada.Strings.Unbounded.To_String(event));
-         --end if;
-   --      race_stat.isOver(raceOver);
-   --      event_buffer.is_bucket_empty(bucket_empty);
-   --   end loop;
-   --   Ada.Text_IO.Put_Line ("task eventi concluso");
-   --end Event_Handler;
 
 end Circuit;

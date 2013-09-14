@@ -5,7 +5,6 @@ package body car_p is
    -----------------------------------------------------------------------
 
    task body Car is
-      --toWait : Positive;
       nextReferee : Referee_Access := initialReferee;
       speed : Float;
       previousReferee : Referee_Access;
@@ -20,19 +19,12 @@ package body car_p is
 
       use type Ada.Real_Time.Time_Span;
       Poll_Time :          Ada.Real_Time.Time := Ada.Real_Time.Clock; -- time to start polling
-      --Period    :          Ada.Real_Time.Time_Span;
       toSleep   :          Ada.Real_Time.Time := Poll_Time;
-      --secondsToSleep : Ada.Real_Time.Seconds_Count;
       durationToSleep : Ada.Real_Time.Time_Span;
    begin
 
-      --Ada.Real_Time.Split(Poll_Time,secondsToSleep,durationToSleep);
-
-      --Ada.Text_IO.Put_Line ("--> " & Ada.Real_Time.Seconds_Count'image(secondcount));	--STAMPARE Seconds_Count
-      --Ada.Text_IO.Put_Line ("-DIVERSA-> " & Duration'Image(Ada.Real_Time.To_Duration(duratiosn))); --STAMPARE TIME_SPAN
       speed := status.get_currentSpeed; -- the initial speed should be zero?
       while (not race_over) loop
-         --Ada.Text_IO.Put_Line ("->" & Positive'Image(status.get_name) & " ed entro nel segmento " & Positive'Image(nextReferee.id));
          previousReferee := nextReferee;
 
 	 --here, we have inadeguated tires for rain status
@@ -53,10 +45,7 @@ package body car_p is
 
          -- enterSegment need to be done as first thing, in order to compensate lag
          nextReferee.enterSegment(id, status, speed, toSleep, nextReferee, box_stop, event_buffer.isRaining, incident, last_lap);
-         --Ada.Real_Time.Split(toSleep,secondsToSleep,durationToSleep);
          durationToSleep := toSleep - Poll_Time;
-        -- Ada.Text_IO.Put_Line ("--seconds_count--> " & Ada.Real_Time.Seconds_Count'image(secondsToSleep));	--STAMPARE Seconds_Count
-         --Ada.Text_IO.Put_Line ("----time_span----> " & Duration'Image(Ada.Real_Time.To_Duration(durationToSleep))); --STAMPARE TIME_SPAN
 
          status.set_currentSpeed(speed); -- set new speed on status
          request_box := status.is_damaged or status.pitStop4tires;
@@ -118,9 +107,7 @@ package body car_p is
                event(1) := Ada.Strings.Unbounded.To_Unbounded_String("ES");
                event(2) := Ada.Strings.Unbounded.To_Unbounded_String(Positive'Image(id));
                event(3) := Ada.Strings.Unbounded.To_Unbounded_String(Positive'Image(previousReferee.id));
-               --Ada.Text_IO.Put_Line ("->" & Positive'Image(status.get_name) & " e sono vivo");
                event(4) := Ada.Strings.Unbounded.To_Unbounded_String(Integer'Image(Integer(speed)));
-               --Ada.Text_IO.Put_Line ("->" & Positive'Image(status.get_name) & " e sono morto");
                event(5) := Ada.Strings.Unbounded.To_Unbounded_String(Positive'Image(status.get_currentBehaviour));
                event(6) := Ada.Strings.Unbounded.To_Unbounded_String(Integer'Image(status.get_tires_state));
                if(status.get_rain_tires)
