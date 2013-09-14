@@ -5,7 +5,7 @@ package body car_status is
    -----------------------------------------------------------------------
 
    protected body Car_Status is
-      -- override procedure
+      -- override procedures
       procedure Change_Tires (order : in Boolean) is
       begin
          change_tires_required := order;
@@ -15,7 +15,7 @@ package body car_status is
          behaviour := bv;
       end Change_Behaviour;
 
-      -- setter procedure
+      -- setter procedures
       procedure set_tires_status (newState : in Integer) is
       begin
          tires_status := newState;
@@ -24,10 +24,6 @@ package body car_status is
       begin
          rain_tires := newTires;
       end set_rain_tires;
-      --procedure set_currentSegment (currentSeg : in Segment_Access) is
-      --begin
-      --   currentSegment := currentSeg;
-      --end set_currentSegment;
       procedure set_currentSpeed (newSpeed : in Float) is
       begin
          currentSpeed := newSpeed;
@@ -37,7 +33,7 @@ package body car_status is
          damaged := status;
       end set_damage;
 
-      -- getter function
+      -- getter functions
       function get_name return Positive is
       begin
          return name;
@@ -50,10 +46,6 @@ package body car_status is
       begin
          return rain_tires;
       end get_rain_tires;
-      --function get_currentSegment return Segment_Access is
-      --begin
-      --   return currentSegment;
-      --end get_currentSegment;
       function get_currentSpeed return Float is
       begin
          return currentSpeed;

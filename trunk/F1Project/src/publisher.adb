@@ -1,12 +1,10 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO;
 with YAMI.Agents;
-with YAMI.Parameters;
-use YAMI.Parameters;
+with YAMI.Parameters; use YAMI.Parameters;
 with YAMI.Serializables;
 with YAMI.Value_Publishers;
-with Ada.Command_Line;
-with Ada.Command_Line;
+with Ada.Command_Line; with Ada.Command_Line;
 
 package body publisher is
 
@@ -29,22 +27,9 @@ package body publisher is
          local := true;
       end if;
 
-      -- send setup information
-      --Content.Set_String("type", "SP");
-      --Content.Set_Integer("car_number", YAMI_Integer(custom_types.car_number));
-      --Content.Set_Integer("laps", YAMI_Integer(custom_types.car_number));
-      --if(not local) then
-      --      Client_Agent.Send_One_Way(Ada.Command_Line.Argument (1),
-      --                                "Event_Dispatcher",
-      --                                "event",
-      --                                Content);
-      --end if;
-
       while ((not raceOver) or else (not bucket_empty))
       loop
-         --Ada.Text_IO.Put_Line("Prendo evento dal bucket.");
          event_buffer.get_event(event);
-         --Ada.Text_IO.Put_Line("Preso.");
 
          -- check the kind of the message
          if (event(1) = "SE")
@@ -134,7 +119,7 @@ package body publisher is
             end if;
             if (event(1) = "CA")
             then
-               -- Car Accident
+               -- Car Incident
                Ada.Text_IO.Put_Line ("Processing event car " & Ada.Strings.Unbounded.To_String(event(2)) &
                                        " car incident occurs, " & Ada.Strings.Unbounded.To_String(event(3)) &
                                        " " & Ada.Strings.Unbounded.To_String(event(4)));
@@ -172,15 +157,12 @@ package body publisher is
 
          if(not local)
          then
-            --Ada.Text_IO.Put_Line("Sending..");
             Client_Agent.Send_One_Way(Ada.Command_Line.Argument (1),
                                       "Event_Dispatcher",
                                       "event",
                                       Content);
-            --Ada.Text_IO.Put_Line("Sent..");
          end if;
 
-         --Publisher.Publish(Content);
          race_stat.isOver(raceOver);
          event_buffer.is_bucket_empty(bucket_empty);
       end loop;
@@ -195,10 +177,9 @@ package body publisher is
                                       "event",
                                       Content);
          end if;
-      --Publisher.Publish(Content);
 
       delay(3.0);
-      Ada.Text_IO.Put_Line ("task eventi concluso");
+      Ada.Text_IO.Put_Line ("Event task concluded");
    end Event_Handler;
 
 end publisher;

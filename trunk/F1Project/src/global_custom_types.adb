@@ -34,7 +34,7 @@ package body global_custom_types is
 
       procedure isOver (over : out Boolean) is
       begin
-         if (cars_racing = 0) -- can be added more conditions here
+         if (cars_racing = 0)
          then
             over := true;
          else

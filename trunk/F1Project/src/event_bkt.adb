@@ -18,26 +18,24 @@ package body event_bkt is
       end is_bucket_empty;
       entry get_event (event : out event_array_Access) when bucket_size > 0 is
       begin
-         event := bucket.First_Element;  -- bucket.First_Element;
-         -- Ada.Text_IO.Put_Line ("ho mangiato l'evento " & Ada.Strings.Unbounded.To_String(event));
+         event := bucket.First_Element;
          bucket.Delete_First;
          bucket_size := bucket_size - 1;
       end get_event;
       procedure insert_event (event : in event_array_Access) is
          event_array_copy : event_array_Access := new event_array;
       begin
-         -- Ada.Text_IO.Put_Line ("inserisco evento " & Ada.Strings.Unbounded.To_String(event));
          event_array_copy.all := event.all;
          if bucket_size >= capacity
          then
             bucket.Delete_First;
-            Ada.Text_IO.Put_Line ("*** bucket pieno *** ");
+            Ada.Text_IO.Put_Line ("*** bucket full *** ");
          else
             bucket_size := bucket_size + 1;
          end if;
          bucket.Append(event_array_copy);
-         -- Ada.Text_IO.Put_Line ("size " & Positive'image(bucket_size));
       end insert_event;
+
       --we save here the rain status
       procedure set_raining (rain : in Boolean) is
       begin

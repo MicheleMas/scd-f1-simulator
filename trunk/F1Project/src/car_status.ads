@@ -8,17 +8,17 @@ package car_status is
                               C_behaviour : Positive;
                               max_speed : Positive;
                               acceleration : Positive) is
-      -- override procedure
+      -- override procedures
       procedure Change_Tires (order : in Boolean);
       procedure Change_Behaviour (bv : in Positive);
 
-      -- setter procedure
+      -- setter procedures
       procedure set_tires_status (newState : in Integer);
       procedure set_rain_tires (newTires : in Boolean);
       procedure set_currentSpeed (newSpeed : in Float);
       procedure set_damage (status : in Boolean);
 
-      -- getter function
+      -- getter functions
       function get_name return Positive;
       function get_tires_state return Integer;
       function get_rain_tires return Boolean;
@@ -28,11 +28,10 @@ package car_status is
       function pitStop4tires return Boolean;
    private
       change_tires_required : Boolean := false;
-      tires_status : Integer := 10000; -- 1 to 10000
+      tires_status : Integer := 10000; --  correct value is between 1 to 10000
       rain_tires : Boolean := false;
-      behaviour : Positive := C_behaviour; -- 1 to 10
-      currentSpeed : Float := 0.0; -- to change
-      toWait : Positive;
+      behaviour : Positive := C_behaviour; -- from 1 to 10
+      currentSpeed : Float := 0.0;
       damaged : Boolean := false;
    end Car_Status;
 

@@ -10,17 +10,6 @@ with YAMI.Value_Publishers;
 package body broker_publisher is
 
    protected body condition is
-      --procedure set_up (cars : Integer;
-      --                 laps : Integer) is
-      --begin
-      --   cars_number := cars;
-      --   laps_number := laps;
-      --   set_up_completed := true;
-      --end set_up;
-      --procedure stop is
-      --begin
-      --   race_over := true;
-      --end stop;
       procedure insert_snapshot(snapshot : in snapshot_vault_Access) is
          snapshot_copy : snapshot_array_Access := new snapshot_array;
          snap_unboxed : snapshot_array_Access;
@@ -102,7 +91,6 @@ package body broker_publisher is
                -- insert weather in the content
                frame.get_rain(weather);
                Content.Set_Boolean("rain", weather);
-               --Ada.Text_IO.Put_Line("--------------carNumber=" & Integer'Image(cars_number));
                for i in Positive range 1 .. cars_number loop
                   current_snapshot(i).get_data(lap, seg, prog, inci, dama, ret ,over, rank);
                   Content.Set_Integer("lap" & Positive'Image(i), YAMI_Integer(lap));
@@ -116,11 +104,10 @@ package body broker_publisher is
                end loop;
             end;
             Snapshot_Publisher.Publish(Content);
-            Ada.Text_IO.Put_Line("-------inviato!!-------");
-            --race_status.is_over(race_over);
+            --Ada.Text_IO.Put_Line("-------sent!!-------");
             race_stats.isOver(race_over);
          end loop;
-         -- take some time to send the last snapshot
+         -- take some time before send the last snapshot
          delay 2.0;
       end;
 

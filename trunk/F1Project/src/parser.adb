@@ -1,9 +1,7 @@
 with Ada.Text_IO;
-with global_custom_types;
-use global_custom_types;
+with global_custom_types; use global_custom_types;
 with GNAT.String_Split;
-with car_status;
-use car_status;
+with car_status; use car_status;
 
 package body parser is
 
@@ -28,13 +26,10 @@ package body parser is
             Working_Ref : Referee_Access := null;
          begin
             Line_Count := Line_Count + 1;
-            -- Ada.Text_IO.Put_Line (Natural'Image (Line_Count) & ": " & Line);
             if (not (Line(Line'First) = '#'))
             then
-               -- Ada.Text_IO.Put_Line ("da leggere : " & Line);
-               -- crea un subset di sotto-stringhe separate dallo spazio o tab
+               -- create a subset of substrings separated by spaces or tab
                GNAT.String_Split.Create (Subs, Line, Seps, Mode => GNAT.String_Split.Multiple);
-               -- GNAT.String_Split.Slice (Subs, i); -- i-esimo elemento del subset
                if (GNAT.String_Split.Slice (Subs, 5) = "t")
                then
                   box := true;
@@ -49,13 +44,13 @@ package body parser is
                                   box);
                if (firstSegment)
                then
-                  -- creare il primo referee
+                  -- create the first referee
                   First_Ref := new Referee(seg.id, null, null);
                   First_Ref.setSegment(seg);
                   Current_Ref := First_Ref;
                   firstSegment := false;
                else
-                  -- creare un referee linkato
+                  -- create a linked referee
                   Working_Ref := new Referee(seg.id, null, First_Ref);
                   Working_Ref.setSegment(seg);
                   -- we mark as started all segments except first
@@ -64,13 +59,6 @@ package body parser is
                   Current_Ref := Working_Ref;
                end if;
             end if;
-
-		--- costruzione del circuito a partire dai dati di ogni linea
-		--- ogni riga del file contiene i dati di un segmento
-		--- il segmento successivo sarà quello che viene dopo
-		--- quando la riga dopo è vuota collego al primo
-		--- dopo aver creato il segmento, crea il referee associato
-		--- ritorna il puntatore al primo referee
          end;
       end loop;
       Current_Ref.setNext(First_Ref);
@@ -100,7 +88,7 @@ package body parser is
  	    if (not (Line(Line'First) = '#'))
             then
                GNAT.String_Split.Create (Subs, Line, Seps, Mode => GNAT.String_Split.Multiple);
-               -- la riga successiva riempie i campi del Car_Status dichiarato di car_p.ads
+               -- we fill Car_Status, as declared in .ads
                car := new car_status.Car_Status(Positive'Value(GNAT.String_Split.Slice (Subs, 1)),
                                                 Positive'Value(GNAT.String_Split.Slice (Subs, 2)),
                                                 Positive'Value(GNAT.String_Split.Slice (Subs, 3)),
@@ -109,8 +97,6 @@ package body parser is
                Cars_Array(carNumber):= car;
             end if;
 
-            --- in ogni riga ci sono i dati di una macchina
-            --- crea l'array con i dati di ogni macchina
          end;
       end loop;
       Ada.Text_IO.Close (File);
@@ -133,11 +119,9 @@ package body parser is
             Line : String := Ada.Text_IO.Get_Line (File);
          begin
             Line_Count := Line_Count + 1;
-            -- Ada.Text_IO.Put_Line (Natural'Image (Line_Count) & ": " & Line);
  	    if (not (Line(Line'First) = '#'))
             then
                GNAT.String_Split.Create (Subs, Line, Seps, Mode => GNAT.String_Split.Multiple);
-               -- la riga successiva riempie i campi del Car_Status dichiarato di car_p.ads
                cnumber := Integer'Value(GNAT.String_Split.Slice (Subs, 1));
                lnumber := Integer'Value(GNAT.String_Split.Slice (Subs, 2));
             end if;

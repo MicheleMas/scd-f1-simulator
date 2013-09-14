@@ -10,17 +10,13 @@ with broker_race_status;
 use broker_race_status;
 use YAMI.Parameters;
 
-with global_custom_types;
-use global_custom_types;
+with global_custom_types; use global_custom_types;
 
-with broker_publisher;
-use broker_publisher;
+with broker_publisher; use broker_publisher;
 
-with broker_warehouse;
-use broker_warehouse;
+with broker_warehouse; use broker_warehouse;
 
-with Ada.Real_Time;
-use Ada.Real_Time;
+with Ada.Real_Time; use Ada.Real_Time;
 with Ada.Strings;
 with Ada.Strings.Unbounded;
 
@@ -42,18 +38,17 @@ procedure Broker is
    lap_time_avg : array (1 .. car_number) of Integer;
    current_lap : array (1 .. car_number) of Integer;
    retired_cars : array (1 .. car_number) of boolean; -- true means retired
-   damaged_cars : array (1 .. car_number) of boolean; -- true means.. ok, you know
+   damaged_cars : array (1 .. car_number) of boolean; -- true means damaged
    completed_cars : array (1 .. car_number) of boolean; -- true means completed
    started_cars : array (1 .. car_number) of boolean; -- true means.. yeah. started
    nCompleted : Integer;
    snapshot : snapshot_array_Access := new snapshot_array;
    detailed_snapshot : detailed_array_Access := new detailed_array;
 
+   --we pack both snapshots in a box to prevent concurrent access
    snap_box : snapshot_vault_Access := new snapshot_vault;
    detailed_snap_box : detailed_snapshot_vault_Access := new detailed_snapshot_vault;
-   --status : race_status_Access;
 
-   --race_general_stats : broker_race_status.race_status_Access := new broker_race_status.race_status(global_custom_types.laps_number, car_number);
    snapshot_bucket : condition_Access := new condition(50);
    snapshot_publisher : updater_Access := new updater(snapshot_bucket, race_stat);
    information_handler : pull_server_Access := new pull_server(race_stat, detailed_snap_box);
@@ -81,15 +76,9 @@ procedure Broker is
             race_stat.set_real_car_number(Integer'Value(Content.Get_String("ncar")));
             race_stat.set_real_laps_number(Integer'Value(Content.Get_String("nlap")));
             race_stat.real_car_number(cars);
-            Ada.Text_IO.Put_Line("DEBUG " & Integer'Image(cars) & "   " & Integer'Image(race_stat.real_laps_number));
+            Ada.Text_IO.Put_Line("Number of cars: " & Integer'Image(cars) & " Number of laps: " & Integer'Image(race_stat.real_laps_number));
          end if;
 
-         --Ada.Text_IO.Put_Line ("ricevuto: " & event & " at " & Content.Get_String("time"));
-         --if(event = "SP")
-         --then
-         --   status := new race_status(Integer'Value(Content.Get_String("laps")),
-         --                             Integer'Value(Content.Get_String("car_number")));
-         --end if;
          if(event = "ES")
          then
             declare
@@ -116,6 +105,7 @@ procedure Broker is
                end if;
             end;
          end if;
+
          if(event = "EL" or event = "LB")
          then
             declare
@@ -137,11 +127,12 @@ procedure Broker is
                end if;
             end;
          end if;
+
          if(event = "ER")
          then
             stop := true;
-            --race_general_stats.set_over;
          end if;
+
          if(event = "CA")
          then
             declare
@@ -151,7 +142,6 @@ procedure Broker is
                time : Integer := Integer((Float'Value(Content.Get_String("time")))*1000.0);
                seg : Positive := Positive'Value(Content.Get_String("seg"));
             begin
-               --Ada.Text_IO.Put_Line("--------------> Setto incidente al time " & Integer'Image(time));
                if(retired) then
                   last_incident(car):=new incident_event(time+10000,seg,damage,retired);
                   position_history(car)(position_index(car)) := new enter_segment(time,seg,0,0,0,false,false);
@@ -167,6 +157,7 @@ procedure Broker is
                end if;
             end;
          end if;
+
          if(event = "EB" or event = "LB")
          then
             declare
@@ -177,6 +168,7 @@ procedure Broker is
 
             end;
          end if;
+
          if(event = "CE")
          then
             declare
@@ -186,6 +178,7 @@ procedure Broker is
                last_end(car):=new end_race_event(time);
             end;
          end if;
+
          if(event = "WC")
          then
             snapshot_bucket.set_rain(Content.Get_Boolean("rain"));
@@ -216,11 +209,9 @@ begin
    end if;
 
    declare
-      Server_Address : constant String :=
-        Ada.Command_Line.Argument (1);
+      Server_Address : constant String := Ada.Command_Line.Argument (1);
 
-      Server_Agent : YAMI.Agents.Agent :=
-        YAMI.Agents.Make_Agent;
+      Server_Agent : YAMI.Agents.Agent := YAMI.Agents.Make_Agent;
 
       Resolved_Server_Address : String (1 .. YAMI.Agents.Max_Target_Length);
       Resolved_Server_Address_Last : Natural;
@@ -238,19 +229,16 @@ begin
 
       Server_Agent.Register_Object("Event_Dispatcher", My_Handler'Unchecked_Access);
 
-      Ada.text_io.Put_Line("Aspetto il setup");
-      --Aspettiamo fino a quando non viene fatto il setup
+      Ada.text_io.Put_Line("Waiting for setup");
       while(not setup_done)
       loop
          delay 1.0;
       end loop;
-      Ada.text_io.Put_Line("Faccio l'inizializzazione");
-
-      --Initialization
+      Ada.text_io.Put_Line("Initialization");
       race_stat.real_car_number(cars);
       nCompleted:=0;
       for i in Positive range 1 ..cars loop
-         --we add a special ES event to each car, to show that they are on starting lane
+         --we add a special event for each type to each car, to underline that they are on starting lane
          position_history(i)(1) := new enter_segment(0,0,0,0,0,false,false);
          position_index(i) := 2;
          last_incident(i) := new incident_event(0,0,false,false);
@@ -272,12 +260,11 @@ begin
          end loop;
       end loop;
 
-      --delay 2.0;
       Wake_Time := Ada.Real_Time.Clock;
 
-      --task che interpola gli eventi
+      --task that make interpolation for events
       declare
-         t:Integer := 0;
+         t:Integer := 0; --time wicch the interpolation is done
          indexPreEvent:Integer;
          indexNextEvent:Integer;
          progress:Float;
@@ -288,26 +275,26 @@ begin
          raceFinished:boolean := false;
          ranking : array (1 .. car_number) of Integer;
       begin
-         Ada.text_io.Put_Line("Inizio l'interpolazione");
+         Ada.text_io.Put_Line("Starting interpolation");
          while(not raceFinished or not stop)
          loop
             -- snapshot
             for i in Positive range 1 .. cars loop
                if(started_cars(i) and retired_cars(i) = false and completed_cars(i) = false) --se abbiamo almeno un evento per la macchina i E non si e' ritirata
                then
-                  --segno il lap corrente
+                  --  mark the current lap
                   lap := last_lap(i).get_laps;
                   if(t > last_lap(i).get_time)
                   then
                      lap := lap+1;
                   end if;
-                  --cerco l'evento ES immediatamente successivo al tempo t
+                  --  search the ES event immediately after the event t
                   indexPreEvent := position_index(i) - 1;
 
                   if(indexPreEvent < 1) then
                      indexPreEvent := 100 - indexPreEvent;
                   end if;
-                  --indexPreEvent è l'evento che è successo appena prima del tempo t
+                  --  indexPreEvent is the immediately previous event, at time t
                   while(t < position_history(i)(indexPreEvent).get_time)
                   loop
                      indexPreEvent := indexPreEvent - 1;
@@ -315,16 +302,15 @@ begin
                         indexPreEvent := 100 - indexPreEvent;
                      end if;
                   end loop;
-                  indexNextEvent := indexPreEvent +  1; --indice dell'evento immediatamente successivo
+                  indexNextEvent := indexPreEvent +  1;
                   if(indexNextEvent > 100) then
                      indexNextEvent := indexNextEvent - 100;
                   end if;
 
-                  --uso il tempo segnato nell'evento per capire a che percentuale del tratto segnato è al tempo t
+                  --  we use the timestamp of the event to calculate the percentage of the current segment
                   precTime := position_history(i)(indexPreEvent).get_time;
-                  if(position_index(i) /= indexNextEvent and last_incident(i).get_time < t) -- position_index(i) > indexNextEvent  <-- condizione che per ora non capisco
+                  if(position_index(i) /= indexNextEvent and last_incident(i).get_time < t)
                   then
-
                      nextTime := position_history(i)(indexNextEvent).get_time;
                      progress := Float(100*(t-precTime)) / Float((nextTime - precTime));
                      snapshot(i).set_data(lap,position_history(i)(indexNextEvent).get_segment,progress,false,damaged_cars(i),false,false);
@@ -338,12 +324,10 @@ begin
                      then
                         damaged_cars(i):=false;
                      end if;
-                     -- casi limite, la macchina o sta facendo un incidente, o è ai box,
+                  --  the car is in the box
                   else if(last_box(i).get_time > t)
                   then
-                        --è ai box
                      nextTime := last_box(i).get_time;
-
                      progress := Float(100*(t-precTime)) / Float((nextTime - precTime));
                      snapshot(i).set_data(lap,-1,progress,false,damaged_cars(i),false,false);
                      detailed_snapshot(i).set_data(position_history(i)(indexPreEvent).get_tire_status,
@@ -352,13 +336,13 @@ begin
                                                    position_history(i)(indexPreEvent).get_behaviour,
                                                    80,
                                                    true);
-                        if(damaged_cars(i))
-                        then
-                           damaged_cars(i):=false;
-                        end if;
+                     if(damaged_cars(i))
+                     then
+                        damaged_cars(i):=false;
+                     end if;
+                  --  is under incident
                   else if(last_incident(i).get_time > t)
                   then
-                     --è incidentata
                      nextTime := last_incident(i).get_time;
                      progress := Float(100*(t-precTime)) / Float((nextTime - precTime));
                      snapshot(i).set_data(lap,last_incident(i).get_segment,progress,true,last_incident(i).is_damaged,last_incident(i).car_retired,false);
@@ -374,8 +358,9 @@ begin
                      if(last_incident(i).is_damaged) then
                         damaged_cars(i):= true;
                      end if;
+                  --  just made the last lap
                   else if(last_end(i).get_time < t)
-                  then --ha fatto l'ultimo giro
+                  then
                      snapshot(i).set_data(lap,0,0.0,false,damaged_cars(i),false,true);
                      detailed_snapshot(i).set_data(0,
                                                    position_history(i)(indexPreEvent).get_rain_tire,
@@ -386,17 +371,15 @@ begin
                      completed_cars(i):=true;
                      nCompleted := nCompleted +1;
                   else
-                     --sono successe cose molto strane TODO da togliere
-                     snapshot(i).set_data(-9,-9,0.0,false,false,false,false);
-                     Ada.Text_IO.Put_Line("DEBUG COSE STRANE!");
+                     --something gone wrong, we should never enter here.
+                     nCompleted := nCompleted;
                   end if;
                   end if;
                   end if;
                   end if;
                   end if;
-
             end loop;
-            -- calcola la classifica (male)
+            --  we calculate the ranking
             for i in Positive range 1 .. cars loop
                if(retired_cars(i)) then
                   ranking(i):=0; -- retired car
@@ -419,24 +402,26 @@ begin
                   end if;
                end if;
             end loop;
-            --la parte sopra è decisamente da migliorare
+            --  we fill the snapshot with the rank we just calculated
             for i in Positive range 1 .. cars loop
                snapshot(i).setRank(ranking(i));
             end loop;
 
 
-            --we put the updated data in the vault, ready to be retrieved
+            --  we put the updated data in the vault, ready to be retrieved
             snap_box.set_data(snapshot);
             detailed_snap_box.set_data(detailed_snapshot);
 
+            --  check if the race is finished
             raceFinished:=true;
             for i in Positive range 1 .. cars loop
                if(not retired_cars(i) and not completed_cars(i))
                then
-	          --Ada.Text_IO.Put_Line("La macchina " & Positive'Image(i) & " e' ancora in corsa");
+	          --  looks like a car is still racing
                   raceFinished:=false;
                end if;
             end loop;
+            --  we comunicate to all concurrent task that is finished
             if raceFinished
             then
                race_stat.finish_race;
@@ -446,26 +431,22 @@ begin
             snapshot_bucket.insert_snapshot(snap_box);
             wake_time := wake_time + Ada.Real_Time.Milliseconds(500);
             delay until wake_time;
-            ---DEBUG
+
+            ---  DEBUG we print the snapshot
+            Ada.Text_IO.Put_Line(" ");
             Ada.Text_IO.Put_Line("-- SNAP TIME " & Integer'Image(t-500) & " --");
             for i in Positive range 1 .. cars loop
-               Ada.Text_IO.Put_Line("### " & Positive'Image(i) &": ");
+               Ada.Text_IO.Put_Line("# " & Positive'Image(i) &": ");
                snapshot(i).print_data;
-               --detailed_snapshot(i).print_data;
-               Ada.Text_IO.Put_Line("---");
+               detailed_snapshot(i).print_data;
             end loop;
-            --Ada.Text_IO.Put_Line("### 2: ");
-            --snapshot(2).print_data;
-            --detailed_snapshot(2).print_data;
-            --Ada.Text_IO.Put_Line("---");
          end loop;
       end;
-      --Ada.Text_IO.Put_Line(Positive'Image(position_index(1)));
-      -- DEBUG stampa tabella posizioni
-      for i in Positive range 1 .. position_index(1)-1 loop
-         Ada.Text_IO.Put_Line(Positive'Image(position_history(1)(i).get_segment) & " " &
-                                Integer'Image(position_history(1)(i).get_time));
-      end loop;
+      -- DEBUG print the final ranking
+      --for i in Positive range 1 .. position_index(1)-1 loop
+      --   Ada.Text_IO.Put_Line(Positive'Image(position_history(1)(i).get_segment) & " " &
+      --                          Integer'Image(position_history(1)(i).get_time));
+      --end loop;
    end;
 exception
    when E : others =>

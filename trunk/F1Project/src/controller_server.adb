@@ -32,7 +32,6 @@ package body controller_server is
          else
             if(kind = "Obox")
             then
-               Ada.Text_IO.Put_Line("BOX!!!!!!!! " & Integer'Image(carID));
                -- Force box entrance
                cars_status(carID).Change_Tires(true);
             end if;
@@ -71,7 +70,6 @@ package body controller_server is
       while(not stop)
       loop
          race_status.isOver(stop);
-         --Ada.Text_IO.Put_Line("sono vivo!!****!*!**!*!*!*!*");
          delay 2.0;
       end loop;
 

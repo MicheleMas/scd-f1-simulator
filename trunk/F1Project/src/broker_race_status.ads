@@ -30,13 +30,6 @@ package broker_race_status is
 
    type index_positions is array (1 .. car_number) of Positive;
 
-   -------- Incident array ---------
-
-   -- nell'array car_incident è salvato all'id corrispondente al numero della
-   -- macchina una lista circolare contenente gli ultimi 20 incidenti che ha
-   -- effettuato. L'indice della lista circolare è contenuto nell'array
-   -- index_incident.
-
    protected type incident_event (time : Integer;
                                   segment : Integer;
                                   damaged : boolean;
