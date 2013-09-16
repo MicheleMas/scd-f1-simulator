@@ -83,7 +83,7 @@ public class Communicator implements Runnable {
 							int segment = content.getInteger("seg "+(car+1));
 							if (seg[car] != -1 && lap[car] != 0 && segment != -1 && segment != 0) {
 								progTemp[car] += step[car];
-								System.out.println("step: " + step[car]);
+								//System.out.println("step: " + step[car]);
 								while (progTemp[car] > 100) {
 									progTemp[car] -= 100;
 									segTemp[car]++;
