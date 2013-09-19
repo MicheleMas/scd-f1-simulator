@@ -163,10 +163,10 @@ package body referee_p is
                c_status.set_tires_status(c_status.get_tires_state - (car_behaviour/2) - (seg.difficulty/2) - numRandom);
             end;
 
-            -- calculate if incident occur, based
+            -- calculate incident, based
             -- on difficulty, rain, tires_status, rain_tires, car_behaviour
             declare
-               type Rand_Incident_Limit is range 1..1000;
+               type Rand_Incident_Limit is range 1..10000;
                package Rand_Incident is new Ada.Numerics.Discrete_Random(Rand_Incident_Limit);
                seed  : Rand_Incident.Generator;
                Num   : Rand_Incident_Limit;
@@ -174,13 +174,13 @@ package body referee_p is
                Rand_Incident.Reset(seed);
                Num := Rand_Incident.Random(seed);
                numRandom := Positive(Num);
-               Incident_Chance := (car_behaviour/2) + (seg.difficulty/2);
+               Incident_Chance := (car_behaviour) + (seg.difficulty);
                if (isRaining)
                then
-                  Incident_Chance := Incident_Chance + 5;
+                  Incident_Chance := Incident_Chance + 10;
                   if (not c_status.get_rain_tires)
                   then
-                     Incident_Chance := Incident_Chance + 5;
+                     Incident_Chance := Incident_Chance + 10;
                   end if;
                end if;
                if(c_status.get_tires_state > 9950)
@@ -192,13 +192,13 @@ package body referee_p is
                   -- incident occurs
                   incident := 1;
                   toSleep := toSleep + Ada.Real_Time.Milliseconds (3000 + ((numRandom)*150));
-                  if(numRandom < 3)
+                  if(numRandom < 5)
                   then
                      incident := 2;
                      c_status.set_damage(true);
                      c_status.Change_Behaviour(4);
                   end if;
-		  if(numRandom < 2)
+		  if(numRandom < 3)
                   then
                      incident := 3;
                   end if;
