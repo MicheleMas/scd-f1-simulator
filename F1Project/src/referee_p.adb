@@ -214,6 +214,11 @@ package body referee_p is
             carArray(car_ID) := toSleep;
          end if;
 
+         if(speed < 0.0)
+         then
+            Ada.Text_IO.Put_Line("DEBUG: " & Float'Image(speed));
+         end if;
+
       end enterSegment;
 
       procedure leaveSegment (car_ID : in Positive;
