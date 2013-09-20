@@ -72,7 +72,7 @@ package body broker_publisher is
          Publisher_Agent.Add_Listener(Ada.Strings.Unbounded.To_String(Address), Resolved_Publisher_Address,
                                       Resolved_Publisher_Address_Last);
          Snapshot_Publisher.Register_At(Publisher_Agent'Unchecked_Access, "snapshots");
-
+         --Ada.Text_IO.Put_Line("Creato un updater");
          while(not race_over)
          loop
             -- read the snapshot and convert it to a Content

@@ -433,13 +433,13 @@ begin
             delay until wake_time;
 
             ---  DEBUG we print the snapshot
-            Ada.Text_IO.Put_Line(" ");
-            Ada.Text_IO.Put_Line("-- SNAP TIME " & Integer'Image(t-500) & " --");
-            for i in Positive range 1 .. cars loop
-               Ada.Text_IO.Put_Line("# " & Positive'Image(i) &": ");
-               snapshot(i).print_data;
-               detailed_snapshot(i).print_data;
-            end loop;
+           -- Ada.Text_IO.Put_Line(" ");
+            --Ada.Text_IO.Put_Line("-- SNAP TIME " & Integer'Image(t-500) & " --");
+            --for i in Positive range 1 .. cars loop
+               --Ada.Text_IO.Put_Line("# " & Positive'Image(i) &": ");
+               --snapshot(i).print_data;
+               --detailed_snapshot(i).print_data;
+            --end loop;
          end loop;
       end;
       -- DEBUG print the final ranking
