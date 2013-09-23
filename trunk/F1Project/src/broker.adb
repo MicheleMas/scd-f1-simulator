@@ -33,6 +33,8 @@ procedure Broker is
    last_lap : array (1 .. car_number) of lap_event_Access;
 
    distances : cars_distances;
+   initial_lap_time : array (1 .. car_number) of Integer;
+   best_lap_time : array (1 .. car_number) of Integer;
    speed_avgs : array (1 .. car_number) of Float;
    n_speed_avgs : array (1 .. car_number) of Integer;
    lap_time_avg : array (1 .. car_number) of Integer;
@@ -91,6 +93,10 @@ procedure Broker is
                rain_tires : Boolean := Content.Get_Boolean("tire_t");
                require_box : Boolean := Content.Get_Boolean("r_box");
             begin
+               if(seg = 1)
+               then
+                  initial_lap_time(car) := time;
+               end if;
                speed_avgs(car) := (speed_avgs(car) * Float(n_speed_avgs(car)) + Float(speed)) / Float(n_speed_avgs(car)+1);
                n_speed_avgs(car) := n_speed_avgs(car) + 1;
                position_history(car)(position_index(car)) := new enter_segment(time,seg,speed,behaviour,tires_status,rain_tires,require_box);
@@ -112,7 +118,13 @@ procedure Broker is
                car : Positive := Positive'Value(Content.Get_String("car"));
                time : Integer := Integer((Float'Value(Content.Get_String("time")))*1000.0);
                lap : Integer := (Integer'Value(Content.Get_String("lap")));
+               lap_time : Integer;
             begin
+               lap_time := time - initial_lap_time(car);
+               if((lap_time < best_lap_time(car)) or (best_lap_time(car) = 0))
+               then
+                  best_lap_time(car) := lap_time;
+               end if;
                lap_time_avg(car) := time / lap;
                current_lap(car) := lap;
                last_lap(car) := new lap_event(time,lap);
@@ -243,6 +255,8 @@ begin
          position_index(i) := 2;
          last_incident(i) := new incident_event(0,0,false,false);
          last_box(i) := new box_event(0);
+         initial_lap_time(i) := 0;
+         best_lap_time(i) := 0;
          speed_avgs(i) := 0.0;
          lap_time_avg(i) := 0;
          n_speed_avgs(i) := 0;
@@ -264,7 +278,7 @@ begin
 
       --task that make interpolation for events
       declare
-         t:Integer := 0; --time wicch the interpolation is done
+         t:Integer := 0; --time when the interpolation is done
          indexPreEvent:Integer;
          indexNextEvent:Integer;
          progress:Float;
@@ -317,6 +331,7 @@ begin
                      detailed_snapshot(i).set_data(position_history(i)(indexNextEvent).get_tire_status,
                                                    position_history(i)(indexNextEvent).get_rain_tire,
                                                    speed_avgs(i),
+                                                   best_lap_time(i),
                                                    position_history(i)(indexNextEvent).get_behaviour,
                                                    position_history(i)(indexNextEvent).get_speed,
                                                    position_history(i)(indexNextEvent).get_require_box);
@@ -333,6 +348,7 @@ begin
                      detailed_snapshot(i).set_data(position_history(i)(indexPreEvent).get_tire_status,
                                                    position_history(i)(indexPreEvent).get_rain_tire,
                                                    speed_avgs(i),
+                                                   best_lap_time(i),
                                                    position_history(i)(indexPreEvent).get_behaviour,
                                                    80,
                                                    true);
@@ -349,6 +365,7 @@ begin
                      detailed_snapshot(i).set_data(position_history(i)(indexPreEvent).get_tire_status,
                                                    position_history(i)(indexPreEvent).get_rain_tire,
                                                    speed_avgs(i),
+                                                   best_lap_time(i),
                                                    position_history(i)(indexPreEvent).get_behaviour,
                                                    0,
                                                    position_history(i)(indexPreEvent).get_require_box);
@@ -365,6 +382,7 @@ begin
                      detailed_snapshot(i).set_data(0,
                                                    position_history(i)(indexPreEvent).get_rain_tire,
                                                    speed_avgs(i),
+                                                   best_lap_time(i),
                                                    position_history(i)(indexPreEvent).get_behaviour,
                                                    0,
                                                    position_history(i)(indexPreEvent).get_require_box);

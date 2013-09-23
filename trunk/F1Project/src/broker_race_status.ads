@@ -86,12 +86,14 @@ package broker_race_status is
       procedure get_data(tire : out Integer;
                          rain : out Boolean;
                          avgspeed : out Float;
+                         best_lap : out Integer;
                          beh : out Integer;
                          speed : out Integer;
                          r_box : out Boolean);
       procedure set_data(tire : in Integer;
                          rain : in Boolean;
                          avgspeed : in Float;
+                         best_lap : in Integer;
                          beh : in Integer;
                          speed : in Integer;
                          r_box : in Boolean);
@@ -100,6 +102,7 @@ package broker_race_status is
       tire_status : Integer := 0;
       rain_tires : Boolean := false;
       average_speed : Float := 0.0;
+      best_lap_time : Integer := 0;
       behaviour : Integer := 0;
       current_speed : Integer := 0;
       require_box : Boolean := false;

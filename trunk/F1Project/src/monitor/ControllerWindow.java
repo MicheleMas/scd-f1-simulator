@@ -73,20 +73,20 @@ public class ControllerWindow extends JPanel implements Runnable {
 		JComboBox driversList = new JComboBox(names);
 		driversList.setBounds(50, 40, 200, 30);
 		JLabel infoLabel = new JLabel("");
-		infoLabel.setBounds(60, 80, 240, 130);
+		infoLabel.setBounds(60, 80, 240, 150);
 		JLabel box = new JLabel("Schedule box entrance:");
-		box.setBounds(20, 222, 260, 20);
+		box.setBounds(20, 242, 260, 20);
 		boxButton = new JButton("Schedule Box");
-		boxButton.setBounds(60, 250, 180, 20);
+		boxButton.setBounds(60, 270, 180, 20);
 		boxButton.setEnabled(false);
 		JLabel behLabel = new JLabel("Set driver behaviour (1-10):");
-		behLabel.setBounds(20, 280, 260, 20);
+		behLabel.setBounds(20, 300, 260, 20);
 		behInput = new JFormattedTextField();
 		behInput.setColumns(2);
-		behInput.setBounds(60, 310, 40, 20);
+		behInput.setBounds(60, 330, 40, 20);
 		behInput.setEnabled(false);
 		behButton = new JButton("Set");
-		behButton.setBounds(160, 310, 80, 20);
+		behButton.setBounds(160, 330, 80, 20);
 		behButton.setEnabled(false);
 
 		driversList.addActionListener(new ActionListener()
@@ -133,6 +133,18 @@ public class ControllerWindow extends JPanel implements Runnable {
 					det = connection.getDetails(driverSelected);
 					text = "<html><table><tr><td><b>Speed</b></td><td>"+det.getSpeed()+"</td></tr>";
 					text += "<tr><td><b>AVG Speed</b></td><td>"+det.getAvgSpeed()+"</td></tr>";
+					int bestLap = det.getBestLap();
+					String bestLapLabel = "";
+					if (bestLap == 0) {
+						bestLapLabel = "-";
+					} else {
+						float seconds = (((float)bestLap)/1000);
+						int minutes = (int)Math.floor(seconds/60);
+						bestLapLabel += ""+minutes+"m ";
+						seconds -= 60*minutes;
+						bestLapLabel += ""+((int)Math.floor(seconds))+"s";
+					}
+					text += "<tr><td><b>Best Lap</b></td><td>"+bestLapLabel+"</td></tr>";
 					if (det.getTireStatus() == -1)
 						text += "<tr><td><b>Tire Status</b></td><td>"+"BOX"+"</td></tr>";
 					else
