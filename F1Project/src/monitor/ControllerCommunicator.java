@@ -38,10 +38,11 @@ public class ControllerCommunicator {
 			int tireStatus = reply.getInteger("tire");
 			boolean rainTire = reply.getBoolean("rain");
 			int avgSpeed = reply.getInteger("avgspeed");
+			int best_lap = reply.getInteger("best_lap");
 			int behaviour = reply.getInteger("beh");
 			int speed = reply.getInteger("speed");
 			boolean r_box = reply.getBoolean("r_box");
-			details = new Detail(tireStatus, rainTire, avgSpeed,behaviour, speed, r_box);
+			details = new Detail(tireStatus, rainTire, avgSpeed, best_lap, behaviour, speed, r_box);
 		}
 
 		return details;

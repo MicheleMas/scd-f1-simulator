@@ -33,6 +33,7 @@ package body broker_warehouse is
          tire : Integer;
          rain : Boolean;
          avgspeed : Float;
+         best_lap : Integer;
          beh : Integer;
          speed : Integer;
          r_box : Boolean;
@@ -54,10 +55,11 @@ package body broker_warehouse is
                ID : Integer := Integer'Value(Content.Get_String("car"));
             begin
                detail.get_data(detail_unboxed);
-               detail_unboxed(ID).get_data(tire, rain, avgspeed, beh, speed,r_box);
+               detail_unboxed(ID).get_data(tire, rain, avgspeed, best_lap, beh, speed,r_box);
                Reply_params.Set_Integer("tire", YAMI.Parameters.YAMI_Integer(tire));
                Reply_params.Set_Boolean("rain", rain);
                Reply_params.Set_Integer("avgspeed", YAMI.Parameters.YAMI_Integer(Integer(avgspeed)));
+               Reply_params.Set_Integer("best_lap", YAMI.Parameters.YAMI_Integer(best_lap));
                Reply_params.Set_Integer("beh", YAMI.Parameters.YAMI_Integer(beh));
                Reply_params.Set_Integer("speed", YAMI.Parameters.YAMI_Integer(speed));
                Reply_params.Set_Boolean("r_box", r_box);
