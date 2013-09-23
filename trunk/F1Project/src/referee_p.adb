@@ -6,11 +6,14 @@ with event_bkt;
 use event_bkt;
 with Ada.Numerics;
 with Ada.Numerics.Discrete_Random;
+with Ada.Containers.Generic_Array_Sort;
 
 package body referee_p is
 
    package Float_Function is new Ada.Numerics.Generic_Elementary_Functions(Float);
-   carArray : array(1 .. car_number) of Ada.Real_Time.Time;
+   type timeArray is array(Natural range <>) of Ada.Real_Time.Time;
+   procedure Sort is new Ada.Containers.Generic_Array_Sort (Natural,Ada.Real_Time.Time,timeArray,"<" => ">");
+   sortedCarArray : timeArray(1 .. car_number);
 
    -----------------------------------------------------------------------
    --------------------------- REFEREE -----------------------------------
@@ -108,28 +111,21 @@ package body referee_p is
             then
                -- segment full, the car will exit 100ms after the last one
                maxWait := toSleep;
-               for i in carArray'Range loop
-                  if (maxWait < (carArray(i) + Ada.Real_Time.Milliseconds (100)))
-                  then
-                     maxWait := carArray(i);
-                     blockingCar := i;
-                  end if;
-               end loop;
+               -- at sortedCarArray(seg.multiplicity) we have the time when there will be a free spot in the segment
+               if (maxWait < (sortedCarArray(seg.multiplicity) + Ada.Real_Time.Milliseconds (100)))
+               then
+                  maxWait := sortedCarArray(seg.multiplicity);
+               end if;
 
                toSleep := maxWait + Ada.Real_Time.Milliseconds (100);
 
-               if(blockingCar = car_ID)
-               then
-                  speed := ((currentAcceleration * (Float(toWait)/1000.0)) + speed) * 3.6;
-               else
-                  deltaTime := toSleep - initialTime;
-                  toWait := Positive(Ada.Real_time.To_Duration(deltaTime*1000));
+               deltaTime := toSleep - initialTime;
+               toWait := Positive(Ada.Real_time.To_Duration(deltaTime*1000));
 
-                  --update speed
-                  speed := (Float(seg.length) / (Float(toWait) / 1000.0)); -- average speed
-                  currentAcceleration := (2.0*(Float(seg.length) - (initialSpeed*(Float(toWait)/1000.0)))) / ((Float(toWait)/1000.0)**2);
-                  speed := (initialSpeed + (currentAcceleration * (Float(toWait)/1000.0))) * 3.6;
-               end if;
+               --update speed
+               speed := (Float(seg.length) / (Float(toWait) / 1000.0)); -- average speed
+               currentAcceleration := (2.0*(Float(seg.length) - (initialSpeed*(Float(toWait)/1000.0)))) / ((Float(toWait)/1000.0)**2);
+               speed := (initialSpeed + (currentAcceleration * (Float(toWait)/1000.0))) * 3.6;
             else
 
                -- update speed
@@ -211,7 +207,8 @@ package body referee_p is
 
             -- update counter and status
             carCounter := carCounter + 1;
-            carArray(car_ID) := toSleep;
+            sortedCarArray(car_number) := toSleep;
+            Sort(sortedCarArray); --bigger value at position 1.
          end if;
 
       end enterSegment;
