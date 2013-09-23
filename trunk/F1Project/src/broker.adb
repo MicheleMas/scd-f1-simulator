@@ -130,6 +130,7 @@ procedure Broker is
                last_lap(car) := new lap_event(time,lap);
                if(event = "LB")
                then
+                  initial_lap_time(car) := time;
                   position_history(car)(position_index(car)) := new enter_segment(time,-1,0,-1,-1,Content.Get_Boolean("tire_t"),false);
                   position_index(car) := position_index(car) + 1;
                   if(position_index(car) > 100)
