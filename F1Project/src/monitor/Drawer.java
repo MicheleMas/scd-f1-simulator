@@ -62,11 +62,9 @@ public class Drawer {
 		for (int i=0; i<segmentNumber; i++) {
 			for (int j=0; j<100; j++) {
 				p = circuit[i].getPosition(j);
-				//System.out.println("Coordinate " + p.getX() + " " + p.getY());
 				g2d.fillOval((int)p.getX(), (int)p.getY(), 10, 10);
 			}
 		}
-		//g2d.fillOval(50, 50, 20, 20);
 		return track;
 	}
 }

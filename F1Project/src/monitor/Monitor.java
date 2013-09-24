@@ -93,7 +93,6 @@ public class Monitor {
 				
 
 			} catch (Exception e) {
-				//System.out.println("error " + e.getMessage());
 				try {
 					Thread.sleep(2000);
 				} catch (Exception e1) {
