@@ -9,10 +9,6 @@ public class Status {
 	private boolean over;
 	private int rank;
 
-	/**
-	There is no setter because any useless instance of this class must be deleted, not used again
-	(race condition problem)
-	*/
 	public Status(int lap, int seg, int prog, boolean inci, boolean dama, boolean ret, boolean over, int rank) {
 		this.lap = lap;
 		this.seg = seg;

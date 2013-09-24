@@ -12,7 +12,6 @@ public class ControllerCommunicator {
 	private static String overrideAddress;
 	private static Agent pullAgent;
 	private static Parameters pullParams;
-	//private static int carNumber;
 
 	public ControllerCommunicator(String pullAddress, String overrideAddress) {
 		this.overrideAddress = overrideAddress;
@@ -60,7 +59,6 @@ public class ControllerCommunicator {
 			params.setString("beh", ""+behaviour);
 			overrideAgent.sendOneWay(overrideAddress, "override", "behaviour", params);
 		} catch (Exception e) {
-			//e.printStackTrace();
 			System.out.println("Can't override, connection closed;");
 		}
 	}
@@ -73,7 +71,6 @@ public class ControllerCommunicator {
 			params.setString("car", ""+(carID+1));
 			overrideAgent.sendOneWay(overrideAddress, "override", "box", params);
 		} catch (Exception e) {
-			//e.printStackTrace();
 			System.out.println("Can't override, connection closed;");
 		}
 	}

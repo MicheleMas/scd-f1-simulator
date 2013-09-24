@@ -163,7 +163,6 @@ public class ControllerWindow extends JPanel implements Runnable {
 				}
 				Thread.currentThread().sleep(1000);
 			} catch (Exception e) {
-				//e.printStackTrace();
 				System.out.println("Connection closed");
 				stop = true;
 				text = "<html><h2>Connection<br>Closed</h2></html>";

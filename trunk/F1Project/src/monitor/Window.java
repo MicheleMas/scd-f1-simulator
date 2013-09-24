@@ -7,8 +7,6 @@ import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.awt.Point;
 import java.awt.Color;
-//import java.awt.GridBagLayout;
-//import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
 import javax.swing.*;
 import java.util.*;
@@ -55,7 +53,6 @@ public class Window extends JPanel implements Runnable {
 		super.paintComponent(g);
 		g.drawImage(track, 0, 0, null);
 		Graphics g2d = (Graphics2D) g;
-		//g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		if(ready) {
 			for (int i=0; i<carNumber; i++) {
 				g2d.setColor(Color.decode("0x"+colors[i]));
@@ -68,7 +65,6 @@ public class Window extends JPanel implements Runnable {
 		frame.setSize(WIDTH, HEIGHT);
 		JPanel panel = (JPanel) frame.getContentPane();
 		panel.setLayout(null);
-		//Box container = Box.createHorizontalBox();
 		JLabel rankLabel = new JLabel("");
 		JLabel statusLabel = new JLabel("");
 		JLabel title = new JLabel("<html><h1>F1 Simulator</h1></html>");
@@ -161,12 +157,11 @@ public class Window extends JPanel implements Runnable {
 				}
 
 				text += "</table></html>";
-				//race.validate();
 
 				race.repaint();
 
 				rankLabel.setText(text);
-				//frame.pack();
+
 				Thread.currentThread().sleep(50);
 			} catch (Exception e) {
 				e.printStackTrace();

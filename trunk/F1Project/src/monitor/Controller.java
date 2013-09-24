@@ -57,7 +57,6 @@ public class Controller {
 					// inizializzare finestra
 					final JFrame frame = new JFrame("Controller");
 					GUI = new ControllerWindow(connection, frame, names, colors);
-					// TODO dai frame alla classe che la gestisce
 					frame.addWindowListener(new WindowAdapter() {
 					@Override
 					public void windowClosing(WindowEvent e) {
