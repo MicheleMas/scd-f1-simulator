@@ -3,7 +3,7 @@ package global_custom_types is
 
    -- constants
    car_number : Positive := 20; -- max number of cars
-   laps_number : Positive := 50; -- max number of laps
+   laps_number : Positive := 90; -- max number of laps
 
    type Segment (id : Positive;
                  length : Positive;
