@@ -289,6 +289,8 @@ begin
          precTime:Integer;
          raceFinished:boolean := false;
          ranking : array (1 .. car_number) of Integer;
+	 polePosition:Positive := 1;
+	 distanceFromFirst:Integer;
       begin
          Ada.text_io.Put_Line("Starting interpolation");
          while(not raceFinished or not stop)
@@ -424,7 +426,38 @@ begin
             --  we fill the snapshot with the rank we just calculated
             for i in Positive range 1 .. cars loop
                snapshot(i).setRank(ranking(i));
+		if(ranking(i) = (nCompleted + 1)) then
+			polePosition:=i;
+		end if;
             end loop;
+
+	    -- we calculate the distance between the first car and the other, in milliseconds
+	    for i in Positive range 1 .. cars loop
+		if(i = polePosition or retired_cars(i) or completed_cars(i))  then
+			distanceFromFirst := 0;
+		else
+			-- we search when the car in polePosition was in the same segment as i
+			indexPreEvent := position_index(polePosition) - 1;
+	                if(indexPreEvent < 1) then
+        	             indexPreEvent := 100 - indexPreEvent;
+      	          	end if;
+			while(indexPreEvent /= position_index(polePosition) and position_history(polePosition)(indexPreEvent).get_segment /= 0 and snapshot(i).getSeg /= position_history(polePosition)(indexPreEvent).get_segment)
+			loop
+				indexPreEvent := indexPreEvent - 1;
+				if(indexPreEvent < 1) then
+        	             		indexPreEvent := 100 - indexPreEvent;
+      	          		end if;
+			end loop;
+			indexNextEvent := position_index(i) -1;
+			if(indexNextEvent < 1) then
+        	             indexNextEvent := 100 - indexNextEvent;
+      	          	end if;
+			distanceFromFirst := position_history(i)(indexNextEvent).get_time - position_history(polePosition)(indexPreEvent).get_time;
+			-- if lap of polePosition is bigger than this, we multiply the difference for best_lap
+			distanceFromFirst := distanceFromFirst + best_lap_time(i) * (position_history(polePosition)(indexPreEvent).getLap - position_history(i)(indexNextEvent).getLap);
+		end if;
+		snapshot(i).setDistance(distanceFromFirst);
+	    end loop;
 
 
             --  we put the updated data in the vault, ready to be retrieved
@@ -457,7 +490,7 @@ begin
             for i in Positive range 1 .. cars loop
                Ada.Text_IO.Put_Line("# " & Positive'Image(i) &": ");
                snapshot(i).print_data;
-               detailed_snapshot(i).print_data;
+               -- detailed_snapshot(i).print_data;
             end loop;
          end loop;
       end;

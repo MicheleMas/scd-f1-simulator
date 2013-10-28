@@ -129,7 +129,8 @@ package broker_race_status is
                          dama : out Boolean;
                          ret : out Boolean;
                          over : out Boolean;
-                         rank : out Integer);
+                         rank : out Integer;
+			 dist : out Integer);
 
       procedure set_data(lapc : in Integer;
                          seg : in Integer;
@@ -142,6 +143,7 @@ package broker_race_status is
       function getSeg return Integer;
       function getProg return Float;
       procedure setRank (rank: in Integer);
+      procedure setDistance (dist: in Integer);
       procedure print_data;
 
    private
@@ -154,6 +156,7 @@ package broker_race_status is
       retired : boolean := false;
       race_completed : boolean := false;
       ranking : Integer := 0;
+      distance : Integer := 0;
 
    end car_snapshot;
 

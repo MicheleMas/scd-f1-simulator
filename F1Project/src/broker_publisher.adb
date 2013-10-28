@@ -86,12 +86,13 @@ package body broker_publisher is
                over : Boolean;
                weather : Boolean;
                rank : Integer;
+	       dist : Integer;
             begin
                -- insert weather in the content
                frame.get_rain(weather);
                Content.Set_Boolean("rain", weather);
                for i in Positive range 1 .. cars_number loop
-                  current_snapshot(i).get_data(lap, seg, prog, inci, dama, ret ,over, rank);
+                  current_snapshot(i).get_data(lap, seg, prog, inci, dama, ret ,over, rank, dist);
                   Content.Set_Integer("lap" & Positive'Image(i), YAMI_Integer(lap));
                   Content.Set_Integer("seg" & Positive'Image(i), YAMI_Integer(seg));
                   Content.Set_Integer("prog" & Positive'Image(i), YAMI_Integer(Integer(prog)));
@@ -100,6 +101,7 @@ package body broker_publisher is
                   Content.Set_Boolean("dama" & Positive'Image(i), dama);
                   Content.Set_Boolean("over" & Positive'Image(i), over);
                   Content.Set_Integer("rank" & Positive'Image(i), YAMI_Integer(rank));
+		  Content.Set_Integer("dist" & Positive'Image(i), YAMI_Integer(dist));
                end loop;
             end;
             Snapshot_Publisher.Publish(Content);
