@@ -10,6 +10,7 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import javax.swing.*;
 import java.util.*;
+import java.text.DecimalFormat;
 
 public class Window extends JPanel implements Runnable {
 
@@ -119,7 +120,7 @@ public class Window extends JPanel implements Runnable {
 					text += "Clear";
 				statusLabel.setText(text);
 
-				text = "<html><h2>Ranking:</h2><table border='1'><tr><td><b>Position</b></td><td><b>Pilot</b></td><td><b>Lap</b></td></tr>";
+				text = "<html><h2>Ranking:</h2><table border='1'><tr><td><b>Position</b></td><td><b>Pilot</b></td><td><b>Lap</b></td><td><b>Distance</b></td></tr>";
 				while(!ranking.isEmpty()) {
 					int carID = ranking.remove(0).carID;
 					stat = updater.raceUpdate(carID);
@@ -145,7 +146,21 @@ public class Window extends JPanel implements Runnable {
 						}
 					}
 					text += "</td><td><font color='"+colors[carID]+"'>"+names[carID]+"</font></td>"+"<td>"+stat.getLap()+"</td>";
-					text += "<td>"+stat.getDist()+"</td></tr>";
+					int millis = stat.getDist();
+					int min = 0;
+					int sec = 0;
+					while(millis>60000) {
+						min++;
+						millis -= 60000;
+					}
+					while(millis>1000) {
+						sec++;
+						millis -= 1000;
+					}
+					if (min>0) {
+						text += min+"m ";
+					}
+					text += "<td>"+sec+"s "+millis+"ms"+"</td></tr>";
 					counter++;
 					if(!stat.getRet()) {
 						p = map.getPosition(stat.getSeg(), stat.getProg());
