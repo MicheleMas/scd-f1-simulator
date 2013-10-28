@@ -120,7 +120,8 @@ public class Window extends JPanel implements Runnable {
 					text += "Clear";
 				statusLabel.setText(text);
 
-				text = "<html><h2>Ranking:</h2><table border='1'><tr><td><b>Position</b></td><td><b>Pilot</b></td><td><b>Lap</b></td><td><b>Distance</b></td></tr>";
+				boolean first = true;
+				text = "<html><h2>Ranking:</h2><table border='1'><tr><td><b>Position</b></td><td><b>Pilot</b></td><td><b>Lap</b></td><td><b>Time Distance</b></td></tr>";
 				while(!ranking.isEmpty()) {
 					int carID = ranking.remove(0).carID;
 					stat = updater.raceUpdate(carID);
@@ -149,18 +150,23 @@ public class Window extends JPanel implements Runnable {
 					int millis = stat.getDist();
 					int min = 0;
 					int sec = 0;
-					while(millis>60000) {
+					while(millis>=60000) {
 						min++;
 						millis -= 60000;
 					}
-					while(millis>1000) {
+					while(millis>=1000) {
 						sec++;
 						millis -= 1000;
 					}
+					text += "<td>";
+					if (first)
+						first = false;
+					else
+						text += "+";
 					if (min>0) {
 						text += min+"m ";
 					}
-					text += "<td>"+sec+"s "+millis+"ms"+"</td></tr>";
+					text += sec+"."+millis+"</td></tr>";
 					counter++;
 					if(!stat.getRet()) {
 						p = map.getPosition(stat.getSeg(), stat.getProg());
