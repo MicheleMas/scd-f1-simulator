@@ -29,6 +29,7 @@ public class Communicator implements Runnable {
 	private static boolean[] ret;
 	private static boolean[] over;
 	private static int[] rank;
+	private static int[] dist;
 
 	public Communicator(String publishAddress, int carNumber, int lapNumber, int segmentNumber) {
 		this.publishAddress = publishAddress;
@@ -46,6 +47,7 @@ public class Communicator implements Runnable {
 		ret = new boolean[carNumber];
 		over = new boolean[carNumber];
 		rank = new int[carNumber];
+		dist = new int[carNumber];
 	}
 
 	// PUBLISH METHODS
@@ -94,7 +96,7 @@ public class Communicator implements Runnable {
 							}
 							progTempInt[car] = (int)progTemp[car];
 						}
-						data.setData(lapTemp, segTemp, progTempInt, inci, dama, ret, over, rank);
+						data.setData(lapTemp, segTemp, progTempInt, inci, dama, ret, over, rank, dist);
 						Thread.currentThread().sleep(50);
 					}
 				}
@@ -108,8 +110,9 @@ public class Communicator implements Runnable {
 					ret[i-1] = content.getBoolean("ret "+i);
 					over[i-1] = content.getBoolean("over "+i);
 					rank[i-1] = content.getInteger("rank "+i);
+					dist[i-1] = content.getInteger("dist "+i);
 			}
-			data.setData(lap, seg, prog, inci, dama, ret, over, rank);
+			data.setData(lap, seg, prog, inci, dama, ret, over, rank, dist);
 			firstRun = false;
 			} catch (Exception e) {
 				e.printStackTrace();
