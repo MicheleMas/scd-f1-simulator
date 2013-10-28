@@ -141,7 +141,8 @@ package body broker_race_status is
                          dama : out Boolean;
                          ret : out Boolean;
                          over : out Boolean;
-                         rank : out Integer) is
+                         rank : out Integer;
+			 dist : out Integer) is
       begin
          lapc := lap;
          seg := segment;
@@ -151,12 +152,18 @@ package body broker_race_status is
          dama := damaged;
          over := race_completed;
          rank := ranking;
+	 dist := distance;
       end get_data;
 
       procedure setRank(rank : in Integer) is
       begin
          ranking := rank;
       end setRank;
+
+      procedure setDistance(dist : in Integer) is
+      begin
+	 distance := dist;
+      end setDistance;
 
       procedure set_data(lapc : in Integer;
                          seg : in Integer;
@@ -190,7 +197,8 @@ package body broker_race_status is
 
       procedure print_data is
       begin
-         Ada.Text_IO.Put_Line(Integer'Image(lap) & " - " & Integer'Image(segment) & " " & Integer'Image(Integer(progress)) & " -  Incident=" & Boolean'Image(incident) & " Damaged=" & Boolean'Image(damaged) & " Ret=" & Boolean'Image(retired) & " Completed=" & Boolean'Image(race_completed) & " Rank =" &Integer'Image(ranking));
+         -- Ada.Text_IO.Put_Line(Integer'Image(lap) & " - " & Integer'Image(segment) & " " & Integer'Image(Integer(progress)) & " -  Incident=" & Boolean'Image(incident) & " Damaged=" & Boolean'Image(damaged) & " Ret=" & Boolean'Image(retired) & " Completed=" & Boolean'Image(race_completed) & " Rank =" &Integer'Image(ranking) & " Dist =" &Integer'Image(distance));
+	 Ada.Text_IO.Put_Line(" Rank =" &Integer'Image(ranking) & " Dist =" &Integer'Image(distance));
       end print_data;
 
    end car_snapshot;
