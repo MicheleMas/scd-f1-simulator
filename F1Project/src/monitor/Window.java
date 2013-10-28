@@ -24,7 +24,7 @@ public class Window extends JPanel implements Runnable {
 	static BufferedImage track;
 	static Drawer map;
 	static final int HEIGHT = 650;
-	static final int WIDTH = 960;
+	static final int WIDTH = 1100;
 	static final int RACE_H = 400;
 	static final int RACE_W = 780;
 	static String[] names;
@@ -144,7 +144,8 @@ public class Window extends JPanel implements Runnable {
 							}
 						}
 					}
-					text += "</td><td><font color='"+colors[carID]+"'>"+names[carID]+"</font></td>"+"<td>"+stat.getLap()+"</td></tr>";
+					text += "</td><td><font color='"+colors[carID]+"'>"+names[carID]+"</font></td>"+"<td>"+stat.getLap()+"</td>";
+					text += "<td>"+stat.getDist()+"</td></tr>";
 					counter++;
 					if(!stat.getRet()) {
 						p = map.getPosition(stat.getSeg(), stat.getProg());

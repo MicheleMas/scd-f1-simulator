@@ -8,8 +8,9 @@ public class Status {
 	private boolean ret;
 	private boolean over;
 	private int rank;
+	private int dist;
 
-	public Status(int lap, int seg, int prog, boolean inci, boolean dama, boolean ret, boolean over, int rank) {
+	public Status(int lap, int seg, int prog, boolean inci, boolean dama, boolean ret, boolean over, int rank, int dist) {
 		this.lap = lap;
 		this.seg = seg;
 		this.prog = prog;
@@ -18,6 +19,7 @@ public class Status {
 		this.ret = ret;
 		this.over = over;
 		this.rank = rank;
+		this.dist = dist;
 	}
 
 	public int getLap() {
@@ -50,5 +52,9 @@ public class Status {
 
 	public int getRank() {
 		return rank;
+	}
+
+	public int getDist() {
+		return dist;
 	}
 }
