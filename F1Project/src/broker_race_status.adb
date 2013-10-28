@@ -10,6 +10,10 @@ package body broker_race_status is
       begin
          return time;
       end get_time;
+      function get_lap return Integer is
+      begin
+         return lap;
+      end get_lap;
       function get_segment return Integer is
       begin
          return segment;

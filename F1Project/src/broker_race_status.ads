@@ -6,6 +6,7 @@ package broker_race_status is
    -------- Positions array ---------
 
    protected type enter_segment (time : Integer;
+				 lap : Integer;
                                  segment : Integer;
                                  speed : Integer;
                                  behaviour : Integer;
@@ -13,6 +14,7 @@ package broker_race_status is
                                  rain_tire : Boolean;
                                  require_box : Boolean) is
       function get_time return Integer;
+      function get_lap return Integer;
       function get_segment return Integer;
       function get_speed return Integer;
       function get_behaviour return Integer;
