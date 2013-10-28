@@ -78,6 +78,7 @@ procedure Broker is
             race_stat.set_real_car_number(Integer'Value(Content.Get_String("ncar")));
             race_stat.set_real_laps_number(Integer'Value(Content.Get_String("nlap")));
             race_stat.real_car_number(cars);
+	    
             Ada.Text_IO.Put_Line("Number of cars: " & Integer'Image(cars) & " Number of laps: " & Integer'Image(race_stat.real_laps_number));
          end if;
 
@@ -92,7 +93,7 @@ procedure Broker is
                tires_status : Integer := Integer'Value(Content.Get_String("tire_s"));
                rain_tires : Boolean := Content.Get_Boolean("tire_t");
                require_box : Boolean := Content.Get_Boolean("r_box");
-
+	       lap : Integer := current_lap(car);
             begin
                if(seg = 1)
                then
@@ -100,7 +101,7 @@ procedure Broker is
                end if;
                speed_avgs(car) := (speed_avgs(car) * Float(n_speed_avgs(car)) + Float(speed)) / Float(n_speed_avgs(car)+1);
                n_speed_avgs(car) := n_speed_avgs(car) + 1;
-               position_history(car)(position_index(car)) := new enter_segment(time,seg,speed,behaviour,tires_status,rain_tires,require_box);
+               position_history(car)(position_index(car)) := new enter_segment(time,lap,seg,speed,behaviour,tires_status,rain_tires,require_box);
                position_index(car) := position_index(car) + 1;
                if(position_index(car) > 100)
                then
@@ -132,7 +133,7 @@ procedure Broker is
                if(event = "LB")
                then
                   initial_lap_time(car) := time;
-                  position_history(car)(position_index(car)) := new enter_segment(time,-1,0,-1,-1,Content.Get_Boolean("tire_t"),false);
+                  position_history(car)(position_index(car)) := new enter_segment(time,lap,-1,0,-1,-1,Content.Get_Boolean("tire_t"),false);
                   position_index(car) := position_index(car) + 1;
                   if(position_index(car) > 100)
                   then
@@ -155,14 +156,15 @@ procedure Broker is
                damage : Boolean := Content.Get_Boolean("damage");
                time : Integer := Integer((Float'Value(Content.Get_String("time")))*1000.0);
                seg : Positive := Positive'Value(Content.Get_String("seg"));
+	       lap : Integer := current_lap(car);
             begin
                if(retired) then
                   last_incident(car):=new incident_event(time+10000,seg,damage,retired);
-                  position_history(car)(position_index(car)) := new enter_segment(time,seg,0,0,0,false,false);
+                  position_history(car)(position_index(car)) := new enter_segment(time,lap,seg,0,0,0,false,false);
                   position_index(car) := position_index(car) + 1;
                   if(position_index(car)=2)
                   then
-                      position_history(car)(position_index(car)) := new enter_segment(time,seg,0,0,0,false,false);
+                      position_history(car)(position_index(car)) := new enter_segment(time,lap,seg,0,0,0,false,false);
                       position_index(car) := position_index(car) + 1;
                   end if;
 
@@ -253,7 +255,7 @@ begin
       nCompleted:=0;
       for i in Positive range 1 ..cars loop
          --we add a special event for each type to each car, to underline that they are on starting lane
-         position_history(i)(1) := new enter_segment(0,0,0,0,0,false,false);
+         position_history(i)(1) := new enter_segment(0,0,0,0,0,0,false,false);
          position_index(i) := 2;
          last_incident(i) := new incident_event(0,0,false,false);
          last_box(i) := new box_event(0);
@@ -262,7 +264,7 @@ begin
          speed_avgs(i) := 0.0;
          lap_time_avg(i) := 0;
          n_speed_avgs(i) := 0;
-         current_lap(i) := 1;
+         current_lap(i) := 0;
          retired_cars(i) := false;
          damaged_cars(i) := false;
          completed_cars(i) := false;
@@ -435,7 +437,7 @@ begin
 	    -- we calculate the distance between the first car and the other, in milliseconds
 	    for i in Positive range 1 .. cars loop
 		if(i = polePosition or retired_cars(i) or completed_cars(i))  then
-			distanceFromFirst := 0;
+			distanceFromFirst := t;
 		else
 			-- we search when the car in polePosition was in the same segment as i
 			indexPreEvent := position_index(polePosition) - 1;
@@ -449,13 +451,29 @@ begin
         	             		indexPreEvent := 100 - indexPreEvent;
       	          		end if;
 			end loop;
+
 			indexNextEvent := position_index(i) -1;
 			if(indexNextEvent < 1) then
         	             indexNextEvent := 100 - indexNextEvent;
       	          	end if;
-			distanceFromFirst := position_history(i)(indexNextEvent).get_time - position_history(polePosition)(indexPreEvent).get_time;
+			while(indexNextEvent /= position_index(i) and position_history(i)(indexNextEvent).get_segment /= 0 and snapshot(i).getSeg /= position_history(i)(indexNextEvent).get_segment)
+			loop
+				indexNextEvent := indexNextEvent - 1;
+				if(indexNextEvent < 1) then
+        		             	indexNextEvent := 100 - indexNextEvent;
+	      	          	end if;
+			end loop;
+
+			if(position_history(i)(indexNextEvent).get_segment = position_history(polePosition)(indexPreEvent).get_segment) then
+				distanceFromFirst := position_history(i)(indexNextEvent).get_time - position_history(polePosition)(indexPreEvent).get_time;
+			end if;
 			-- if lap of polePosition is bigger than this, we multiply the difference for best_lap
-			--distanceFromFirst := distanceFromFirst + best_lap_time(i) * (position_history(polePosition)(indexPreEvent).getLap - position_history(i)(indexNextEvent).getLap);
+			if(position_history(polePosition)(indexPreEvent).get_lap /= position_history(i)(indexNextEvent).get_lap) then
+				 Ada.Text_IO.Put_Line("DIVERSO!");
+				 distanceFromFirst := distanceFromFirst + best_lap_time(polePosition) * (position_history(polePosition)(indexPreEvent).get_lap - position_history(i)(indexNextEvent).get_lap);
+			end if;
+			Ada.Text_IO.Put_Line("DEBUG " &Integer'Image(position_history(i)(indexNextEvent).get_lap));
+			
 		end if;
 		snapshot(i).setDistance(distanceFromFirst);
 	    end loop;
