@@ -92,6 +92,7 @@ procedure Broker is
                tires_status : Integer := Integer'Value(Content.Get_String("tire_s"));
                rain_tires : Boolean := Content.Get_Boolean("tire_t");
                require_box : Boolean := Content.Get_Boolean("r_box");
+
             begin
                if(seg = 1)
                then
@@ -454,7 +455,7 @@ begin
       	          	end if;
 			distanceFromFirst := position_history(i)(indexNextEvent).get_time - position_history(polePosition)(indexPreEvent).get_time;
 			-- if lap of polePosition is bigger than this, we multiply the difference for best_lap
-			distanceFromFirst := distanceFromFirst + best_lap_time(i) * (position_history(polePosition)(indexPreEvent).getLap - position_history(i)(indexNextEvent).getLap);
+			--distanceFromFirst := distanceFromFirst + best_lap_time(i) * (position_history(polePosition)(indexPreEvent).getLap - position_history(i)(indexNextEvent).getLap);
 		end if;
 		snapshot(i).setDistance(distanceFromFirst);
 	    end loop;
