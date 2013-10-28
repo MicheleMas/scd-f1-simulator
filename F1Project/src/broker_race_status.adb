@@ -201,8 +201,7 @@ package body broker_race_status is
 
       procedure print_data is
       begin
-         -- Ada.Text_IO.Put_Line(Integer'Image(lap) & " - " & Integer'Image(segment) & " " & Integer'Image(Integer(progress)) & " -  Incident=" & Boolean'Image(incident) & " Damaged=" & Boolean'Image(damaged) & " Ret=" & Boolean'Image(retired) & " Completed=" & Boolean'Image(race_completed) & " Rank =" &Integer'Image(ranking) & " Dist =" &Integer'Image(distance));
-	 Ada.Text_IO.Put_Line(" Rank =" &Integer'Image(ranking) & " Dist =" &Integer'Image(distance));
+         Ada.Text_IO.Put_Line(Integer'Image(lap) & " - " & Integer'Image(segment) & " " & Integer'Image(Integer(progress)) & " -  Incident=" & Boolean'Image(incident) & " Damaged=" & Boolean'Image(damaged) & " Ret=" & Boolean'Image(retired) & " Completed=" & Boolean'Image(race_completed) & " Rank =" &Integer'Image(ranking) & " Dist =" &Integer'Image(distance));
       end print_data;
 
    end car_snapshot;

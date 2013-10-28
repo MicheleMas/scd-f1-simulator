@@ -438,6 +438,12 @@ begin
 	    for i in Positive range 1 .. cars loop
 		if(i = polePosition or retired_cars(i) or completed_cars(i))  then
 			distanceFromFirst := t;
+			if(retired_cars(i)) then
+				distanceFromFirst := 0;
+			end if;
+			if(completed_cars(i)) then
+				distanceFromFirst := position_history(i)(position_index(i)-1).get_time;
+			end if;
 		else
 			-- we search when the car in polePosition was in the same segment as i
 			indexPreEvent := position_index(polePosition) - 1;
@@ -469,10 +475,9 @@ begin
 			end if;
 			-- if lap of polePosition is bigger than this, we multiply the difference for best_lap
 			if(position_history(polePosition)(indexPreEvent).get_lap /= position_history(i)(indexNextEvent).get_lap) then
-				 Ada.Text_IO.Put_Line("DIVERSO!");
 				 distanceFromFirst := distanceFromFirst + best_lap_time(polePosition) * (position_history(polePosition)(indexPreEvent).get_lap - position_history(i)(indexNextEvent).get_lap);
 			end if;
-			Ada.Text_IO.Put_Line("DEBUG " &Integer'Image(position_history(i)(indexNextEvent).get_lap));
+			--Ada.Text_IO.Put_Line("DEBUG " &Integer'Image(position_history(i)(indexNextEvent).get_lap));
 			
 		end if;
 		snapshot(i).setDistance(distanceFromFirst);
