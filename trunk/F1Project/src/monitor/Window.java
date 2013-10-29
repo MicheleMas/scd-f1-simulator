@@ -123,14 +123,19 @@ public class Window extends JPanel implements Runnable {
 				boolean first = true;
 				text = "<html><h2>Ranking:</h2><table border='1'><tr><td><b>Position</b></td><td><b>Pilot</b></td><td><b>Lap</b></td><td><b>Time Distance</b></td></tr>";
 				while(!ranking.isEmpty()) {
+					boolean end = false;
+					boolean distNotAvailable = false;
 					int carID = ranking.remove(0).carID;
 					stat = updater.raceUpdate(carID);
 					text += "<tr><td>";
-					if(stat.getRet())
+					if(stat.getRet()) {
 						text += " *RET*";
+						distNotAvailable = true;
+					}
 					else {
 						if(stat.getSeg() == -1) {
 							text += " *BOX*";
+							distNotAvailable = true;
 						} else {
 							text += counter+"°";
 							if(stat.getInci() && !stat.getDama()) {
@@ -138,6 +143,7 @@ public class Window extends JPanel implements Runnable {
 							} else {
 								if (stat.getOver()) {
 									text += " <font color='green'>*END*</font>";
+									end = true;
 								} else {
 									if (stat.getDama()) {
 										text += " <font color='red'>*DMG*</font>";
@@ -159,14 +165,20 @@ public class Window extends JPanel implements Runnable {
 						millis -= 1000;
 					}
 					text += "<td>";
-					if (first)
-						first = false;
-					else
-						text += "+";
-					if (min>0) {
-						text += min+"m ";
+					if (!(end || distNotAvailable))
+						if (first) {
+							first = false;
+						} else {
+							text += "+";
+						}
+					if (distNotAvailable) {
+						text += "-</td></tr>";
+					} else {
+						if (min>0) {
+							text += min+"m ";
+						}
+						text += sec+"."+millis+"</td></tr>";
 					}
-					text += sec+"."+millis+"</td></tr>";
 					counter++;
 					if(!stat.getRet()) {
 						p = map.getPosition(stat.getSeg(), stat.getProg());
