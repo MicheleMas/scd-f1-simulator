@@ -60,7 +60,7 @@ package body referee_p is
       begin
          incident := 0;
 
-         if ((c_status.pitStop4tires or c_status.is_damaged) and seg.isBoxEntrance and (not last_lap)) -- TODO non deve entrare ai box all'ultimo giro!
+         if ((c_status.pitStop4tires or c_status.is_damaged) and seg.isBoxEntrance and (not last_lap))
          then
 
             -- box
@@ -204,11 +204,14 @@ package body referee_p is
 
             -- update referee
             nextReferee := next;
+		
+	    -- TODO controlliamo se toSleep è uguale (a meno di una costante epsilon) ad un elemento del sortedCarArray, nel caso sommiamo un certo valore (dimostrare che è piccolo ma grande abbastanza) al toSleep e ricontrolliamo.
 
             -- update counter and status
             carCounter := carCounter + 1;
             sortedCarArray(car_number) := toSleep;
             Sort(sortedCarArray); --bigger value at position 1.
+
          end if;
 
       end enterSegment;
