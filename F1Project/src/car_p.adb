@@ -24,6 +24,7 @@ package body car_p is
    begin
 
       speed := status.get_currentSpeed; -- the initial speed should be zero?
+      -- TODO prima del loop, prendiamo dal circuit il tempo a cui dovremo risvegliarci col dealy until (se non è un problema mettiamo nel costruttore)
       while (not race_over) loop
          previousReferee := nextReferee;
 

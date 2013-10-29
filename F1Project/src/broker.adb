@@ -436,7 +436,7 @@ begin
 
 	    -- we calculate the distance between the first car and the other, in milliseconds
 	    for i in Positive range 1 .. cars loop
-		if(i = polePosition or retired_cars(i) or completed_cars(i))  then
+		if(i = polePosition or retired_cars(i) or completed_cars(i) or snapshot(i).getSeg = -1)  then
 			distanceFromFirst := t;
 			if(retired_cars(i)) then
 				distanceFromFirst := 0;
