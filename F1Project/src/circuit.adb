@@ -59,7 +59,6 @@ package body Circuit is
       event_buffer.insert_event(event);
      
       race_stat.start_race;
-      firstReferee.setStart;
 
    end bootstrap;
 

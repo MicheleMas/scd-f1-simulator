@@ -14,6 +14,7 @@ package body referee_p is
    type timeArray is array(Natural range <>) of Ada.Real_Time.Time;
    procedure Sort is new Ada.Containers.Generic_Array_Sort (Natural,Ada.Real_Time.Time,timeArray,"<" => ">");
    sortedCarArray : timeArray(1 .. car_number);
+   i : integer;
 
    -----------------------------------------------------------------------
    --------------------------- REFEREE -----------------------------------
@@ -28,11 +29,7 @@ package body referee_p is
       begin
          seg := new_seg;
       end setSegment;
-      procedure setStart is
-      begin
-         isStarted := true;
-      end setStart;
-      entry enterSegment (car_ID : in Positive;
+      procedure enterSegment (car_ID : in Positive;
                           c_status : in Car_Status_Access;
                           speed : in out Float;
                           toSleep : in out Ada.Real_Time.Time;
@@ -40,7 +37,7 @@ package body referee_p is
                           box_stop : out Boolean;
                           isRaining : in Boolean;
                           incident : out Natural;
-                          last_lap : in Boolean) when isStarted is
+                          last_lap : in Boolean) is
          car_behaviour : Positive := c_status.get_currentBehaviour;
          maxSpeed : Positive := c_status.max_speed;
          acceleration : Positive := c_status.acceleration;
@@ -56,7 +53,7 @@ package body referee_p is
          blockingCar : Positive := car_ID;
          initialSpeed : Float;
          Incident_Chance : Integer := 1;
-         numRandom : Positive := 1;
+         numRandom : Integer := 1;
       begin
          incident := 0;
 
@@ -206,6 +203,26 @@ package body referee_p is
             nextReferee := next;
 		
 	    -- TODO controlliamo se toSleep è uguale (a meno di una costante epsilon) ad un elemento del sortedCarArray, nel caso sommiamo un certo valore (dimostrare che è piccolo ma grande abbastanza) al toSleep e ricontrolliamo.
+	    i := 1;
+	    while(i <= carCounter and sortedCarArray(i) - toSleep > epsilon)
+	    loop
+		i := i + 1;
+	    end loop;
+	    -- a car exit in the same (too close) time
+	    if( abs(sortedCarArray(i) - toSleep) < epsilon )
+	    then
+		--Ada.Text_IO.Put_Line ("Sono vivo!");
+		while(i > 0)
+		loop
+			-- that's because there is no lazy evaluation in two while conditions separated by an AND operator
+			if(abs(sortedCarArray(i) - toSleep) < epsilon)
+			then
+				toSleep := toSleep + epsilon;
+			end if;
+			i := i - 1;
+		end loop;
+		--Ada.Text_IO.Put_Line ("E ora no.");
+	    end if;
 
             -- update counter and status
             carCounter := carCounter + 1;
