@@ -53,8 +53,7 @@ package body parser is
                   -- create a linked referee
                   Working_Ref := new Referee(seg.id, null, First_Ref);
                   Working_Ref.setSegment(seg);
-                  -- we mark as started all segments except first
-                  Working_Ref.setStart;
+
                   Current_Ref.setNext(Working_Ref);
                   Current_Ref := Working_Ref;
                end if;

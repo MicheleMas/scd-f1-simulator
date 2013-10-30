@@ -19,8 +19,7 @@ package referee_p is
                            First_Referee : Referee_Access) is
       function getSegment return Segment_Access;
       procedure setSegment (new_seg : in Segment_Access);
-      procedure setStart;
-      entry enterSegment (car_ID : in Positive;
+      procedure enterSegment (car_ID : in Positive;
                           c_status : in Car_Status_Access;
                           speed : in out Float;
                           toSleep : in out Ada.Real_Time.Time;

@@ -1,10 +1,13 @@
 with Ada.Real_Time;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Real_Time;
+use Ada.Real_Time;
 package global_custom_types is
 
    -- constants
    car_number : Positive := 20; -- max number of cars
    laps_number : Positive := 90; -- max number of laps
+   epsilon : Ada.Real_Time.Time_Span := Ada.Real_Time.Milliseconds (100); --a very short time span
 
    type Segment (id : Positive;
                  length : Positive;
