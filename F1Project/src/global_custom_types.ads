@@ -1,3 +1,4 @@
+with Ada.Real_Time;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 package global_custom_types is
 
@@ -37,5 +38,8 @@ package global_custom_types is
    type event_array is array (1 .. 9) of Unbounded_String;
 
    type event_array_Access is access event_array;
+
+   use type Ada.Real_Time.Time_Span;
+   type Time_Access is access Ada.Real_Time.Time;
 
 end global_custom_types;

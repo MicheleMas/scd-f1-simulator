@@ -22,7 +22,8 @@ package car_p is
                   initialReferee : Referee_Access;
                   status : Car_Status_Access;
                   event_buffer : Event_Bucket_Access;
-                  race_stat : race_status_Access);
+                  race_stat : race_status_Access;
+		  Poll_Time_Access : Time_Access);
 
    type Car_Access is access Car;
 

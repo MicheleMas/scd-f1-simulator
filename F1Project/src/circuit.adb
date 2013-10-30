@@ -1,4 +1,3 @@
-with Ada.Real_Time;
 with Ada.Text_IO;
 use Ada.Text_IO;
 with Ada.Containers.Indefinite_Vectors;
@@ -28,6 +27,9 @@ package body Circuit is
       real_cnumber : Integer;
       real_lapn : Integer;
       event : event_array_Access := new event_array;
+      
+      Poll_Time :          Ada.Real_Time.Time := Ada.Real_Time.Clock; -- time to start polling
+      poll_time_access : Time_Access := Poll_Time'Access;
    begin
       firstReferee := parser.readCircuit("circuit.txt");
       Ada.Text_IO.Put_Line ("Circuit parsed.");
@@ -40,7 +42,7 @@ package body Circuit is
 
       For_Loop :
       for i in Integer range 1 .. real_cnumber loop
-         car_array(i) := new Car(i,firstReferee,car_status_array(i), event_buffer, race_stat);
+         car_array(i) := new Car(i,firstReferee,car_status_array(i), event_buffer, race_stat, poll_time_access);
       end loop For_Loop;
       Ada.Text_IO.Put_Line ("Tasks built. ");
 
