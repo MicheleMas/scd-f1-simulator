@@ -10,7 +10,7 @@ with Publisher;
 use Publisher;
 with controller_server;
 use controller_server;
-with Ada.Real_Time;
+with Ada.Real_Time; use Ada.Real_Time;
 
 package body Circuit is
 
@@ -39,6 +39,7 @@ package body Circuit is
 
       race_stat.set_real_car_number(real_cnumber);
       race_stat.set_real_laps_number(real_lapn);
+      Poll_Time := Poll_Time + Ada.Real_Time.Milliseconds (5000);
       race_stat.set_starting_time(Poll_Time);
 
       For_Loop :
@@ -51,11 +52,12 @@ package body Circuit is
       publisher := new Event_Handler(event_buffer, race_stat);
 
       --let's start the race
+      delay until Poll_Time;
       event(1) := Ada.Strings.Unbounded.To_Unbounded_String("SE");
       event(2) := Ada.Strings.Unbounded.To_Unbounded_String(Positive'Image(real_cnumber));
       event(3) := Ada.Strings.Unbounded.To_Unbounded_String(Positive'Image(race_stat.real_laps_number));
       event_buffer.insert_event(event);
-
+     
       race_stat.start_race;
       firstReferee.setStart;
 
