@@ -17,6 +17,8 @@ package global_custom_types is
    type Segment_Access is access Segment;
 
    protected type race_status is
+      procedure set_starting_time( start_time : in Ada.Real_Time.Time);
+      function get_starting_time return Ada.Real_Time.Time ;
       procedure set_real_car_number ( number : in Integer);
       procedure set_real_laps_number ( number : in Integer);
       entry real_car_number (cars : out Integer);
@@ -30,6 +32,7 @@ package global_custom_types is
       real_laps : Integer := laps_number;
       registered_cars : Integer;
       cars_racing : Natural := car_number;
+      starting_time : Ada.Real_Time.Time;
 
    end race_status;
 

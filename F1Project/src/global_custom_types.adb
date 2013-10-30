@@ -1,6 +1,16 @@
 package body global_custom_types is
 
    protected body race_status is
+      procedure set_starting_time ( start_time : in Ada.Real_Time.Time) is
+      begin
+	starting_time := start_time;
+      end set_starting_time;
+
+      function get_starting_time return Ada.Real_Time.Time is
+      begin
+	 return starting_time;
+      end get_starting_time;
+
       procedure set_real_car_number ( number : in Integer) is
       begin
          registered_cars := number;
