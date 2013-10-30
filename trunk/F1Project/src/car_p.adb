@@ -18,8 +18,8 @@ package body car_p is
       request_box : Boolean := false;
 
       use type Ada.Real_Time.Time_Span;
-      --Poll_Time :          Ada.Real_Time.Time := Ada.Real_Time.Clock; -- time to start polling
-      Poll_Time : Ada.Real_Time.Time := Poll_Time_Access; -- time to start polling
+      Poll_Time :          Ada.Real_Time.Time := Ada.Real_Time.Clock; -- time to start polling
+      --Poll_Time : Ada.Real_Time.Time := race_stat.starting_time; -- time to start polling
       toSleep   :          Ada.Real_Time.Time;
       durationToSleep : Ada.Real_Time.Time_Span;
    begin
