@@ -64,7 +64,7 @@ package body referee_p is
          then
 
             -- box
-            toSleep := initialTime + Ada.Real_Time.Milliseconds (15000);
+            toSleep := initialTime + Ada.Real_Time.Milliseconds (5000);
             if (c_status.pitStop4tires)
             then
                c_status.Change_Tires(false);

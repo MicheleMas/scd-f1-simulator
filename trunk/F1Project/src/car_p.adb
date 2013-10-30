@@ -18,15 +18,18 @@ package body car_p is
       request_box : Boolean := false;
 
       use type Ada.Real_Time.Time_Span;
-      Poll_Time :          Ada.Real_Time.Time := Ada.Real_Time.Clock; -- time to start polling
-      --Poll_Time : Ada.Real_Time.Time := race_stat.starting_time; -- time to start polling
+      --Poll_Time :          Ada.Real_Time.Time := Ada.Real_Time.Clock; -- time to start polling
+      Poll_Time : Ada.Real_Time.Time := race_stat.get_starting_time; -- time to start polling
       toSleep   :          Ada.Real_Time.Time;
       durationToSleep : Ada.Real_Time.Time_Span;
+      epsilon : Ada.Real_Time.Time_Span; --a very short time span
    begin
 
       speed := status.get_currentSpeed; -- the initial speed should be zero?
-      -- TODO prima del loop, prendiamo dal circuit il tempo a cui dovremo risvegliarci col dealy until (se non è un problema mettiamo nel costruttore)
-      toSleep := Poll_Time;
+      -- TODO prima del loop, prendiamo dal circuit il tempo a cui dovremo risvegliarci col dealy until (messo nella risorsa esterna race_stat)
+      epsilon := Ada.Real_Time.Milliseconds (100);
+      toSleep := Poll_Time + epsilon * id;
+      delay until toSleep;
 
       while (not race_over) loop
          previousReferee := nextReferee;
