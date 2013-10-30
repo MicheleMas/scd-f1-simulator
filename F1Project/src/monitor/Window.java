@@ -78,7 +78,7 @@ public class Window extends JPanel implements Runnable {
 		panel.add(statusLabel);
 		panel.add(race);
 		panel.add(rankLabel);
-		rankLabel.setText("prova");
+		rankLabel.setText("");
 		frame.setLocationRelativeTo(null);
 		
 		frame.setVisible(true);

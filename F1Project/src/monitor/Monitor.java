@@ -27,6 +27,16 @@ public class Monitor {
 			pullAddress = args[1];
 		}
 
+		final JFrame frame = new JFrame("Monitor");
+		JPanel loadingPanel = (JPanel) frame.getContentPane();
+		loadingPanel.setLayout(null);
+		frame.setSize(1100, 650);
+		JLabel loading = new JLabel("Loading, please wait...");
+		loading.setBounds(500 ,250 ,200 , 100);
+		loadingPanel.add(loading);
+		frame.setVisible(true);
+		frame.setLocationRelativeTo(null);
+
 		// setup
 		String request = "S";
 		System.out.println("Waiting for the connection");
@@ -66,7 +76,7 @@ public class Monitor {
 					colors = driv.getColors();
 
 					// inizializzazione finestra
-					final JFrame frame = new JFrame("Monitor");
+					//final JFrame frame = new JFrame("Monitor");
 					GUI = new Window(connection, frame, map, names, colors);
 					frame.addWindowListener(new WindowAdapter() {
 					@Override
