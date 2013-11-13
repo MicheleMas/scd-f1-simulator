@@ -1,0 +1,67 @@
+\chapter{Analisi della concorrenza} % Main chapter title
+
+\label{Chapter4} % Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
+
+\lhead{Capitolo 4. \emph{Analisi della concorrenza}} % Change X to a consecutive number; this is for the header on each page - perhaps a shortened title
+
+%----------------------------------------------------------------------------------------
+%	SECTION 1
+%----------------------------------------------------------------------------------------
+
+\section{Determinismo}
+
+Il determinismo è quella proprietà che assicura che partendo da un set di condizioni il risultato di uno stesso insieme di azioni sarà sempre lo stesso. In un simulatore questa proprietà è utile alla rappresentazione reale di un sistema, ma non per questo il non determinismo va evitato. In caso voglia essere riprodotto un comportamento reale non deterministico (come una gara automobilistica) può essere utile avere alcune componenti dal comportamento non predeterminato, assicurandosi però che siano controllate, e che rispecchino la imprevedibilità del sistema reale.
+Un esempio di elementi di cui non abbiamo il controllo è lo scheduler; proprio per questo motivo è necessario slegare il funzionamento del simulatore dall’architettura del sistema operativo su cui viene eseguito. 
+Come detto precedentemente viene utilizzato il tempo relativo per ogni calcolo degli intervalli di tempo di percorrenza dei segmenti, che si basano solo su calcoli matematici dettati dalle carratteristiche del veicolo e del tratto che sta attraversando in quel momento, non tenendo mai in considerazione il tempo reale in cui un task è stato risvegliato. Inoltre la maggior parte dei task resta nello stato di sleep per la maggior parte del loro tempo di esecuzione, permettendo di minimizzare il rischio di preemption da parte dello scheduler. Durante tutta la simulazione l’intervallo di tempo in cui il task deve essere risvegliato viene ricavato solo utilizzando il tempo precedente e alcuni parametri statici, quindi se anche un task venisse risvegliato più tardi del previsto il calcolo del successivo non includerebbe alcun ritardo, dato che in questo modo la latenza non è accumulabile.
+Un secondo punto da tenere in considerazione è il risveglio delle macchine, ed il relativo accodamento per entrare nel segmento successivo.
+L’entrata al segmento successivo può essere effettuata in tre modi:
+\begin{itemize}
+ \item Nessun controllo
+ \item Semplice mutua esclusione
+ \item Accodamento
+\end{itemize}
+Il primo caso può essere scartato a priori, dato che come detto precedentemente i segmenti sono risorse protette e senza effettuare controlli si otterrebbero sorpassi impossibili.
+Nel secondo caso ogni macchina quando si sveglia si mette in attesa di entrare all’interno della risorsa protetta, e l’accesso verrà dato ad una delle macchine che attendono secondo una scelta casuale. Questo comportamento potrebbe essere utile a dare un elemento di non determinismo al simulatore, ma porta con se la possibilità di starvation, che causerebbe comportamenti non assimilabili ad un sistema reale, e non sarebbe pienamente controllabile.
+La terza opzione ci dà la garanzia che la starvation non si verificherà, ma toglierà ogni elemento di non determinismo.
+Per quanto la possibilità di starvation sia piuttosto remota dato il numero di macchine, abbiamo preferito rendere il sistema il più robusto possibile, optando per la terza opzione, e occupandoci di aggiungere il non determinismo in altri modi.
+
+%-----------------------------------
+%	SECTION 2
+%-----------------------------------
+\section{Non determinismo}
+
+Come già detto in precedenza, una componente di non determinismo può tornare utile (se controllata) per dare valore aggiunto alla simulazione.
+Quello che abbiamo deciso è stato di simulare degli elementi di non determinismo, in modo da assicurarci che fossero sempre controllabili.
+Per farlo viene sempre aggiunto un elemento casuale all’interno dei calcoli che vengono effettuati durante l’attraversamento di un tratto, in termini di velocità e tempo di attesa (abbastanza piccoli da essere assimilabili a traiettorie o condizioni della pista non ottimali). Inoltre è stata introdotta la possibilità di incidente basandosi sia su caratteristiche fisiche (pista bagnata, gomme non adatte, ecc…) che ed elementi casuali, garantendo risultati diversi per ogni simulazione di gara.
+
+%-----------------------------------
+%	SECTION 3
+%-----------------------------------
+
+\section{Stalli}
+Dato che trattiamo un sistema concorrente, è importante assicurarci che non si verifichino stalli (o deadlock) durante l’esecuzione.
+Affinchè possa verificarsi uno stallo, è necessario che le quattro condizioni di Havender vengano soddisfatte, ovvero:
+\begin{itemize}
+ \item \textbf{Mutua Esclusione}: una risorsa è in mutua esclusione quando può essere posseduta da un processo alla volta. Nel nostro caso ogni segmento di pista è stato implementato in questo modo.
+ \item \textbf{Richieste incrementali}: i processi che possiedono una risorsa la trattengono in attesa dell’acquisizione di altre. Ad esempio una macchina può chiedere l’accesso al segmento successivo essendo ancora nel precedente.
+ \item \textbf{Impossibilità di prelazione}: un processo non può essere costretto a rilasciare una risorsa.
+ \item \textbf{Attesa circolare}: avviene quando un gruppo di processi P1,...,Pn è in attesa di una risorsa posseduta dal processo successivo, creando una catena chiusa.
+\end{itemize}
+Le soluzioni al deadlock sono due, risolverli o prevenirli. Nel caso della risoluzione è necessario rimuovere forzatamente uno dei task che causa lo stallo, interrompendolo o usando il prerilascio. Questa soluzione potrebbe causare la presenza di stati inconsistenti per la “vittima” designata al momento dell’interruzione. 
+Quindi abbiamo scelto la strada della prevenzione, identificando quali condizioni ci permettano di non avere conseguenze nello svolgimento della simulazione.
+La mutua esclusione è necessaria per preservare il corretto funzionamento dei segmenti, infatti è l’unico modo per assicurarci che non ci siano problemi derivanti da race condition, ad esempio nel controllo dei veicoli attualmente presenti in un singolo tratto.
+Come già detto precedentemente, l’utilizzo del prerilascio può portare a stati inconsistenti per il task che viene colpito, e per questo motivo è stato scartato.
+Abbiamo quindi scelto di impedire l’accumulo di risorse, imponendo alle macchine di lasciare il segmento corrente prima di entrare nel successivo. In questo modo, annulliamo almeno una delle quattro precondizioni, e abbiamo conseguentemente la sicurezza che non si verificheranno stalli.
+
+%----------------------------------------------------------------------------------------
+%	SECTION 4
+%----------------------------------------------------------------------------------------
+
+\section{Attraversamento dei segmenti}
+
+L’attraversamento dei tratti è la parte centrale della simulazione, e per questo verrà trattata approfonditamente.
+La prima soluzione a cui abbiamo pensato è stata quella di usare il segmento (risorsa protetta) come gestore degli ingressi basato sulla molteplicità: ovvero consentivamo l’ingresso al segmento solo se le macchina attualmente al suo interno erano <= n (dove n è la molteplicità specidica di quel segmento). Le macchine che non riuscivano e entrare venivano messe in coda in ingresso al segmento e risvegliate solo quando una delle macchine all’interno del segmento ne usciva.
+Per quanto funzionante, la soluzione non rispecchia il comportamento del sistema reale.Una macchina non si ferma mai completamente in attesa che si liberi il segmento successivo, ma rallenta per disporsi dietro alla macchina che lo precede; per questo motivo questa proposta è stata scartata e abbiamo cercato delle soluzioni alternative.
+L’idea a cui siamo giunti è stata quella di non far comunicare direttamente la vettura con la risorsa protetta segmento, ma utilizzare un arbitro come intermediario tra i due. Dato che l’arbitro deve calcolare il tempo di uscita delle macchine dal segmento, può salvare i risultati di questi calcoli e avere quindi un’immagine in tempo reale della situazione del tratto in un dato istante. In questo modo la richiesta di attraversamento da parte di una macchina non viene mai negata o accodata, ma elaborata immediatamente tenendo conto che non potrà uscire del segmento prima che il veicolo che fa saturare la molteplicità di quel segmento non abbia liberato lo spazio necessario. In questo modo diventa possibile far rallentare l’ultima vettura facendola uscire con un maggior ritardo dal segmento.
+Tutto questo funziona perchè l’evento che viene considerato dal simulatore è esclusivamente l’uscita da un segmento in un dato istante di tempo. L’ingresso in un dato segmento viene gestito solo a livello implementativo, e viene considerato come immediatamente successivo all’evento di uscita dal segmento precedente.
+L’implementazione specifica verrà trattata in modo più specifico successivamente.
