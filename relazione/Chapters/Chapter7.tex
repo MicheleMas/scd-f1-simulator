@@ -1,0 +1,21 @@
+% Chapter Template
+
+\chapter{Controllo dei requisiti} % Main chapter title
+
+\label{Chapter7} % Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
+
+\lhead{Capitolo 7. \emph{Controllo dei requisiti}} % Change X to a consecutive number; this is for the header on each page - perhaps a shortened title
+
+I requisiti del sistema erano:
+
+\begin{itemize}
+ \item 1) un circuito, possibilmente selezionabile in fase di configurazione, dotato almeno della pista e della corsia di rifornimento, ciascuna della quali soggette a regole congruenti di accesso, condivisione, tempo di percorrenza, condizioni atmosferiche, ecc.
+ \item 2) un insieme configurabile di concorrenti, ciascuno con caratteristiche specifiche di prestazione, risorse, strategia di gara, ecc.
+ \item 3) un sistema di controllo capace di riportare costantemente, consistentemente e separatamente, lo stato della competizione, le migliori prestazioni (sul giro, per sezione di circuito) e anche la situazione di ciascun concorrente rispetto a specifici parametri tecnici
+ \item 4) una particolare competizione, con specifica configurabile della durata e controllo di terminazione dei concorrenti a fine gara.
+\end{itemize}
+
+Il punto 1 è soddisfatto perchè il circuito di gara viene letto durante l’avvio del sistema da file testuali e costruito in modo da avere sempre una corsia di rifornimento (box). All’interno dei suddetti file sono definite le regole di accesso per ogni segmento che ne fa parte, oltre ad informazioni riguardanti la lunghezza o la difficoltà che permettono al simulatore di calcolarne coerentemente il tempo di percorrenza. Il tempo atmosferico viene gestito da un entità attiva separata dal resto del sistema, e cambia in modo completamente casuale.
+Per quanto riguarda il punto 2, abbiamo che l’insieme dei concorrenti è memorizzato anch’esso all’interno di un file testuale. Ogni concorrente ha le proprie specifiche caratteristiche di velocità massima, accelerazione e comportamento tenuto in gara memorizzate all’interno di tale file.
+Il punto 3 viene soddisfatto dal monitor, in grado di riportare lo stato della competizione, e dal controller, in grado di mostrare per il pilota selezionato le migliori prestazioni sul giro e altri parametri utili per decidere la strategia.
+Infine, per il punto 4, abbiamo che durata e numero di partecipanti alla competizioni vengono anch’essi letti da un file testuale, e al termine gara abbiamo una chiusura ordinata dei componenti facente parte del sistema.

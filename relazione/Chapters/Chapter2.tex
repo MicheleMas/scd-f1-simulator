@@ -1,0 +1,55 @@
+\chapter{Problemi ed analisi delle soluzioni} % Main chapter title
+
+\label{Chapter2} % Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
+
+\lhead{Capitolo 2. \emph{Problematiche}} % Change X to a consecutive number; this is for the header on each page - perhaps a shortened title
+
+%----------------------------------------------------------------------------------------
+%	SECTION 1
+%----------------------------------------------------------------------------------------
+
+\section{Scelta del tipo di simulazione}
+
+I tipi di simulazioni possibili possono dividersi in due categorie:
+\begin{itemize}
+ \item \textbf{Continua}: può essere rappresentata come una grande macchina a stati, in cui lo stato avanza solo quando tutte le operazioni correnti vengono completate. Vengono rappresentati tutti gli stati possibili. Spesso non è possibile garantire l'avanzamento a tempo reale perchè il tick di progressione richiede un tempo maggiore del periodo temporale rappresentato, in quanto l'aggiornamento di stato richiede di considerare un numero di variabili molto elevato.
+ \item \textbf{Discreta}: l’avanzamento di stato avviene solo quando è necessario, e quindi non vengono rappresentati tutti gli stati, ma solo quelli significativi per l’architettura del sistema. In questo caso il tempo di avanzamento non è più lineare, e quindi una rappresentazione a tempo simulato risulta più complicata di quella a tempo reale.
+\end{itemize}
+
+%-----------------------------------
+%	SECTION 2
+%-----------------------------------
+\section{Gestione del tempo}
+
+In una simulazione di F1, una componente molto importante è rappresentata dal tempo. Ci sono due tipi di orologi utilizzabili:
+\begin{itemize}
+ \item \textbf{Clock assoluto}: usa il clock del pc per ottenere il tempo assoluto ad ogni avanzamento di stato
+ \item \textbf{Tempo relativo}: ogni task usa un proprio orario, e calcola autonomamente il tempo relativamente a quello salvato
+\end{itemize}
+Il problema dell’utilizzo del clock è intrinseco nel metodo in cui viene reperito, infatti non c’è modo di avere una risposta immediata alla richiesta di lettura (nel momento in cui si riceve il dato è sicuramente passato un altro breve istante), e non si può nemmeno compensare la latenza di lettura dato il jitter causato dallo scheduler (due letture da due task verranno messe necessariamente in coda).
+Diventa evidente che l’unica soluzione valida sia l’utilizzo del tempo relativo; in particolare nel nostro caso ogni task ha un tempo proprio, e tutte le comunicazioni di eventi si basano su intervalli di tempo calcolati matematicamente a partire dall’intervallo precedente. In questo modo i tempi comunicati saranno sempre offset riferiti ad un zero logico, che è stato definito come istante di inizio della gara.
+
+%-----------------------------------
+%	SECTION 3
+%-----------------------------------
+
+\section{Rappresentazione del circuito}
+Un’altra componente molto importante è il circuito, inteso sia come sequenza di rettilinei e curve che lo definiscono, sia come spazio fisico in cui le macchine si spostano durante la gara. Una delle prime problematiche incontrate è stata quella di riuscire a creare una rappresentazione di un circuito che permettesse di imporre vincoli in grado di riprodurre i limiti fisici dello spazio, garantendo che le macchine non si sovrappongano o che non accadano sorpassi fisicamente impossibili. 
+Per poter fornire queste garanzie, il circuito è stato diviso in numerose risorse protette, che rappresentano i segmenti della pista. Ogni segmento può indicare un rettilineo od una curva, e contiene le informazioni riguardanti il breve tratto che contengono, come la difficoltà, la lunghezza, e la molteplicità. Quest’ultima ci permette di indicare il numero di veicoli che contemporaneamente possono essere contenuti nel tratto; questo parametro è ciò che garantisce che solo un certo numero di auto, coerente con la fisica del tracciato, sia in una certo tratto in un dato tempo, e che un sorpasso possa essere effettuato solo se lo spazio è disponibile, eliminando la possibilità di sorpassi impossibili. La dimostrazione è facilmente intuibile impostando una molteplicità unitaria a tutti i segmenti del circuito: ogni macchina dovrà attendere che il veicolo che la precede liberi il tratto successivo per poter passare, rendendo di fatto impossibile ogni sorpasso, come ci si aspetta.
+
+%----------------------------------------------------------------------------------------
+%	SECTION 4
+%----------------------------------------------------------------------------------------
+
+\section{Rappresentazione dei veicoli}
+
+Come specificato nelle richieste, ogni coppia pilota-vettura possiede una serie di parametri, come l’accelerazione, la velocità massima e la strategia. Per mantenere la simulazione realistica, ogni veicolo è implementato come singolo task, con relativi problemi di concorrenza che verranno trattati più avanti. Come detto precedentemente, è necessario assicurarsi che ogni veicolo rispetti i vincoli e le invarianti nell’attraversamento dei segmenti della pista. Per questo si deve evitare che le macchine siano in grado di autodeterminarsi, decidendo la propria posizione. La soluzione adottata è stata quella di introdurre una ulteriore entità, un arbitro, che gestisce un singolo tratto e che prende le decisioni per tutte le macchine che in un certo momento transitano per il suo spazio di competenza. 
+In questo modo la macchina ha il solo compito di comunicare all’arbitro i propri obiettivi (dettati dalla strategia che segue), e quest’ultimo cercherà di soddisfarli se le condizioni lo permettono.
+
+\section{Determinismo}
+
+\section{Concorrenza}
+ \subsection{Stalli}
+ \subsection{Sorpassi fisicamente impossibili}
+
+\section{Distribuzione}

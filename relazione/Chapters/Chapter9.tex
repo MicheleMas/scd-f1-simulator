@@ -1,0 +1,45 @@
+% Chapter Template
+
+\chapter{Configurazione ed utilizzo} % Main chapter title
+
+\label{Chapter9} % Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
+
+\lhead{Capitolo 9. \emph{Configurazione ed utilizzo}} % Change X to a consecutive number; this is for the header on each page - perhaps a shortened title
+
+La configurazione dei parametri della simulazione viene effettuata tramite cinque file di testo.
+Il file race\textunderscore properties.txt contiene solamente due elementi, il numero di giri ed il numero di veicoli, separati da uno spazio.
+Nel file cars.txt sono presenti tutte le caratteristiche di ogni veicolo, una macchina per ogni riga; in ordine vanno definiti ID, comportamento di default (da 1 a 10), velocità massima in $Km/h$, ed accelerazione in $m/s^2$. Il numero massimo di macchine ammissibile è 20.
+Il circuito logico (cioè i dati utilizzati nella simulazione e non nella visualizzazione) sono contenuti nel file circuit.txt, in cui in ogni riga va inserito un singolo segmento. Le proprietà di ogni segmento sono: ID, lunghezza in metri, molteplicità di vetture contenute, difficoltà, ed un flag t/f che indica se è presente l’ingresso ai box.
+Durante la costruzione il programma collegherà automaticamente ogni segmento al successivo, e l’ultimo segmento al primo, in modo da creare un circuito chiuso.
+I file visti finora sono utilizzati per la logica del sistema, mentre i due successivi per la visualizzazione nel monitor.
+CarsProp.txt permette l’associazione dell’ID di ogni veicolo ad un soprannome (tipicamente le prime tre lettere del cognome) ed a un colore. All’interno del file il numero di riga indica l’ID del veicolo associato.
+L’ultimo file è quello che contiene le informazioni necessarie alla visualizzazione del circuito; circuitMap.txt deve contenere come prima riga un solo numero, che indica il numero di segmenti totali. Successivamente ogni riga rappresenta un tratto, che può essere di due tipi: ogni rettilineo ha come primo valore il carattere ‘S’, seguito dalle coordinate x e y dei punti di inizio e fine, mentre ogni curva ha come primo valore il carattere ‘T’ seguito dai punti necessari alla costruzione della curva di Bézier. Un caso particolare è il tratto del box, caratterizzato dal carattere ‘B’ e trattato come una curva, il cui ingresso è fissato al termine del penultimo segmento e l’uscita è al quarto.
+Tramite questi file è possibile modificare ogni caratteristica della simulazione, dai piloti al circuito, avendo la possibilità di ricostruire una gara a piacere.
+La seconda configurazione necessaria è quella della distribuzione, infatti ogni nodo del sistema ha diversi requisiti. All’avvio di ogni componente è necessario specificare come parametri da linea di comando gli indirizzi di cui ha bisogno, cioè i seguenti:
+
+\begin{itemize}
+ \item Broker:
+ \begin{itemize}
+  \item [1] Indirizzo locale su cui ricevere i dati del core
+  \item [2] Indirizzo locale su cui avviare il publisher per le comunicazioni al monitor
+  \item [3] Indirizzo e porta locale su cui avviare il server necessario al pull
+ \end{itemize}
+ \item Core (main):
+ \begin{itemize}
+  \item [1] Indirizzo del broker ([1] del broker)
+  \item [2] Indirizzo locale su cui avviare il server in ascolto per il controller
+ \end{itemize}
+ \item Monitor:
+ \begin{itemize}
+  \item [1] Indirizzo per il subscribe al broker ([2] del broker)
+  \item [2] Indirizzo per il pull dal broker ([3] del broker)
+ \end{itemize}
+ \item Controller:
+ \begin{itemize}
+  \item [1] Indirizzo per il pull dal broker ([3] del broker)
+  \item [2] Indirizzo del core a cui inviare gli override ([2] del core)
+ \end{itemize}
+\end{itemize}
+
+Inoltre è presente un solo vincolo di avvio, cioè il broker deve essere avviato prima del core; il monitor ed il controller invece possono essere avviati in qualsiasi momento.
+Dato il grande numero di parametri, è stato creato nella cartella “scd-f1-simulator” un eseguibile start.sh, che avvia le varie parti in modo che eseguano su un solo computer.

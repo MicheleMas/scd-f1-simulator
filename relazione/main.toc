@@ -1,0 +1,46 @@
+\select@language {italian}
+\contentsline {chapter}{Elenco delle figure}{iii}{chapter*.2}
+\contentsline {chapter}{\numberline {1}Introduzione}{1}{chapter.3}
+\contentsline {chapter}{\numberline {2}Overview}{2}{chapter.4}
+\contentsline {chapter}{\numberline {3}Problemi ed analisi delle soluzioni}{3}{chapter.6}
+\contentsline {section}{\numberline {3.1}Scelta del tipo di simulazione}{3}{section.7}
+\contentsline {section}{\numberline {3.2}Gestione del tempo}{4}{section.8}
+\contentsline {section}{\numberline {3.3}Circuito}{4}{section.9}
+\contentsline {section}{\numberline {3.4}Veicoli}{5}{section.10}
+\contentsline {chapter}{\numberline {4}Analisi della concorrenza}{6}{chapter.11}
+\contentsline {section}{\numberline {4.1}Determinismo}{6}{section.12}
+\contentsline {section}{\numberline {4.2}Non determinismo}{7}{section.13}
+\contentsline {section}{\numberline {4.3}Stalli}{7}{section.14}
+\contentsline {section}{\numberline {4.4}Attraversamento dei segmenti}{8}{section.15}
+\contentsline {chapter}{\numberline {5}Analisi della distribuzione}{10}{chapter.16}
+\contentsline {section}{\numberline {5.1}Elementi}{10}{section.17}
+\contentsline {section}{\numberline {5.2}Tipo di comunicazione}{11}{section.18}
+\contentsline {section}{\numberline {5.3}Comunicazione del Core}{12}{section.19}
+\contentsline {section}{\numberline {5.4}Comunicazione dell\IeC {\textquoteright }intermediario}{13}{section.20}
+\contentsline {section}{\numberline {5.5}Comunicazione del monitor}{13}{section.21}
+\contentsline {section}{\numberline {5.6}Comunicazione del Controller}{14}{section.22}
+\contentsline {section}{\numberline {5.7}Avvio e chiusura del sistema}{14}{section.23}
+\contentsline {chapter}{\numberline {6}Soluzione proposta}{16}{chapter.24}
+\contentsline {section}{\numberline {6.1}Linguaggi}{16}{section.25}
+\contentsline {section}{\numberline {6.2}Componenti ad alto livello}{17}{section.26}
+\contentsline {subsection}{\numberline {6.2.1}Circuito}{17}{subsection.28}
+\contentsline {subsection}{\numberline {6.2.2}Arbitro}{18}{subsection.29}
+\contentsline {subsection}{\numberline {6.2.3}Macchina}{19}{subsection.30}
+\contentsline {subsection}{\numberline {6.2.4}Raccoglitore di eventi}{19}{subsection.31}
+\contentsline {subsection}{\numberline {6.2.5}Intermediario}{20}{subsection.32}
+\contentsline {subsection}{\numberline {6.2.6}Monitor}{21}{subsection.33}
+\contentsline {subsection}{\numberline {6.2.7}Controller}{21}{subsection.34}
+\contentsline {section}{\numberline {6.3}Implementazione nel dettaglio}{22}{section.35}
+\contentsline {subsection}{\numberline {6.3.1}Circuit}{22}{subsection.36}
+\contentsline {subsection}{\numberline {6.3.2}Car}{23}{subsection.37}
+\contentsline {subsection}{\numberline {6.3.3}Referee}{24}{subsection.38}
+\contentsline {subsection}{\numberline {6.3.4}Event Bucket}{25}{subsection.39}
+\contentsline {subsection}{\numberline {6.3.5}Publisher}{26}{subsection.40}
+\contentsline {subsection}{\numberline {6.3.6}Broker}{27}{subsection.41}
+\contentsline {subsection}{\numberline {6.3.7}Monitor}{28}{subsection.42}
+\contentsline {subsection}{\numberline {6.3.8}Controller}{31}{subsection.44}
+\contentsline {subsection}{\numberline {6.3.9}Eventi}{33}{subsection.46}
+\contentsline {subsection}{\numberline {6.3.10}Snapshot}{34}{subsection.47}
+\contentsline {chapter}{\numberline {7}Copertura dei requisiti}{35}{chapter.48}
+\contentsline {chapter}{\numberline {8}Conoscenze apprese}{37}{chapter.49}
+\contentsline {chapter}{\numberline {9}Configurazione ed utilizzo}{39}{chapter.50}
