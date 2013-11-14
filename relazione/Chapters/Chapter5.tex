@@ -10,25 +10,6 @@
 
 \section{Elementi}
 
-
-
-\begin{figure}[htbp]
-	\centering
-		\includegraphics[keepaspectratio = true, width = 400px] {Pictures/nodes}
-		\rule{35em}{0.5pt}
-	\caption[Struttura]{Struttura ad alto livello.}
-	\label{fig:Struttura}
-\end{figure}
-
-Come si può vedere dall’immagine, l’architettura del simulatore è stata diviso in quattro parti:
-\begin{itemize}
- \item \textbf{Core}: esegue la simulazione vera e propria, calcolando i tempi, le velocità e tutto ciò che è necessario per lo svolgimento della gara
- \item \textbf{Broker}: riceve gli eventi riguardanti lo svolgimento della gara, li elabora, e li distribuisce agli elementi che ne permettono la visualizzazione ed il controllo da parte dell’utente
- \item \textbf{Monitor}: permette di visualizzare l’andamento della gara tramite una classifica ed una rappresentazione grafica dell’andamento della gara.
- \item \textbf{Controller}: dà la possibilità all’utente di agire come se fosse ai box, indicando al pilota di un veicolo che strategia utilizzare, e pianificando i pit-stop. Permette inoltre di visualizzare dati aggiuntivi sul veicolo.
-\end{itemize}
-
-
 Uno dei requisiti del simulatore è che sia distribuito, e quindi sorge il problema di capire quali parti possono essere separate dal core pur garantendone il funzionamento.
 Ad una prima analisi del sistema abbiamo identificato quattro componenti principali per il soddisfacimento dei requisiti:
 \begin{itemize}
@@ -38,14 +19,32 @@ Ad una prima analisi del sistema abbiamo identificato quattro componenti princip
  \item controller
 \end{itemize}
 Supponiamo di dividere queste entità in nodi separati, in grado di essere eseguiti su elaboratori differenti connessi fra di loro. 
-Questa partizione non funziona perchè:
+Questa partizione non è funzionale perché:
 \begin{itemize}
 \item circuito e macchine sono funzionalmente accoppiate, l'uno necessita dell'altro per poter completare le operazioni della simulazione.
 \item il distacco delle entità potrebbe causare numerosi problemi (latenza, disconnessione, ecc…) al simulatore. 
 \end{itemize}
 Di conseguenza è necessario che il circuito ed i veicoli siano in un unico nodo. \\
 
-Il monitor è un’entità quasi totalmente passiva, cioè non fa altro che ricevere i dati sulla situazione della simulazione e presentarla all’utente tramite un render grafico. Dato che l’output di questa entità può essere visualizzato solo dall’utente, una possibile latenza non causa alcun disturbo, dato che può essere assimilata a ritardi causati dalla televisione in una situazione reale. Una eventuale disconnessione causata da problemi di rete potrebbe avvenire anche nel mondo reale. \\
+---------Checkpoint (ricorda di presentare il broker)
+
+\begin{figure}[htbp]
+	\centering
+		\includegraphics[keepaspectratio = true, width = 400px] {Pictures/nodes}
+		\rule{35em}{0.5pt}
+	\caption[Struttura]{Struttura ad alto livello.}
+	\label{fig:Struttura}
+\end{figure}
+
+Come si può vedere dall'immagine, l'architettura del simulatore è stata diviso in quattro parti:
+\begin{itemize}
+ \item \textbf{Core}: esegue la simulazione vera e propria, calcolando i tempi, le velocità e tutto ciò che è necessario per lo svolgimento della gara
+ \item \textbf{Broker}: riceve gli eventi riguardanti lo svolgimento della gara, li elabora, e li distribuisce agli elementi che ne permettono la visualizzazione ed il controllo da parte dell’utente
+ \item \textbf{Monitor}: permette di visualizzare l’andamento della gara tramite una classifica ed una rappresentazione grafica dell’andamento della gara.
+ \item \textbf{Controller}: dà la possibilità all’utente di agire come se fosse ai box, indicando al pilota di un veicolo che strategia utilizzare, e pianificando i pit-stop. Permette inoltre di visualizzare dati aggiuntivi sul veicolo.
+\end{itemize}
+
+Il monitor è un'entità quasi totalmente passiva, cioè non fa altro che ricevere i dati sulla situazione della simulazione e presentarla all’utente tramite un render grafico. Dato che l’output di questa entità può essere visualizzato solo dall’utente, una possibile latenza non causa alcun disturbo, dato che può essere assimilata a ritardi causati dalla televisione in una situazione reale. Una eventuale disconnessione causata da problemi di rete potrebbe avvenire anche nel mondo reale. \\
  
 Il controller è ciò che permette all’utente di decidere la strategia di gara di un dato veicolo; questo tipo di controller non necessità di avere i dati aggiornati in un tempo il più vicino possibile a quello reale, dato che non effettua un controllo diretto sul pilota ma dà solo indicazioni sulla strategia di gara, può quindi sopportare una eventuale latenza anche di qualche secondo. \\
 
