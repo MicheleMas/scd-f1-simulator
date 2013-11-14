@@ -17,13 +17,13 @@ Un secondo punto da tenere in considerazione è il risveglio delle macchine, ed 
 L’entrata al segmento successivo può essere effettuata in tre modi:
 \begin{itemize}
  \item Nessun controllo
- \item Semplice mutua esclusione
- \item Accodamento
+ \item Mutua esclusione con accodamento
+ \item Accodamento su condizione logica
 \end{itemize}
 Il primo caso può essere scartato a priori, dato che come detto precedentemente i segmenti sono risorse protette e senza effettuare controlli si otterrebbero sorpassi impossibili.
-Nel secondo caso ogni macchina quando si sveglia si mette in attesa di entrare all’interno della risorsa protetta, e l’accesso verrà dato ad una delle macchine che attendono secondo una scelta casuale. Questo comportamento potrebbe essere utile a dare un elemento di non determinismo al simulatore, ma porta con se la possibilità di starvation, che causerebbe comportamenti non assimilabili ad un sistema reale, e non sarebbe pienamente controllabile.
-La terza opzione ci dà la garanzia che la starvation non si verificherà, ma toglierà ogni elemento di non determinismo.
-Per quanto la possibilità di starvation sia piuttosto remota dato il numero di macchine, abbiamo preferito rendere il sistema il più robusto possibile, optando per la terza opzione, e occupandoci di aggiungere il non determinismo in altri modi.
+Nel secondo caso ogni veicolo quando si sveglia si mette in attesa di entrare all’interno della risorsa protetta, e l’accesso verrà dato ad una delle macchine che attendono secondo una scelta determinata dalla politica adottata dallo scheduler e non dalle caratteristiche fisiche della simulazione, portando di conseguenza il rischio di avere un ordine di ingresso non corretto. Questo comportamento potrebbe essere utile a dare un elemento di non determinismo al simulatore, ma non è controllabile e può causare comportamenti non assimilabili ad un sistema reale.
+La terza opzione consiste nell'aggiunta di un guardiano sulla condizione di ingresso nel segmento, ma non permette di evitare il presentarsi del problema descritto precedentemente.
+Per risolvere il problema è stato necessario diversificare forzatamente gli istanti in cui vengono effettuate le richieste di ingresso da parte dei vari veicoli, inserendo un ritardo artificiale epsilon in caso di risvegli concomitanti o troppo ravvicinati temporalmente. La lunghezza del ritardo è stata calcolata in modo che sia sufficientemente grande da permettere il completamento del calcolo del veicolo precedente, ma abbastanza piccola da non creare ritardi nell'esecuzione. Il calcolo di questa variabile epsilon sarà trattato dettagliatamente nel capitolo \ref{Chapter5}
 
 %-----------------------------------
 %	SECTION 2
@@ -39,29 +39,21 @@ Per farlo viene sempre aggiunto un elemento casuale all’interno dei calcoli ch
 %-----------------------------------
 
 \section{Stalli}
-Dato che trattiamo un sistema concorrente, è importante assicurarci che non si verifichino stalli (o deadlock) durante l’esecuzione.
-Affinchè possa verificarsi uno stallo, è necessario che le quattro condizioni di Havender vengano soddisfatte, ovvero:
-\begin{itemize}
- \item \textbf{Mutua Esclusione}: una risorsa è in mutua esclusione quando può essere posseduta da un processo alla volta. Nel nostro caso ogni segmento di pista è stato implementato in questo modo.
- \item \textbf{Richieste incrementali}: i processi che possiedono una risorsa la trattengono in attesa dell’acquisizione di altre. Ad esempio una macchina può chiedere l’accesso al segmento successivo essendo ancora nel precedente.
- \item \textbf{Impossibilità di prelazione}: un processo non può essere costretto a rilasciare una risorsa.
- \item \textbf{Attesa circolare}: avviene quando un gruppo di processi P1,...,Pn è in attesa di una risorsa posseduta dal processo successivo, creando una catena chiusa.
-\end{itemize}
-Le soluzioni al deadlock sono due, risolverli o prevenirli. Nel caso della risoluzione è necessario rimuovere forzatamente uno dei task che causa lo stallo, interrompendolo o usando il prerilascio. Questa soluzione potrebbe causare la presenza di stati inconsistenti per la “vittima” designata al momento dell’interruzione. 
-Quindi abbiamo scelto la strada della prevenzione, identificando quali condizioni ci permettano di non avere conseguenze nello svolgimento della simulazione.
-La mutua esclusione è necessaria per preservare il corretto funzionamento dei segmenti, infatti è l’unico modo per assicurarci che non ci siano problemi derivanti da race condition, ad esempio nel controllo dei veicoli attualmente presenti in un singolo tratto.
-Come già detto precedentemente, l’utilizzo del prerilascio può portare a stati inconsistenti per il task che viene colpito, e per questo motivo è stato scartato.
-Abbiamo quindi scelto di impedire l’accumulo di risorse, imponendo alle macchine di lasciare il segmento corrente prima di entrare nel successivo. In questo modo, annulliamo almeno una delle quattro precondizioni, e abbiamo conseguentemente la sicurezza che non si verificheranno stalli.
+Come accennato precedentemente le possibilità sono due: prevenzione o risoluzione dello stallo. Nel caso della risoluzione è possibile che vengano causati stati inconsistenti per la “vittima” designata al momento dell'interruzione.
+Si è deciso di prevenire gli stalli, invalidando una delle quattro condizioni di Havender.
+La mutua esclusione è necessaria per preservare il corretto funzionamento dei segmenti, infatti è l'unico modo per assicurarci che non ci siano problemi derivanti da race condition, ad esempio nel controllo dei veicoli attualmente presenti in un singolo tratto.
+L'utilizzo del prerilascio può portare a stati inconsistenti per il task che viene colpito, e per questo motivo è stato scartato.
+Abbiamo quindi scelto di impedire l'accumulo di risorse, imponendo alle macchine di lasciare il segmento corrente prima di entrare nel successivo. In questo modo, annulliamo almeno una delle quattro precondizioni, e abbiamo conseguentemente la sicurezza che non si verificheranno stalli.
 
 %----------------------------------------------------------------------------------------
 %	SECTION 4
 %----------------------------------------------------------------------------------------
 
-\section{Attraversamento dei segmenti}
+\section{Sorpassi fisicamente impossibili}
 
-L’attraversamento dei tratti è la parte centrale della simulazione, e per questo verrà trattata approfonditamente.
-La prima soluzione a cui abbiamo pensato è stata quella di usare il segmento (risorsa protetta) come gestore degli ingressi basato sulla molteplicità: ovvero consentivamo l’ingresso al segmento solo se le macchina attualmente al suo interno erano <= n (dove n è la molteplicità specidica di quel segmento). Le macchine che non riuscivano e entrare venivano messe in coda in ingresso al segmento e risvegliate solo quando una delle macchine all’interno del segmento ne usciva.
-Per quanto funzionante, la soluzione non rispecchia il comportamento del sistema reale.Una macchina non si ferma mai completamente in attesa che si liberi il segmento successivo, ma rallenta per disporsi dietro alla macchina che lo precede; per questo motivo questa proposta è stata scartata e abbiamo cercato delle soluzioni alternative.
-L’idea a cui siamo giunti è stata quella di non far comunicare direttamente la vettura con la risorsa protetta segmento, ma utilizzare un arbitro come intermediario tra i due. Dato che l’arbitro deve calcolare il tempo di uscita delle macchine dal segmento, può salvare i risultati di questi calcoli e avere quindi un’immagine in tempo reale della situazione del tratto in un dato istante. In questo modo la richiesta di attraversamento da parte di una macchina non viene mai negata o accodata, ma elaborata immediatamente tenendo conto che non potrà uscire del segmento prima che il veicolo che fa saturare la molteplicità di quel segmento non abbia liberato lo spazio necessario. In questo modo diventa possibile far rallentare l’ultima vettura facendola uscire con un maggior ritardo dal segmento.
-Tutto questo funziona perchè l’evento che viene considerato dal simulatore è esclusivamente l’uscita da un segmento in un dato istante di tempo. L’ingresso in un dato segmento viene gestito solo a livello implementativo, e viene considerato come immediatamente successivo all’evento di uscita dal segmento precedente.
-L’implementazione specifica verrà trattata in modo più specifico successivamente.
+In primo luogo il segmento è stato implementato come risorsa protetta utilizzando un gestore degli ingressi basato sulla molteplicità, in particolare si consentiva l'ingresso al segmento solo se le macchine attualmente al suo interno erano in numero minore o uguale n (dove n è la molteplicità specifica di quel segmento). I veicoli che non erano in grado di entrare venivano messi in coda in ingresso al segmento e risvegliate solo quando una delle macchine all'interno del segmento ne usciva.
+Per quanto funzionale, la soluzione non rispecchia il comportamento del sistema reale. Una vettura non si ferma mai completamente in attesa che si liberi il segmento successivo, ma rallenta per disporsi dietro al veicolo che lo precede; per questo motivo questa ipotesi è stata scartata in favore di soluzioni alternative.
+E' stato scelto quindi di non far comunicare direttamente la vettura con la risorsa protetta segmento, ma utilizzare un arbitro come intermediario tra i due. Dato che l'arbitro deve calcolare il tempo di uscita delle vetture dal segmento, può salvare i risultati di questi calcoli e avere quindi un'immagine in tempo reale della situazione del tratto in un dato istante. In questo modo la richiesta di attraversamento da parte di una veicolo non viene mai negata o accodata, ma elaborata immediatamente tenendo conto che non potrà uscire del segmento prima che il veicolo che fa saturare la molteplicità non abbia liberato lo spazio necessario. In questo modo diventa possibile far rallentare l'ultima vettura facendola uscire con un maggior ritardo dal tratto.
+La correttezza funzionale è garantita perché l'evento che viene considerato dal simulatore è esclusivamente l'uscita da un segmento in un dato istante di tempo. L'ingresso viene gestito solo a livello implementativo, e viene considerato come immediatamente successivo all'evento di uscita dal segmento precedente.
+Tramite questa soluzione viene evitato il problema esposto nella sezione [2.5.2], infatti non è più possibile che il veicolo B termini prima di A se la molteplicità non lo consente.
+L'implementazione specifica verrà trattata in modo più specifico successivamente.
