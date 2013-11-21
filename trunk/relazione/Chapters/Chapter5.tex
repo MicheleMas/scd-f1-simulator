@@ -18,6 +18,10 @@ Ad una prima analisi del sistema abbiamo identificato quattro componenti princip
  \item monitor
  \item controller
 \end{itemize}
+
+Il monitor è un'entità quasi totalmente passiva, cioè non fa altro che ricevere i dati sulla situazione della simulazione e presentarla all’utente tramite un render grafico. Dato che l’output di questa entità può essere visualizzato solo dall’utente, una possibile latenza non causa alcun disturbo, dato che può essere assimilata a ritardi causati dalla televisione in una situazione reale. Una eventuale disconnessione causata da problemi di rete potrebbe avvenire anche nel mondo reale.
+\\
+Il controller è ciò che permette all’utente di decidere la strategia di gara di un dato veicolo; questo tipo di controller non necessità di avere i dati aggiornati in un tempo il più vicino possibile a quello reale, dato che non effettua un controllo diretto sul pilota ma dà solo indicazioni sulla strategia di gara, può quindi sopportare una eventuale latenza anche di qualche secondo. \\
 Supponiamo di dividere queste entità in nodi separati, in grado di essere eseguiti su elaboratori differenti connessi fra di loro. 
 Questa partizione non è funzionale perché:
 \begin{itemize}
@@ -25,9 +29,12 @@ Questa partizione non è funzionale perché:
 \item il distacco delle entità potrebbe causare numerosi problemi (latenza, disconnessione, ecc…) al simulatore. 
 \end{itemize}
 Di conseguenza è necessario che il circuito ed i veicoli siano in un unico nodo. \\
-
----------Checkpoint (ricorda di presentare il broker)
-
+Al termine di questa analisi i nodi identificati sono diventati tre, il core (che comprende sia il circuito che le macchine), il monitor ed il controller.
+Dato che il simulatore funziona ad eventi, è sorto un ulteriore problema: il numero di eventi generati può diventare piuttosto grande, ed in caso di monitor multipli e numerosi si otterrebbe un grosso spreco di risorse inviandoli tutti (alcuni dei quali potrebbero anche non interessare al destinatario). Inoltre questi eventi andrebbero convertiti da ogni monitor in modo da poterne fare una rappresentazione, implicando inoltre un cambiamento di funzionalità del monitor, da entità passiva ad entità attiva, che raccoglie gli eventi e li elabora per creare una raffigurazione del tracciato.
+Inoltre questa scelta avrebbe aumentato il carico di lavoro che grava sul core,  che avrebbe dovuto disporre di funzioni atte a permettere la comunicazione con entità multiple.
+Per questi motivi abbiamo aggiunto ai tre tipi di nodi presenti un quarto, l’intermediario. Questa nuova entità (unica per tutto il simulatore) raccoglie gli eventi derivati dalla simulazione, e li elabora rendendoli facilmente fruibili per la rappresentazione grafica. In questo modo il carico di lavoro sul core viene alleggerito: dovrà comunicare gli eventi ad una sola entità. Viene anche alleggerito il carico di lavoro dei monitor, che dovranno limitarsi a fare un render grafico delle informazioni ottenute, senza essere obbligati ad avere conoscenza del funzionamento interno della simulazione.
+\\
+Con l'aggiunta di queste ulteriori entità il partizionamento adottato è il seguente:
 \begin{figure}[htbp]
 	\centering
 		\includegraphics[keepaspectratio = true, width = 400px] {Pictures/nodes}
@@ -36,7 +43,7 @@ Di conseguenza è necessario che il circuito ed i veicoli siano in un unico nodo
 	\label{fig:Struttura}
 \end{figure}
 
-Come si può vedere dall'immagine, l'architettura del simulatore è stata diviso in quattro parti:
+Come si evince dall'immagine, l'architettura del simulatore è stata divisa in quattro parti:
 \begin{itemize}
  \item \textbf{Core}: esegue la simulazione vera e propria, calcolando i tempi, le velocità e tutto ciò che è necessario per lo svolgimento della gara
  \item \textbf{Broker}: riceve gli eventi riguardanti lo svolgimento della gara, li elabora, e li distribuisce agli elementi che ne permettono la visualizzazione ed il controllo da parte dell’utente
@@ -44,25 +51,19 @@ Come si può vedere dall'immagine, l'architettura del simulatore è stata diviso
  \item \textbf{Controller}: dà la possibilità all’utente di agire come se fosse ai box, indicando al pilota di un veicolo che strategia utilizzare, e pianificando i pit-stop. Permette inoltre di visualizzare dati aggiuntivi sul veicolo.
 \end{itemize}
 
-Il monitor è un'entità quasi totalmente passiva, cioè non fa altro che ricevere i dati sulla situazione della simulazione e presentarla all’utente tramite un render grafico. Dato che l’output di questa entità può essere visualizzato solo dall’utente, una possibile latenza non causa alcun disturbo, dato che può essere assimilata a ritardi causati dalla televisione in una situazione reale. Una eventuale disconnessione causata da problemi di rete potrebbe avvenire anche nel mondo reale. \\
- 
-Il controller è ciò che permette all’utente di decidere la strategia di gara di un dato veicolo; questo tipo di controller non necessità di avere i dati aggiornati in un tempo il più vicino possibile a quello reale, dato che non effettua un controllo diretto sul pilota ma dà solo indicazioni sulla strategia di gara, può quindi sopportare una eventuale latenza anche di qualche secondo. \\
-
-Al termine di questa analisi i nodi identificati sono diventati tre, il core (che comprende sia il circuito che le macchine), il monitor ed il controller.
-Dato che il simulatore funziona ad eventi, è sorto un ulteriore problema: il numero di eventi generati può diventare piuttosto grande, ed in caso di monitor multipli e numerosi si otterrebbe un grosso spreco di risorse inviandoli tutti (alcuni dei quali potrebbero anche non interessare al destinatario). Inoltre questi eventi andrebbero convertiti da ogni monitor in modo da poterne fare una rappresentazione, implicando inoltre un cambiamento di funzionalità del monitor, da entità passiva ad entità attiva, che raccoglie gli eventi e li elabora per creare una raffigurazione del tracciato.
-Inoltre questa scelta avrebbe aumentato il carico di lavoro che grava sul core,  che avrebbe dovuto disporre di funzioni atte a permettere la comunicazione con entità multiple.
-Per questi motivi abbiamo aggiunto ai tre tipi di nodi presenti un quarto, l’intermediario. Questa nuova entità (unica per tutto il simulatore) raccoglie gli eventi derivati dalla simulazione, e li elabora rendendoli facilmente fruibili per la rappresentazione grafica. In questo modo il carico di lavoro sul core viene alleggerito: dovrà comunicare gli eventi ad una sola entità. Viene anche alleggerito il carico di lavoro dei monitor, che dovranno limitarsi a fare un render grafico delle informazioni ottenute, senza essere obbligati ad avere conoscenza del funzionamento interno della simulazione.
 
 %-----------------------------------
 %	SECTION 2
 %-----------------------------------
 \section{Tipo di comunicazione}
 
-Dopo aver suddiviso il simulatore in parti che possono essere distribuite su più computer, è stato necessario capire quale design pattern di comunicazione si adatti meglio al nostro utilizzo.
-Le scelte analizzate sono state due:
-Utilizzare un middleware
-Utilizzare una libreria per lo scambio di messaggi (nel caso specifico YAMI4)
-La prima permette di definire un’architettura del sistema distribuito, fissando i nodi e i ruoli di ogni agente. In questo modo si riesce a creare una distribuzione più robusta e definita a priori, che permette l’utilizzo di strutture dati interni al linguaggio in modo condiviso e trasparente.
+Dopo aver suddiviso il simulatore in componenti che possono essere distribuite su più computer, è stato necessario provvedere alla comunicazione fra quest'ultime.
+Si è deciso di prendere in considerazione le seguenti alternative:
+\begin{itemize}
+\item Utilizzare un middleware
+\item Utilizzare una libreria per lo scambio di messaggi (nel caso specifico YAMI4)
+\end{itemize}
+La prima impone l’architettura del sistema distribuito, fissando i nodi e i ruoli di ogni agente. In questo modo si crea una distribuzione più robusta e definita a priori, che permette l’utilizzo di strutture dati interni al linguaggio in modo condiviso e trasparente.
 La seconda, invece, è un insieme di librerie che espongono API che permettono l’invio di messaggi tra le varie entità del sistema distribuito; non viene definita alcuna architettura o nodo, ma viene solo fornito un sistema standard per l’invio e ricezione delle informazioni.
 Per quanto la prima soluzione garantisca una maggiore affidabilità, introduce vincoli sul tipo di architettura da implementare ed una intrinseca dipendenza del software dal middleware, con la relativa necessità di installare i vari componenti prima di poter eseguire il programma.
 Principalmente per questo motivo, la nostra scelta è ricaduta sulla libreria YAMI4, in quanto ci è sembrato molto importante poter garantire la portabilità di nodi quali il monitor ed il controller, in modo che possano essere avviati su pc in modalità “plug and play”, senza avere la necessità di installare ulteriore software.
@@ -76,7 +77,7 @@ Ci siamo resi conto che in una situazione diversa, ad esempio se il nostro softw
 
 Il core produce sequenza di eventi che indicano il raggiungimento di un obiettivo da parte di un’entità (ad esempio una macchina che esce da un segmento).
 Questo flusso di eventi deve essere inviato all’intermediario, per permetterne l’elaborazione e l’invio ai monitor ed i controller.
-Il tipo di comunicazione è “uno ad uno”, dato che le istanze del core e dell’intermediario sono uniche; per questo ci è sembrato appropriato utilizzare il metodo push, che invia ogni nuovo evento il prima possibile.
+Il tipo di comunicazione è “uno ad uno”, dato che le istanze del core e dell’intermediario sono uniche; per questo ci è sembrato appropriato utilizzare il metodo push, che permette di inviare ogni nuovo evento con il minimo ritardo possibile.
 A differenza del pull, ogni informazione viene spedita, e la frequenza di comunicazione viene gestita dal core. Se la comunicazione fosse stata effettuata direttamente tra il core ed i monitor non sarebbe stato possibile utilizzare questo metodo, visto che ogni monitor non è interessato alla totalità di eventi. Dato che l’intermediario funziona anche come punto di raccolta delle informazioni della gara, siamo sicuri che tutti gli eventi generati dal core saranno di interesse dell’intermediario. Inoltre inviando immediatamente tutte le informazioni disponibili si diminuisce la latenza tra l’istante in cui un evento è generato e quello in cui viene ricevuto ed elaborato.
 L’impegno del core dal punto di vista della comunicazione non è limitato unicamente alla trasmissione degli eventi, ma è anche necessario che sia predisposto a ricevere i comandi da parte del controller. Il ragionamento effettuato per la comunicazione core-controller è il medesimo: usando un architettura di tipo pull, sarebbe necessario che il core controllasse in continuazione se qualche giocatore ha inviato un comando, il che aumenterebbe enormemente il carico di lavoro e soprattutto avrebbe esito negativo per la maggior parte delle volte. Per questo è stato utilizzato lo stesso metodo push, ma questa volta dal controller al core (i dettagli del controller verranno descritti successivamente).
 
@@ -90,10 +91,10 @@ L’intermediario deve poter comunicare su due fronti: ricevere gli eventi dal c
 La comunicazione con il core è già stata trattata precedentemente: come spiegato ogni evento viene ricevuto nel modo più rapido possibile.
 Dopo aver elaborato le informazioni, bisogna simistarle alle entità monitor e controller, ma la scelta del tipo di comunicazione non è banale.
 Ci sono infatti diversi requisiti da soddisfare, in quanto l’intermediario è in possesso di due tipi di informazioni: quelle più generali, che servono a tutti, e quelle più dettagliate, che vengono comunicate su richiesta.
-Le tipologie di invio analizzate sono principalmente due, pull e publish subscriber. Nel primo caso le informazioni devono essere recuperate esplicitamente, richiedendole all’intermediario, nel secondo ogni informazioni viene spedita a tutte le entità interessate (che hanno fatto il subscribe).
-Entrambe le soluzioni hanno pro e contro, infatti utilizzare il pull implicherebbe una frequenza di aggiornamenti dettata dai monitor, e non dall’arrivo di nuove informazioni, mentre l’utilizzo del publish subscribe comporterebbe l’invio di tutte le informazioni a tutte le entità, informazioni a cui alcune entità non sono interessate, il che data la mole di informazioni sarebbe uno speco di risorse non indifferente.
-Consdierato che ambedue le soluzioni hanno elementi interessanti, abbiamo deciso di utilizzarle entrambe, utilizzando una per sopperire agli svantaggi dell’altra, e viceversa.
-Per questo motivo abbiamo diviso in due parti le informazioni dell’intermediario, quelle che sono necessarie a tutti, e quelle che vengono distribuite su richiesta. Per le prime abbiamo disposto un sistema di publish subscribe che le invia, appena sono disponibili, a tutte le entità registrate; per le seconde abbiamo utilizzato un sistema di pull, creando una risorsa che contiene queste informazioni, e lasciando l’onere di recuperarle all’entità interessata.
+Le tipologie di invio analizzate sono principalmente due, pull e publish subscribe. Nel primo caso le informazioni devono essere recuperate esplicitamente, richiedendole all’intermediario, nel secondo ogni informazioni viene spedita a tutte le entità interessate (che hanno fatto il subscribe).
+Ambedue le soluzioni hanno pro e contro, infatti utilizzare il pull implicherebbe una frequenza di aggiornamenti dettata dai monitor, e non dall’arrivo di nuove informazioni, mentre l’utilizzo del publish subscribe comporta l'invio delle informazioni con una cadenza dettata esclusivamente dal produttore.
+Entrambe sono utili in determinate circostanze e quindi è stato deciso di adottarle entrambe, utilizzando una per sopperire agli svantaggi dell’altra, e viceversa.
+Per questo motivo abbiamo diviso in due parti le informazioni dell’intermediario, quelle che sono necessarie a tutti, e quelle che vengono distribuite su richiesta. Per le prime abbiamo disposto un sistema di publish subscribe che le invia, appena sono disponibili, a tutte le entità registrate per quelle specifiche informazioni; per le seconde abbiamo utilizzato un sistema di pull, creando una risorsa che contiene queste informazioni, e lasciando l’onere di recuperarle all’entità interessata.
 
 %----------------------------------------------------------------------------------------
 %	SECTION 5
