@@ -130,10 +130,17 @@ Il referee ha inoltre il dovere di gestire l’ingresso ai box nel caso sia prop
 
 \subsection{Car}
 
---TODO flowchar ciclo di vita car, SCIMMIA
-
 Il task Car, contenuto nel package car\textunderscore p, è ciò che rappresenta il funzionamento di una macchina che partecipa alla competizione.
 Il suo ciclo di vita consiste in due azioni principali, la richiesta di ingresso in un segmento, e l’applicazione delle istruzioni restituite dal referee.
+
+\noindent%
+\begin{minipage}{\linewidth}
+\makebox[\linewidth]{%
+  \includegraphics[keepaspectratio=true,scale=0.5]{Pictures/car_p_ciclo}}
+\captionof{figure}{Flowchart: ciclo di vita di car.}% only if needed
+\label{car_p_ciclo}
+\end{minipage}
+
 Per la prima, viene utilizzata l’entry “enterSegment” del referee, a cui vengono passati i parametri attuali, e si aspetta in uscita i dati neccessari a proseguire, cioè il tempo di attesa, un puntatore al prossimo arbitro da contattare, ed il nuovo stato del veicolo.
 A questo punto il task deve controllare i dati restituiti, ed agire di conseguenza. I casi possono essere molteplici, e per questo deve generare gli eventi necessari per spiegare l’andamento di una gara, comunicando un eventuale incidente (con possibili danni o ritiro), il rientro ai box, o la semplice uscita del segmento (associata alla nuova velocità, strategia e gli altri dati necessari all’intermediario).
 Il tempo di attesa è stato implementato con un “delay until”, che a differenza del semplice “delay” permette di ottenere una precisione migliore e non causa latenza incrementale. Per questo è stato necessario avere un riferimento assoluto di tempo. La scelta è stata quella di leggere il clock del PC solo una volta, all’avvio del task, e sommare di volta in volta il tempo di attesa derivante dall’attraversamento del segmento.
@@ -179,13 +186,21 @@ Il primo compito è quello di recuperare gli eventi dal bucket, e convertirli da
 Una volta creato l’evento viene inviato immediatamente al broker.
 
 \subsection{Broker}
-TOODO inserisci flowchart brokersnapshot, SCIMMIA
 
 Il broker, o intermediario, si occupa di mediare la comunicazione fra il core principale che esegue la simulazione, e gli eventuali monitor o controller che vogliono visualizzarne lo stato in un dato istante. Ottiene il duplice scopo di bilanciare il traffico di rete e di processare i dati forniti dal simulatore in modo che siano più facilmente fruibili per la visualizzazione. Infatti, ponendosi a metà tra monitor e core, permette di alleggerire il carico di lavoro del simulatore poichè la comunicazione di quest’ultimo sarà sempre solo con un entità singola (il broker), indipendentemente dal numero di monitor che stanno visualizzando la gara in un dato istante.
 Come prima cosa apre un canale di comunicazione che il core utilizzerà per inviare gli eventi man mano che vengono prodotti, tramite un architettura push. Gli eventi vengono smistati in base al loro tipo, e memorizzati nello stato interno del broker utilizzando una lista circolare. In questo modo riusciamo a mantenerne uno storico. L’utilizzo di una lista circolare è stato dettato dal fatto che per ragioni di memoria limitata non possiamo memorizzarli tutti. In questo modo quando lo spazio è esaurito gli eventi più recenti vengono sempre memorizzati, ricavando spazio dalla rimozione di quelli più obsoleti.
 Gli eventi così memorizzati vengono poi elaborati in modo da ricavare uno snapshot, ovvero una “fotografia” della gara in un dato istante, fruibile dal monitor per la visualizzazione. Questo è necessario perchè gli eventi generati dal core si riferiscono al dominio dello spazio, ma per poter essere fruibili da un utente umano è necessario che essi siano nel dominio del tempo.
 La costruzione dello snapshot viene effettuata ripetutamente a intervalli discreti e regolari.
 Gli eventi ricevuti dal monitor contengono tutti un timestamp, ovvero il tempo in millisecondi relativo dall’inizio della simulazione in cui sono stati generati. La maggior parte di essi contiene anche il numero identificativo della macchina che li ha prodotti. Grazie a questi due campi è possibile raggruppare eventi che si riferiscono alla stessa macchina, e ordinarli in base al timestamp in modo crescente.
+
+\noindent%
+\begin{minipage}{\linewidth}
+\makebox[\linewidth]{%
+  \includegraphics[keepaspectratio=true,scale=0.5]{Pictures/brokerSnapshot}}
+\captionof{figure}{Flowchart: costruzione dello snapshot.}% only if needed
+\label{brokerSnapshot}
+\end{minipage}
+
 Quanto generiamo uno snapshot, fissiamo un tempo t e cerchiamo nella lista di eventi di ogni macchina gli eventi che corrispondono al timestamp precedente e immediatamente successivo.
 Analizzando questi due eventi riusciamo a determinare dove si troverà (o meglio, dove si trovava) la macchina al tempo t fissato. Utilizzando i dati forniti degli eventi trovati, calcoliamo la posizione della macchina e la memorizziamo nello stato interno sovrascrivendo lo stato precedente. Una volta effettuata questa operazione per tutte le macchine appartenenti al sistema, siamo in grado di determinare la posizione in classifica di ogni macchina per quel dato istante. Aggiungiamo questa informazione allo stato interno e copiamo il tutto all’interno di una risorsa protetta che verrà usata per passare queste informazioni ai monitor/controller. L’utilizzo di una risorsa protetta è stato reso necessario dal fatto che le informazioni vengono prelevate in modo concorrente, e vogliamo quindi assicurarci che lo snapshot fornito sia completo e coerente.
 Gli snapshot vengono suddivisi in due categorie: lo snapshot dettagliato e quello generalista. Lo snapshot dettagliato contiene informazioni aggiuntive per ogni macchina, come ad esempio la velocità corrente o lo stato attuale delle gomme. Queste informazioni non sono necessarie per la rappresentazione del monitor, e vengono quindi salvate in una risorsa protetta separata da quella che contiene lo snapshot generalista.
