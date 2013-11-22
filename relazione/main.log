@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2013.9.26)  22 NOV 2013 15:02
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2013.9.26)  22 NOV 2013 15:07
 entering extended mode
  %&-line parsing enabled.
 **main.tex
@@ -849,7 +849,7 @@ Capitolo 5.
 ------------------------------------------------------------------------------
 [11
 
-] <Pictures/nodes.png, id=349, 1022.82124pt x 294.09875pt>
+] <Pictures/nodes.png, id=351, 1022.82124pt x 294.09875pt>
 File: Pictures/nodes.png Graphic file (type png)
 
 <use Pictures/nodes.png>
@@ -870,7 +870,7 @@ Capitolo 6.
 ------------------------------------------------------------------------------
 [18
 
-] <Pictures/schema.png, id=381, 634.37pt x 520.94624pt>
+] <Pictures/schema.png, id=383, 634.37pt x 520.94624pt>
 File: Pictures/schema.png Graphic file (type png)
 
 <use Pictures/schema.png>
@@ -879,7 +879,7 @@ Overfull \hbox (1.9129pt too wide) in paragraph at lines 26--28
  []
 
 [19 <./Pictures/schema.png>] [20] [21] [22]
-<Pictures/SchemaOverview.png, id=402, 927.465pt x 352.31625pt>
+<Pictures/SchemaOverview.png, id=404, 927.465pt x 352.31625pt>
 File: Pictures/SchemaOverview.png Graphic file (type png)
 
 <use Pictures/SchemaOverview.png>
@@ -899,7 +899,7 @@ Overfull \hbox (5.22781pt too wide) in paragraph at lines 85--93
  []
 
 [23] [24 <./Pictures/SchemaOverview.png>] [25]
-<Pictures/enterSegment.png, id=416, 662.475pt x 1502.61375pt>
+<Pictures/enterSegment.png, id=418, 662.475pt x 1502.61375pt>
 File: Pictures/enterSegment.png Graphic file (type png)
 
 <use Pictures/enterSegment.png>
@@ -908,46 +908,66 @@ Package caption Warning: The option `hypcap=true' will be ignored for this
 (caption)                particular \caption on input line 120.
 See the caption package documentation for explanation.
 
-[26 <./Pictures/enterSegment.png>] [27] [28] [29] [30]
-<Pictures/monitor.png, id=439, 963.6pt x 652.4375pt>
+[26 <./Pictures/enterSegment.png>] [27]
+<Pictures/car_p_ciclo.png, id=429, 389.455pt x 679.53876pt>
+File: Pictures/car_p_ciclo.png Graphic file (type png)
+
+<use Pictures/car_p_ciclo.png>
+
+Package caption Warning: The option `hypcap=true' will be ignored for this
+(caption)                particular \caption on input line 140.
+See the caption package documentation for explanation.
+
+[28 <./Pictures/car_p_ciclo.png>] [29] [30]
+<Pictures/brokerSnapshot.png, id=443, 362.35374pt x 859.21pt>
+File: Pictures/brokerSnapshot.png Graphic file (type png)
+
+<use Pictures/brokerSnapshot.png>
+
+Package caption Warning: The option `hypcap=true' will be ignored for this
+(caption)                particular \caption on input line 200.
+See the caption package documentation for explanation.
+
+[31] [32 <./Pictures/brokerSnapshot.png>]
+<Pictures/monitor.png, id=454, 963.6pt x 652.4375pt>
 File: Pictures/monitor.png Graphic file (type png)
 
 <use Pictures/monitor.png>
-Overfull \hbox (1.9129pt too wide) in paragraph at lines 201--203
+Overfull \hbox (1.9129pt too wide) in paragraph at lines 216--218
  [] 
  []
 
-[31] [32 <./Pictures/monitor.png>] [33]
-<Pictures/controller.png, id=454, 301.125pt x 401.5pt>
+[33 <./Pictures/monitor.png>] [34] [35]
+<Pictures/controller.png, id=471, 301.125pt x 401.5pt>
 File: Pictures/controller.png Graphic file (type png)
 
 <use Pictures/controller.png>
-Overfull \hbox (1.9129pt too wide) in paragraph at lines 229--231
+Overfull \hbox (1.9129pt too wide) in paragraph at lines 244--246
  [] 
  []
 
-[34] [35 <./Pictures/controller.png>] [36]) (./Chapters/Chapter7.tex [37]
+[36 <./Pictures/controller.png>] [37] [38]) (./Chapters/Chapter7.tex [39]
 Capitolo 7.
 ------------------------------------------------------------------------------
  7 Copertura dei requisiti
 ------------------------------------------------------------------------------
-) (./Chapters/Chapter8.tex [38
+) (./Chapters/Chapter8.tex [40
 
-] [39]
+] [41]
 Capitolo 8.
 ------------------------------------------------------------------------------
  8 Conoscenze apprese
 ------------------------------------------------------------------------------
-) (./Chapters/Chapter9.tex [40
+) (./Chapters/Chapter9.tex [42
 
-] [41]
+] [43]
 Capitolo 9.
 ------------------------------------------------------------------------------
  9 Configurazione ed utilizzo
 ------------------------------------------------------------------------------
-[42
+[44
 
-]) [43]
+]) [45]
 ------------------------------------------------------------------------------
  Bibliografia
 ------------------------------------------------------------------------------
@@ -957,25 +977,43 @@ LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
  ) 
 Here is how much of TeX's memory you used:
- 10768 strings out of 493848
- 147375 string characters out of 1152823
- 246321 words of memory out of 3000000
- 13697 multiletter control sequences out of 15000+50000
+ 10790 strings out of 493848
+ 147794 string characters out of 1152823
+ 248321 words of memory out of 3000000
+ 13707 multiletter control sequences out of 15000+50000
  12614 words of font info for 46 fonts, out of 3000000 for 9000
  714 hyphenation exceptions out of 8191
- 48i,11n,45p,1299b,482s stack positions out of 5000i,500n,10000p,200000b,50000s
-</usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/sha
-re/texmf-texlive/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-te
-xlive/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texmf-texlive/font
-s/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-texlive/fonts/type1/pub
-lic/amsfonts/cm/cmr10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts
-/cm/cmr12.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr8.pfb
-></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/shar
-e/texmf-texlive/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texmf-tex
-live/fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on main.pdf (47 pages, 453328 bytes).
+ 48i,12n,45p,1299b,482s stack positions out of 5000i,500n,10000p,200000b,50000s
+pdfTeX warning (dest): name{figure.caption.56} has been referenced but does n
+ot exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{figure.caption.54} has been referenced but does not
+ exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{chapter.59} has been referenced but does not exist,
+ replaced by a fixed one
+
+pdfTeX warning (dest): name{subsection.57} has been referenced but does not exi
+st, replaced by a fixed one
+
+pdfTeX warning (dest): name{subsection.55} has been referenced but does not exi
+st, replaced by a fixed one
+
+pdfTeX warning (dest): name{subsection.53} has been referenced but does not exi
+st, replaced by a fixed one
+
+</usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share
+/texmf-texlive/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-texl
+ive/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texmf-texlive/fonts/
+type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-texlive/fonts/type1/publi
+c/amsfonts/cm/cmr10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/c
+m/cmr12.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr8.pfb><
+/usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/
+texmf-texlive/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texmf-texli
+ve/fonts/type1/public/amsfonts/cm/cmti12.pfb>
+Output written on main.pdf (49 pages, 497773 bytes).
 PDF statistics:
- 555 PDF objects out of 1000 (max. 8388607)
- 108 named destinations out of 1000 (max. 500000)
- 447 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 580 PDF objects out of 1000 (max. 8388607)
+ 118 named destinations out of 1000 (max. 500000)
+ 457 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -40,14 +40,14 @@
 \contentsline {section}{\numberline {6.3}Implementazione nel dettaglio}{24}{section.43}
 \contentsline {subsection}{\numberline {6.3.1}Circuit}{24}{subsection.45}
 \contentsline {subsection}{\numberline {6.3.2}Referee}{25}{subsection.46}
-\contentsline {subsection}{\numberline {6.3.3}Car}{27}{subsection.48}
-\contentsline {subsection}{\numberline {6.3.4}Event Bucket}{29}{subsection.49}
-\contentsline {subsection}{\numberline {6.3.5}Publisher}{29}{subsection.50}
-\contentsline {subsection}{\numberline {6.3.6}Broker}{30}{subsection.51}
-\contentsline {subsection}{\numberline {6.3.7}Monitor}{32}{subsection.52}
-\contentsline {subsection}{\numberline {6.3.8}Controller}{35}{subsection.54}
-\contentsline {subsection}{\numberline {6.3.9}Eventi}{36}{subsection.56}
-\contentsline {subsection}{\numberline {6.3.10}Snapshot}{37}{subsection.57}
-\contentsline {chapter}{\numberline {7}Copertura dei requisiti}{38}{chapter.58}
-\contentsline {chapter}{\numberline {8}Conoscenze apprese}{40}{chapter.59}
-\contentsline {chapter}{\numberline {9}Configurazione ed utilizzo}{42}{chapter.60}
+\contentsline {subsection}{\numberline {6.3.3}Car}{28}{subsection.48}
+\contentsline {subsection}{\numberline {6.3.4}Event Bucket}{29}{subsection.50}
+\contentsline {subsection}{\numberline {6.3.5}Publisher}{30}{subsection.51}
+\contentsline {subsection}{\numberline {6.3.6}Broker}{31}{subsection.52}
+\contentsline {subsection}{\numberline {6.3.7}Monitor}{33}{subsection.54}
+\contentsline {subsection}{\numberline {6.3.8}Controller}{36}{subsection.56}
+\contentsline {subsection}{\numberline {6.3.9}Eventi}{37}{subsection.58}
+\contentsline {subsection}{\numberline {6.3.10}Snapshot}{38}{subsection.59}
+\contentsline {chapter}{\numberline {7}Copertura dei requisiti}{40}{chapter.60}
+\contentsline {chapter}{\numberline {8}Conoscenze apprese}{42}{chapter.61}
+\contentsline {chapter}{\numberline {9}Configurazione ed utilizzo}{44}{chapter.62}
