@@ -11,8 +11,7 @@ Per questi motivi la scelta è ricaduta sulla realizzazione di una simulazione d
 
 \section{Gestione del tempo}
 Il problema dell’utilizzo del clock è intrinseco nel metodo in cui viene reperito, infatti non c’è modo di avere una risposta immediata alla richiesta di lettura (nel momento in cui si riceve il dato è sicuramente passato un altro breve istante), e non si può nemmeno compensare la latenza di lettura dato il jitter causato dallo scheduler (due letture da due task verranno messe necessariamente in coda).
-Diventa evidente che l’unica soluzione valida sia l’utilizzo del tempo relativo; in particolare nel nostro caso ogni task ha un tempo proprio, e tutte le comunicazioni di eventi si basano su intervalli di tempo calcolati matematicamente a partire dall’intervallo precedente. In questo modo i tempi comunicati saranno sempre offset riferiti ad un zero logico, che è stato definito come istante di inizio della gara.
-\textbf{!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!AMBIGUA E NON SI CAPISCE CHE VOGLIAMO SUPPORTARE COERENZA COL TEMPO REALE!!!!!! RIASCOLTA, SCIMMIA!!!!!!!!!}
+Diventa evidente che l’unica soluzione valida sia l’utilizzo di un tempo relativo coerente con il tempo reale. Considerando che il sistema prevede l'interazione da parte dell'utente, il rapporto fra tempo relativo e tempo reale è unitario; in particolare ogni task ha un tempo proprio, e tutte le comunicazioni di eventi si basano su intervalli temporali calcolati matematicamente a partire dall’intervallo precedente. In questo modo i tempi comunicati saranno sempre offset riferiti ad uno zero logico, che è stato definito come istante di inizio della gara.
 
 \section{Rappresentazione delle componenti di gara}
 Per poter fornire le garanzie richieste dal problema, il circuito è suddiviso in numerose risorse protette, che rappresentano i segmenti in cui è possibile ripartire il tracciato.\\

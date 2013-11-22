@@ -46,9 +46,9 @@ Il secondo canale dell’entità arbitro, il “leaveSegment”, viene usato (co
 Inoltre l’unica azione che viene compiuta dalla “leaveSegment” è quella di decrementare un contatore interno relativo al numero di macchine presenti nel segmento, che essendo una semplice operazione aritmetica viene eseguita senza sideeffects.
 
 
-\subsection{Macchina}
+\subsection{Car}
 
-Ogni macchina che partecipa alla gara è un’entità attiva separata. Ognuna è dotata di parametri propri, che cercano di rispecchiare le caratteristiche di un veicolo reale. Questi parametri vengono letti all’avvio del core, da un file “cars.txt” tramite parser. Dopo la lettura i task vengono creati utilizzando le informazioni lette dal file. Tra i parametri figurano velocità massima in $Km/h$, l’accelerazione in $m/s^2$, il comportamento del pilota (che implica la strategia), ed il suo identificativo. Inoltre sono presenti numerose altre informazioni che raffigurano lo stato in gara, come lo stato ed il tipo di gomme, i danni riportati in caso di incidente e la velocità istantanea.
+Ogni vettura che partecipa alla gara è un’entità attiva separata. Ognuna è dotata di parametri propri, che cercano di rispecchiare le caratteristiche di un veicolo reale. Questi parametri vengono letti all’avvio del core, da un file “cars.txt” tramite parser. Dopo la lettura i task vengono creati utilizzando le informazioni lette dal file. Tra i parametri figurano velocità massima in $Km/h$, l’accelerazione in $m/s^2$, il comportamento del pilota (che implica la strategia), ed il suo identificativo. Inoltre sono presenti numerose altre informazioni che raffigurano lo stato in gara, come lo stato ed il tipo di gomme, i danni riportati in caso di incidente e la velocità istantanea.
 Il ciclo di vita dei task macchina è relativamente semplice, infatti consiste nel richiedere l’ingresso in un segmento, attendere quanto specificato dall’arbitro, ed uscire dal segmento.
 Questo ciclo viene ripetuto finchè i giri non terminano, o fino al ritiro del veicolo in caso di incidente.
 L’attesa tra l’ingresso in un segmento e l’uscita dal medesimo viene fatta tramite il costrutto “delay until”, che ci assicura che in caso il risveglio del task ottenga qualche ritardo, quest’ultimo non venga accumulato al risveglio successivo.
@@ -83,7 +83,13 @@ A questo punto è però sorto un problema, infatti il controller ed il monitor s
 \section{Implementazione nel dettaglio}
 
 Verrà ora descritta l’implementazione in modo dettagliato, per ogni package$/$classe più importante.
----TODO aggiungi una visione di insieme con frecce che indicano chiamate a procedure, SCIMMIA!
+\begin{figure}[htbp]
+	\centering
+		\includegraphics[keepaspectratio = true, width = 400px] {Pictures/SchemaOverview}
+		\rule{35em}{0.5pt}
+	\caption[Componenti]{Componenti: vista in dettaglio.}
+	\label{fig:SchemaOverview}
+\end{figure}
 
 \subsection{Circuit}
 
@@ -104,8 +110,17 @@ Il Circuit contiene anche il task del meteo, che tramite la generazione di un nu
 Come ampiamente anticipato, il referee (o arbitro) è l’entità che incarna la vera risorsa protetta del segmento. 
 Oltre al alcune funzioni e procedure necessarie per il setup, i canali principali che offre sono tre, “getNext”, “enterSegment”, “leaveSegment”.
 La prima è una funzione rispecchia l’implementazione a linked list, in cui ogni elemento conosce solo i propri dati ed un puntatore all’elemento successivo.
-La maggior parte del lavoro viene effettuata dall’entry “enterSegment”, che ha l’onere di calcolare tramite vincoli fisici l’attraversamento del segmento dal parte del veicolo o il suo ingresso ai box.
+La maggior parte del lavoro viene effettuata dalla procedure “enterSegment”, che ha l’onere di calcolare tramite vincoli fisici l’attraversamento del segmento da parte del veicolo o il suo ingresso ai box.
 Per ricavare il tempo di attesa e la nuova velocità vengono utilizzate le leggi della cinematica modificate con coefficienti che alterano il risultato a seconda della strategia utilizzata dal pilota e dal tipo di tratto. Per quanto nella realtà l’accelerazione non sia costante, ci è sembrata una buona approssimazione, soprattutto considerando che il realismo fisico non è il fine ultimo del progetto.
+
+\noindent%
+\begin{minipage}{\linewidth}
+\makebox[\linewidth]{%
+  \includegraphics[keepaspectratio=true,scale=0.4]{Pictures/enterSegment}}
+\captionof{figure}{Flowchart: procedure enterSegment.}% only if needed
+\label{enterSegment}
+\end{minipage}
+
 Dopo aver calcolato il tempo di attesa e la nuova velocità del veicolo, viene effettuato un controllo sulla molteplicità del tratto, verificando il numero di veicoli al momento presenti all’interno. In caso ci sia spazio per un’altra macchina, il tempo e la velocità restano invariate, dato che rappresentano il massimo che la vettura può ottenere; in caso contrario la vettura deve accodarsi alla più vicina che la precede, e viene quindi sommato al tempo di uscita del veicolo il minor tempo per permettere l’uscita di una delle macchine già presenti.
 Essendo in possesso del nuovo tempo di uscita viene ricalcolata la velocità, simulando la frenata necessaria ad adeguarsi al veicolo che la precede.
 L’arbitro provvede anche ad aggiornare lo stato delle gomme dei veicoli, calcolandone il consumo basato sul tratto percorso, sul comportamento del pilota, ed in piccola parte dalla casualità (che aggiunge una piccola parte di non determinismo). La variabile che rappresenta lo stato attuale delle gomme viene utilizzata per eseguire il rientro ai box per il cambio gomme quando quest’ultime sono troppo usurate.
@@ -164,8 +179,7 @@ Il primo compito è quello di recuperare gli eventi dal bucket, e convertirli da
 Una volta creato l’evento viene inviato immediatamente al broker.
 
 \subsection{Broker}
-
---TODO inserisci flowchart broker_snapshot, SCIMMIA
+TOODO inserisci flowchart brokersnapshot, SCIMMIA
 
 Il broker, o intermediario, si occupa di mediare la comunicazione fra il core principale che esegue la simulazione, e gli eventuali monitor o controller che vogliono visualizzarne lo stato in un dato istante. Ottiene il duplice scopo di bilanciare il traffico di rete e di processare i dati forniti dal simulatore in modo che siano più facilmente fruibili per la visualizzazione. Infatti, ponendosi a metà tra monitor e core, permette di alleggerire il carico di lavoro del simulatore poichè la comunicazione di quest’ultimo sarà sempre solo con un entità singola (il broker), indipendentemente dal numero di monitor che stanno visualizzando la gara in un dato istante.
 Come prima cosa apre un canale di comunicazione che il core utilizzerà per inviare gli eventi man mano che vengono prodotti, tramite un architettura push. Gli eventi vengono smistati in base al loro tipo, e memorizzati nello stato interno del broker utilizzando una lista circolare. In questo modo riusciamo a mantenerne uno storico. L’utilizzo di una lista circolare è stato dettato dal fatto che per ragioni di memoria limitata non possiamo memorizzarli tutti. In questo modo quando lo spazio è esaurito gli eventi più recenti vengono sempre memorizzati, ricavando spazio dalla rimozione di quelli più obsoleti.
