@@ -22,10 +22,13 @@ package body car_p is
       Poll_Time : Ada.Real_Time.Time := race_stat.get_starting_time; -- time to start polling
       toSleep   :          Ada.Real_Time.Time;
       durationToSleep : Ada.Real_Time.Time_Span;
+
+      --scimmia : Ada.Real_Time.Time;
+      --scimmia2 : Ada.Real_Time.Time;
+      --deltaScimmia : Ada.Real_Time.Time_Span;
    begin
 
       speed := status.get_currentSpeed; -- the initial speed should be zero?
-      -- TODO prima del loop, prendiamo dal circuit il tempo a cui dovremo risvegliarci col dealy until (messo nella risorsa esterna race_stat)
       toSleep := Poll_Time + epsilon * id;
       delay until toSleep;
 
@@ -49,7 +52,12 @@ package body car_p is
          end if;
 
          -- enterSegment need to be done as first thing, in order to compensate lag
+--scimmia := Ada.Real_Time.Clock;
          nextReferee.enterSegment(id, status, speed, toSleep, nextReferee, box_stop, event_buffer.isRaining, incident, last_lap);
+--scimmia2 := Ada.Real_Time.Clock;
+--deltaScimmia := scimmia2-scimmia;
+--Ada.Text_IO.Put_Line (Duration'Image(Ada.Real_Time.To_Duration(deltaScimmia)));
+
          durationToSleep := toSleep - Poll_Time;
 
          status.set_currentSpeed(speed); -- set new speed on status
