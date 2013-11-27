@@ -5,13 +5,12 @@
 \lhead{Capitolo 3. \emph{Analisi della soluzione}} % Change X to a consecutive number; this is for the header on each page - perhaps a shortened title
 
 \section{Scelta del tipo di simulazione}
-Per capire quale tipo di simulazione utilizzare dobbiamo sapere quali sono gli eventi di interesse del nostro sistema.
-Nel caso di una simulazione continua sarebbe necessario calcolare molti più stati di quelli necessari per l’avanzamento della simulazione, e dover includere tutti i dati di gara in ogni passaggio di stato; dato che uno degli obiettivi è la distribuzione, ci sarebbe uno spreco di risorse non indifferente, CPU per il calcolo degli eventi, e di rete per la comunicazione di eventi non rilevanti.
-Per questi motivi la scelta è ricaduta sulla realizzazione di una simulazione discreta a tempo reale, assicurandoci che l’architettura assicuri il rispetto dei vincoli e delle invarianti tra due eventi successivi.
-
+Per stabilire quale tipo di simulazione utilizzare è necessario sapere quali sono gli eventi di interesse del sistema.
+Utilizzando una simulazione continua sarebbe necessario calcolare molti più stati di quelli effettivamente utili per l’avanzamento della simulazione, oltre a dover includere tutti i dati di gara in ogni passaggio di stato; dato che uno degli obiettivi è la distribuzione, ci sarebbe uno spreco di risorse non indifferente, CPU per il calcolo degli eventi, e di rete per la comunicazione di eventi non rilevanti.
+Per questi motivi la scelta è ricaduta sulla realizzazione di una simulazione \emph{discreta a tempo reale}, assicurandoci che l’architettura assicuri il rispetto dei vincoli e delle invarianti tra due eventi successivi.
 \section{Gestione del tempo}
 Il problema dell’utilizzo del clock è intrinseco nel metodo in cui viene reperito, infatti non c’è modo di avere una risposta immediata alla richiesta di lettura (nel momento in cui si riceve il dato è sicuramente passato un altro breve istante), e non si può nemmeno compensare la latenza di lettura dato il jitter causato dallo scheduler (due letture da due task verranno messe necessariamente in coda).
-Diventa evidente che l’unica soluzione valida sia l’utilizzo di un tempo relativo coerente con il tempo reale. Considerando che il sistema prevede l'interazione da parte dell'utente, il rapporto fra tempo relativo e tempo reale è unitario; in particolare ogni task ha un tempo proprio, e tutte le comunicazioni di eventi si basano su intervalli temporali calcolati matematicamente a partire dall’intervallo precedente. In questo modo i tempi comunicati saranno sempre offset riferiti ad uno zero logico, che è stato definito come istante di inizio della gara.
+Diventa evidente che l’unica soluzione valida sia l’utilizzo di un tempo relativo, supportando coerenza con il tempo reale. Considerando che il sistema prevede l'interazione da parte dell'utente, il rapporto fra tempo relativo e tempo reale è unitario; in particolare ogni task ha un tempo proprio, e tutte le comunicazioni di eventi si basano su intervalli temporali calcolati matematicamente a partire dall’intervallo precedente. In questo modo i tempi comunicati saranno sempre offset riferiti ad uno zero logico, che è stato definito come istante di inizio della gara.
 
 \section{Rappresentazione delle componenti di gara}
 Per poter fornire le garanzie richieste dal problema, il circuito è suddiviso in numerose risorse protette, che rappresentano i segmenti in cui è possibile ripartire il tracciato.\\
@@ -22,7 +21,7 @@ Ogni segmento ha le seguenti proprietà:
  \item lunghezza, in metri
  \item molteplicità, numero di veicoli che possono essere contemporaneamente contenuti
 \end{itemize} 
-L'ultimo parametro garantisce che solo un certo numero di auto, coerente con la fisica del tracciato, sia in una certo tratto in un dato istante di tempo, e che quindi un sorpasso possa essere effettuato solo se lo spazio è disponibile, eliminando quindi la possibilità di sorpassi impossibili. La dimostrazione è facilmente intuibile impostando una molteplicità unitaria a tutti i segmenti del circuito: ogni macchina dovrà attendere che il veicolo che la precede liberi il tratto successivo per poter passare, rendendo di fatto impossibile ogni sorpasso, come ci si aspetta.
+L'ultimo parametro garantisce che solo un certo numero di auto, coerente con la fisica del tracciato, sia in un certo tratto in un dato istante di tempo, e che quindi un sorpasso possa essere effettuato solo se lo spazio è disponibile, eliminando quindi la possibilità di sorpassi impossibili. La dimostrazione è facilmente intuibile impostando una molteplicità unitaria a tutti i segmenti del circuito: ogni macchina dovrà attendere che il veicolo che la precede liberi il tratto successivo per poter passare, rendendo di fatto impossibile ogni sorpasso, come ci si aspetta.
 Il problema resta aperto in caso di richieste concorrenti di ingresso al segmento, caso che verrà trattato successivamente.
 \\
 \\

@@ -55,7 +55,8 @@ I veicoli, intesi come coppia pilota-vettura, possiedono una serie di parametri 
 Il determinismo è quella proprietà che assicura che partendo da un set di condizioni il risultato di uno stesso insieme di azioni sarà sempre lo stesso. In un simulatore questa proprietà è utile alla rappresentazione reale di un sistema, ma non per questo il non determinismo va evitato. In caso voglia essere riprodotto un comportamento reale non deterministico (come una gara automobilistica) può essere utile avere alcune componenti dal comportamento non predeterminato, assicurandosi però che siano controllate e che rispecchino l'imprevedibilità del sistema reale. Un esempio di comportamento non prevedibile è quello dello scheduler, che per quanto sia deterministico è indipendente dalla simulazione e quindi non è controllabile. Si presenta quindi il problema di separare il simulatore dall'architettura del sistema operativo su cui viene eseguito.
 
 \section{Concorrenza}
-Il problema richiede che il simulatore abbia componenti con esecuzione concorrente, ovvero la possibilità che un insieme di processi sia in esecuzione nello stesso istante e che interagiscano fra di loro attraverso l'utilizzo di risorse condivise. L'utilizzo di concorrenza introduce diverse problematiche.
+Il problema richiede che il simulatore abbia componenti con esecuzione concorrente, ovvero la possibilità che un insieme di processi sia in esecuzione nello stesso istante e che interagiscano fra di loro attraverso l'utilizzo di risorse condivise.
+L'utilizzo di concorrenza introduce diverse problematiche.
  \subsection{Stalli}
  Dato che trattiamo un sistema concorrente, è importante assicurarci che non si verifichino stalli (o deadlock) durante l’esecuzione.
 Affinchè possa verificarsi uno stallo, è necessario che le quattro condizioni di Havender vengano soddisfatte, ovvero:
@@ -65,7 +66,8 @@ Affinchè possa verificarsi uno stallo, è necessario che le quattro condizioni 
  \item \textbf{Impossibilità di prelazione}: un processo non può essere costretto a rilasciare una risorsa.
  \item \textbf{Attesa circolare}: avviene quando un gruppo di processi P1,...,Pn è in attesa di una risorsa posseduta dal processo successivo, creando una catena chiusa.
 \end{itemize}
-Le possibili soluzioni al deadlock sono due, risolverli o prevenirli. Nel caso della risoluzione è necessario rimuovere forzatamente uno dei task che causa lo stallo, interrompendolo o usando il prerilascio, mentre per la prevenzione è sufficiente invalidare una delle quattro condizioni espresse sopra.
+Le possibili soluzioni al deadlock sono due, risolverli o prevenirli.
+Nel caso della risoluzione è necessario rimuovere forzatamente uno dei task che causa lo stallo, interrompendolo o usando il prerilascio, mentre per la prevenzione è sufficiente invalidare una delle quattro condizioni espresse sopra.
 
  \subsection{Sorpassi fisicamente impossibili}
  Nel caso di una simulazione di corsa automobilistica è ragionevole pensare ai veicoli come task concorrenti e ai tratti come risorse condivise a cui essi accedono. In questa situazione è necessario risolvere il problema di garantire il corretto comportamento dei veicoli anche in situazioni di concorrenza, come ad esempio il seguente scenario:
@@ -82,3 +84,4 @@ Le possibili soluzioni al deadlock sono due, risolverli o prevenirli. Nel caso d
 Uno dei requisiti del sistema è quello di essere distribuito, ovvero la possibilità di permettere la separazione dei componenti della simulazione su computer interconnessi fra loro. E' quindi necessario individuare quali componenti possono essere fisicamente separate fra loro in modo da garantire un corretto funzionamento complessivo.
 \\
 Bisogna inoltre stabilire quale protocollo di comunicazione utilizzare per l'interazione fra le varie componenti.
+%TODO aggiungere problemi causati da monitor multipli e richiesta del joystick? A parte che mi sembrano molto specifici, implementativi.
