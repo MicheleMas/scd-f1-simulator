@@ -10,20 +10,21 @@
 
 \section{Determinismo}
 
-Per rendere deterministico il calcolo degli intervalli di tempo di percorrenza dei segmenti viene utilizzato il tempo relativo, basandosi solo su calcoli matematici dettati dalle caratteristiche del veicolo e del tratto che sta attraversando in quel momento. Durante tutta la simulazione l’intervallo di tempo in cui il task deve essere risvegliato viene ricavato solo utilizzando il tempo precedente e alcuni parametri statici, quindi anche se un task venisse risvegliato più tardi del previsto il calcolo del successivo non includerebbe alcun ritardo, dato che in questo modo la latenza non è accumulabile.
-Per minimizzare il rischio di preemption da parte dello scheduler, il ciclo di vita del task è costruito in modo da restare per la maggior parte del tempo in sleep.
-
-Un secondo punto da tenere in considerazione è il risveglio delle macchine, ed il relativo accodamento per entrare nel segmento successivo.
-L’entrata al segmento successivo può essere effettuata in tre modi:
+Per rendere deterministico il calcolo degli intervalli di tempo di percorrenza dei segmenti viene utilizzato il tempo relativo, basandosi solo su calcoli matematici dettati dalle caratteristiche del veicolo e del tratto che sta attraversando in quel momento. Durante tutta la simulazione l’istante temporale in cui il task deve essere risvegliato viene ricavato solo utilizzando il tempo precedente e alcuni parametri statici, quindi anche se un task venisse risvegliato più tardi del previsto il calcolo del successivo non includerebbe alcun ritardo, dato che in questo modo la latenza non è accumulabile.
+Per minimizzare il rischio di preemption da parte dello scheduler, il ciclo di vita del task è progettato in modo da restare per la maggior parte del tempo in stato di sleep.
+Un secondo punto tenuto in considerazione è il risveglio delle macchine, ed il relativo accodamento per entrare nel segmento successivo.
+\\
+L'entrata al segmento successivo può essere effettuata in tre modi:
 \begin{itemize}
  \item Nessun controllo
  \item Mutua esclusione con accodamento
  \item Accodamento su condizione logica
 \end{itemize}
-Il primo caso può essere scartato a priori, dato che come detto precedentemente i segmenti sono risorse protette e senza effettuare controlli si otterrebbero sorpassi impossibili.
-Nel secondo caso ogni veicolo quando si sveglia si mette in attesa di entrare all’interno della risorsa protetta, e l’accesso verrà dato ad una delle macchine che attendono secondo una scelta determinata dalla politica adottata dallo scheduler e non dalle caratteristiche fisiche della simulazione, portando di conseguenza il rischio di avere un ordine di ingresso non corretto. Questo comportamento potrebbe essere utile a dare un elemento di non determinismo al simulatore, ma non è controllabile e può causare comportamenti non assimilabili ad un sistema reale.
+Il primo caso può essere scartato a priori, dato che come detto precedentemente i segmenti sono risorse protette e senza effettuare controlli si otterrebbero sorpassi impossibili.\\
+Nel secondo caso ogni veicolo quando si sveglia si mette in attesa di entrare all’interno della risorsa protetta, e l’accesso verrà dato ad una delle macchine che attendono secondo una scelta determinata dalla politica adottata dallo scheduler e non dalle caratteristiche fisiche della simulazione, portando di conseguenza il rischio di avere un ordine di ingresso non corretto. Questo comportamento potrebbe essere utile a dare un elemento di non determinismo al simulatore, ma non è controllabile e può causare comportamenti non assimilabili ad un sistema reale. \\
 La terza opzione consiste nell'aggiunta di un guardiano sulla condizione di ingresso nel segmento, ma non permette di evitare il presentarsi del problema descritto precedentemente.
-Per risolvere il problema è stato necessario diversificare forzatamente gli istanti in cui vengono effettuate le richieste di ingresso da parte dei vari veicoli, inserendo un ritardo artificiale epsilon in caso di risvegli concomitanti o troppo ravvicinati temporalmente. La lunghezza del ritardo è stata calcolata in modo che sia sufficientemente grande da permettere il completamento del calcolo del veicolo precedente, ma abbastanza piccola da non creare ritardi nell'esecuzione. Il calcolo di questa variabile epsilon sarà trattato dettagliatamente nel capitolo \ref{Chapter5}
+\\ \\
+Per risolvere il problema è necessario diversificare forzatamente gli istanti in cui vengono effettuate le richieste di ingresso da parte dei vari veicoli, inserendo un ritardo artificiale $\mathcal{E}$ in caso di risvegli concomitanti o troppo ravvicinati temporalmente. La lunghezza del ritardo è stata calcolata in modo che sia sufficientemente grande da permettere il completamento del calcolo del veicolo precedente, ma abbastanza piccola da non creare ritardi nell'esecuzione. Il calcolo di questa variabile $\mathcal{E}$ sarà trattato dettagliatamente nel capitolo \ref{Chapter5}
 
 %-----------------------------------
 %	SECTION 2
@@ -31,8 +32,7 @@ Per risolvere il problema è stato necessario diversificare forzatamente gli ist
 \section{Non determinismo}
 
 Come già detto in precedenza, una componente di non determinismo può tornare utile (se controllata) per dare valore aggiunto alla simulazione.
-Quello che abbiamo deciso è stato di simulare degli elementi di non determinismo, in modo da assicurarci che fossero sempre controllabili.
-Per farlo viene sempre aggiunto un elemento casuale all’interno dei calcoli che vengono effettuati durante l’attraversamento di un tratto, in termini di velocità e tempo di attesa (abbastanza piccoli da essere assimilabili a traiettorie o condizioni della pista non ottimali). Inoltre è stata introdotta la possibilità di incidente basandosi sia su caratteristiche fisiche (pista bagnata, gomme non adatte, ecc…) che ed elementi casuali, garantendo risultati diversi per ogni simulazione di gara.
+Per assicurare che siano sempre controllabili, gli elementi di non determinismo vengono simulati aggiungendo un elemento casuale all’interno dei calcoli che vengono effettuati per stabilire l’attraversamento di un tratto, in termini di velocità e tempo di attesa (abbastanza piccoli da essere assimilabili a traiettorie o condizioni della pista non ottimali). Inoltre è stata introdotta la possibilità di incidente basandosi sia su caratteristiche fisiche (pista bagnata, gomme non adatte, ecc…) che ad elementi casuali, garantendo risultati diversi per ogni simulazione di gara.
 
 %-----------------------------------
 %	SECTION 3
@@ -40,10 +40,10 @@ Per farlo viene sempre aggiunto un elemento casuale all’interno dei calcoli ch
 
 \section{Stalli}
 Come accennato precedentemente le possibilità sono due: prevenzione o risoluzione dello stallo. Nel caso della risoluzione è possibile che vengano causati stati inconsistenti per la “vittima” designata al momento dell'interruzione.
-Si è deciso di prevenire gli stalli, invalidando una delle quattro condizioni di Havender.
-La mutua esclusione è necessaria per preservare il corretto funzionamento dei segmenti, infatti è l'unico modo per assicurarci che non ci siano problemi derivanti da race condition, ad esempio nel controllo dei veicoli attualmente presenti in un singolo tratto.
-L'utilizzo del prerilascio può portare a stati inconsistenti per il task che viene colpito, e per questo motivo è stato scartato.
-Abbiamo quindi scelto di impedire l'accumulo di risorse, imponendo alle macchine di lasciare il segmento corrente prima di entrare nel successivo. In questo modo, annulliamo almeno una delle quattro precondizioni, e abbiamo conseguentemente la sicurezza che non si verificheranno stalli.
+Si è deciso di prevenire gli stalli, invalidando una delle quattro condizioni di Havender.\\
+La mutua esclusione è necessaria per preservare il corretto funzionamento dei segmenti, infatti è l'unico modo per assicurarci che non ci siano problemi derivanti da \emph{race condition}, ad esempio nel controllo dei veicoli attualmente presenti in un singolo tratto.\\
+L'utilizzo del prerilascio può portare a stati inconsistenti per il task che viene colpito, e per questo motivo è stato scartato.\\
+La scelta risolutiva è stata quindi di impedire l'accumulo di risorse, imponendo alle macchine di lasciare il segmento corrente prima di entrare nel successivo. In questo modo viene annullata una delle quattro precondizioni, e c'è conseguentemente la sicurezza che non si verificheranno stalli.
 
 %----------------------------------------------------------------------------------------
 %	SECTION 4
@@ -51,9 +51,9 @@ Abbiamo quindi scelto di impedire l'accumulo di risorse, imponendo alle macchine
 
 \section{Sorpassi fisicamente impossibili}
 
-In primo luogo il segmento è stato implementato come risorsa protetta utilizzando un gestore degli ingressi basato sulla molteplicità, in particolare si consentiva l'ingresso al segmento solo se le macchine attualmente al suo interno erano in numero minore o uguale n (dove n è la molteplicità specifica di quel segmento). I veicoli che non erano in grado di entrare venivano messi in coda in ingresso al segmento e risvegliate solo quando una delle macchine all'interno del segmento ne usciva.
+In primo luogo il segmento è stato implementato come risorsa protetta utilizzando un gestore degli ingressi basato sulla molteplicità. In particolare si consentiva l'ingresso al segmento solo se le macchine attualmente al suo interno erano in numero minore o uguale \emph{n} (dove \emph{n} è la molteplicità specifica di quel segmento). I veicoli che non erano in grado di entrare venivano messi in coda in ingresso al segmento e risvegliati solo quando una delle macchine all'interno del segmento ne usciva.
 Per quanto funzionale, la soluzione non rispecchia il comportamento del sistema reale. Una vettura non si ferma mai completamente in attesa che si liberi il segmento successivo, ma rallenta per disporsi dietro al veicolo che lo precede; per questo motivo questa ipotesi è stata scartata in favore di soluzioni alternative.
-E' stato scelto quindi di non far comunicare direttamente la vettura con la risorsa protetta segmento, ma utilizzare un arbitro come intermediario tra i due. Dato che l'arbitro deve calcolare il tempo di uscita delle vetture dal segmento, può salvare i risultati di questi calcoli e avere quindi un'immagine in tempo reale della situazione del tratto in un dato istante. In questo modo la richiesta di attraversamento da parte di una veicolo non viene mai negata o accodata, ma elaborata immediatamente tenendo conto che non potrà uscire del segmento prima che il veicolo che fa saturare la molteplicità non abbia liberato lo spazio necessario. In questo modo diventa possibile far rallentare l'ultima vettura facendola uscire con un maggior ritardo dal tratto.
+È stato scelto quindi di non far comunicare direttamente la vettura con la risorsa protetta segmento, ma utilizzare un arbitro come intermediario tra i due. Dato che l'arbitro deve calcolare il tempo di uscita delle vetture dal segmento, può salvare i risultati di questi calcoli e avere quindi un'immagine in tempo reale della situazione del tratto in un dato istante. In questo modo la richiesta di attraversamento da parte di una veicolo non viene mai negata o accodata, ma elaborata immediatamente tenendo conto che non potrà uscire del segmento prima che il veicolo che fa saturare la molteplicità non abbia liberato lo spazio necessario. In questo modo diventa possibile far rallentare l'ultima vettura facendola uscire con un maggior ritardo dal tratto.
 La correttezza funzionale è garantita perché l'evento che viene considerato dal simulatore è esclusivamente l'uscita da un segmento in un dato istante di tempo. L'ingresso viene gestito solo a livello implementativo, e viene considerato come immediatamente successivo all'evento di uscita dal segmento precedente.
-Tramite questa soluzione viene evitato il problema esposto nella sezione [2.5.2]--TODO inserisci link, SCIMMIA, infatti non è più possibile che il veicolo B termini prima di A se la molteplicità non lo consente.
+Tramite questa soluzione viene evitato il problema esposto nella sezione \ref{sorpassimpossibili}, infatti non è più possibile che il veicolo B termini prima di A se la molteplicità non lo consente.
 L'implementazione specifica verrà trattata in modo più specifico successivamente.

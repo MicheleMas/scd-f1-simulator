@@ -70,6 +70,7 @@ Le possibili soluzioni al deadlock sono due, risolverli o prevenirli.
 Nel caso della risoluzione è necessario rimuovere forzatamente uno dei task che causa lo stallo, interrompendolo o usando il prerilascio, mentre per la prevenzione è sufficiente invalidare una delle quattro condizioni espresse sopra.
 
  \subsection{Sorpassi fisicamente impossibili}
+ \label{sorpassimpossibili}
  Nel caso di una simulazione di corsa automobilistica è ragionevole pensare ai veicoli come task concorrenti e ai tratti come risorse condivise a cui essi accedono. In questa situazione è necessario risolvere il problema di garantire il corretto comportamento dei veicoli anche in situazioni di concorrenza, come ad esempio il seguente scenario:
  \begin{itemize}
  \item un veicolo A inizia l'attraversamento di un tratto
