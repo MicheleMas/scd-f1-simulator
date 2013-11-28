@@ -1,3 +1,4 @@
 Ho modificato:			Alle righe:	In data ora:
 
 Chapter#.tex			666-18546	22/11/13 5.47
+vabbeh, me ne sono dimenticato. Lasciamo fare sto lavoro a SVN.

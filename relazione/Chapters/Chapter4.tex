@@ -9,6 +9,7 @@
 %----------------------------------------------------------------------------------------
 
 \section{Determinismo}
+\label{epsilondeterminismo}
 
 Per rendere deterministico il calcolo degli intervalli di tempo di percorrenza dei segmenti viene utilizzato il tempo relativo, basandosi solo su calcoli matematici dettati dalle caratteristiche del veicolo e del tratto che sta attraversando in quel momento. Durante tutta la simulazione l’istante temporale in cui il task deve essere risvegliato viene ricavato solo utilizzando il tempo precedente e alcuni parametri statici, quindi anche se un task venisse risvegliato più tardi del previsto il calcolo del successivo non includerebbe alcun ritardo, dato che in questo modo la latenza non è accumulabile.
 Per minimizzare il rischio di preemption da parte dello scheduler, il ciclo di vita del task è progettato in modo da restare per la maggior parte del tempo in stato di sleep.
