@@ -45,7 +45,7 @@
 \contentsline {subsection}{\numberline {6.3.6}Broker}{32}{subsection.51}
 \contentsline {subsection}{\numberline {6.3.7}Monitor}{34}{subsection.53}
 \contentsline {subsection}{\numberline {6.3.8}Controller}{37}{subsection.55}
-\contentsline {subsection}{\numberline {6.3.9}Eventi}{38}{subsection.57}
+\contentsline {subsection}{\numberline {6.3.9}Eventi}{39}{subsection.57}
 \contentsline {subsection}{\numberline {6.3.10}Snapshot}{39}{subsection.58}
 \contentsline {chapter}{\numberline {7}Copertura dei requisiti}{41}{chapter.59}
 \contentsline {chapter}{\numberline {8}Conoscenze apprese}{43}{chapter.60}
