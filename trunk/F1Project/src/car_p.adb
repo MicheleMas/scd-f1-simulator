@@ -18,14 +18,10 @@ package body car_p is
       request_box : Boolean := false;
 
       use type Ada.Real_Time.Time_Span;
-      --Poll_Time :          Ada.Real_Time.Time := Ada.Real_Time.Clock; -- time to start polling
+
       Poll_Time : Ada.Real_Time.Time := race_stat.get_starting_time; -- time to start polling
       toSleep   :          Ada.Real_Time.Time;
       durationToSleep : Ada.Real_Time.Time_Span;
-
-      --scimmia : Ada.Real_Time.Time;
-      --scimmia2 : Ada.Real_Time.Time;
-      --deltaScimmia : Ada.Real_Time.Time_Span;
    begin
 
       speed := status.get_currentSpeed; -- the initial speed should be zero?
@@ -52,11 +48,7 @@ package body car_p is
          end if;
 
          -- enterSegment need to be done as first thing, in order to compensate lag
---scimmia := Ada.Real_Time.Clock;
          nextReferee.enterSegment(id, status, speed, toSleep, nextReferee, box_stop, event_buffer.isRaining, incident, last_lap);
---scimmia2 := Ada.Real_Time.Clock;
---deltaScimmia := scimmia2-scimmia;
---Ada.Text_IO.Put_Line (Duration'Image(Ada.Real_Time.To_Duration(deltaScimmia)));
 
          durationToSleep := toSleep - Poll_Time;
 
