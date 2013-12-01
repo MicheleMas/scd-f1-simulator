@@ -7,7 +7,7 @@ package global_custom_types is
    -- constants
    car_number : Positive := 20; -- max number of cars
    laps_number : Positive := 90; -- max number of laps
-   epsilon : Ada.Real_Time.Time_Span := Ada.Real_Time.Milliseconds (1); --a very short time span
+   epsilon : Ada.Real_Time.Time_Span := Ada.Real_Time.Milliseconds (1); -- a very short time span
 
    type Segment (id : Positive;
                  length : Positive;
