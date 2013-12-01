@@ -1,0 +1,38 @@
+Differenze tra la relazione consegnata e quella attuale:
+
+-Generali
+Reso il testo un po' meno narrativo e un po' più formale.
+Rimosso il capitolo Overview, e separato il capitolo 3 "Problemi e analisi delle soluzioni" nel capitolo 2 "Problematiche" e 3 "Analisi della soluzione"
+Aggiunta una didascalia per ogni figura per indicare il significato delle componenti
+
+-1 Introduzione
+Aggiunte specifiche aggiuntive fissate in fase di colloquio
+
+-2 Problematiche
+Riorganizzato e corretto attingendo dall'inizio dell'ex capitolo3.
+
+-3 Analisi della soluzione
+Riveduto e corretto pezzi dell'ex capitolo3.
+
+-4 Analisi della concorrenza
+Riveduto e corretto 4.1, 4.3
+Aggiunto 4.4 sul problema dei Sorpassi fisicamente impossibili
+
+-5 Analisi della distribuzione
+Riveduto e corretto 5.1 aggiungendo un overview delle componenti
+Correzioni minori in 5.3, 5.4
+
+-6 Soluzione proposta
+Riveduto e corretto 6.2.2, aggiungendo le problematiche evidenziate dall'utilizzo di una procedure per la ex-entry enterSegment
+Correzioni minori a 6.2.1, 6.2.3, 6.2.5.
+Aggiunta figura per la visione d'insieme nel 6.3.
+Riordinati, correzioni minori e aggiunta di flowchart per aumentare la chiarezza espositiva i capitoli rimanenti.
+
+-7 Copertura dei requisiti
+Correzioni minori.
+
+-8 Conoscenze apprese
+Nessuna modifica.
+
+-9 Configurazione e utilizzo
+Nessuna modifica.

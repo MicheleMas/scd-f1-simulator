@@ -1,0 +1,6 @@
+Expecting 2 parameters, override address and broker(pull) address
+Using default tcp://localhost:12348 / tcp://localhost:12347
+Waiting for the connection
+Connection completed, cars = 20
+Selezionato pilota 2
+Selezionato pilota 1
