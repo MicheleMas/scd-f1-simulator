@@ -4,6 +4,8 @@
 
 \lhead{Capitolo 2. \emph{Problematiche}} % Change X to a consecutive number; this is for the header on each page - perhaps a shortened title
 
+In questo capitolo verranno discusse le problematiche evidenziate nel corso dell'analisi del sistema richiesto, derivanti dalla tipologia del progetto e dalle caratteristiche esposte nel precedente capitolo.
+
 %----------------------------------------------------------------------------------------
 %	SECTION 1
 %----------------------------------------------------------------------------------------
@@ -56,7 +58,8 @@ Il determinismo è quella proprietà che assicura che partendo da un set di cond
 
 \section{Concorrenza}
 Il problema richiede che il simulatore abbia componenti con esecuzione concorrente, ovvero la possibilità che un insieme di processi sia in esecuzione nello stesso istante e che interagiscano fra di loro attraverso l'utilizzo di risorse condivise.
-L'utilizzo di concorrenza introduce diverse problematiche.
+L'utilizzo di concorrenza introduce diverse problematiche che verranno esposte di seguito.
+
  \subsection{Stalli}
  Dato che trattiamo un sistema concorrente, è importante assicurarci che non si verifichino stalli (o deadlock) durante l’esecuzione.
 Affinchè possa verificarsi uno stallo, è necessario che le quattro condizioni di Havender vengano soddisfatte, ovvero:
@@ -85,4 +88,3 @@ Nel caso della risoluzione è necessario rimuovere forzatamente uno dei task che
 Uno dei requisiti del sistema è quello di essere distribuito, ovvero la possibilità di permettere la separazione dei componenti della simulazione su computer interconnessi fra loro. E' quindi necessario individuare quali componenti possono essere fisicamente separate fra loro in modo da garantire un corretto funzionamento complessivo.
 \\
 Bisogna inoltre stabilire quale protocollo di comunicazione utilizzare per l'interazione fra le varie componenti.
-%TODO aggiungere problemi causati da monitor multipli e richiesta del joystick? A parte che mi sembrano molto specifici, implementativi.
