@@ -1,5 +1,5 @@
 Differenze nel codice consegnato:
-- visualizzazione della distanza temporale fra il primo classificato e i successivi
+- visualizzazione della distanza temporale fra il primo classificato e i successivi concorrenti
 - implementazione della enterSegment come procedure invece che come entry
 
 Differenze tra la relazione consegnata e quella attuale:
@@ -10,7 +10,7 @@ Rimosso il capitolo Overview, e separato il capitolo 3 "Problemi e analisi delle
 Aggiunta una didascalia per ogni figura per indicare il significato delle componenti
 
 -1 Introduzione
-Aggiunte specifiche aggiuntive fissate in fase di colloquio
+Aggiunte specifiche ulteriori fissate in fase di colloquio
 
 -2 Problematiche
 Riorganizzato e corretto attingendo dall'inizio dell'ex capitolo3.
