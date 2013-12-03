@@ -18,7 +18,7 @@ Ad una prima analisi del sistema vengono identificate quattro componenti princip
  \item monitor
  \item controller
 \end{itemize}
-Le entità circuito e macchina sono già state ampiamente discusse nei capitoli precedenti. \\ %TODO non mi piace molto come frase, ma mi sembra giusto dirlo
+Le entità circuito e macchina sono già state ampiamente discusse nei capitoli precedenti. \\
 Il monitor è un'entità quasi totalmente passiva, cioè non fa altro che ricevere i dati sulla situazione della simulazione e presentarla all’utente tramite un render grafico. Dato che l’output di questa entità può essere visualizzato solo dall’utente, una possibile latenza non causa alcun disturbo, dato che può essere assimilata a ritardi causati dalla televisione in una situazione reale. Una eventuale disconnessione causata da problemi di rete potrebbe avvenire anche nel mondo reale. \\
 Il controller è ciò che permette all’utente di decidere la strategia di gara di un dato veicolo; questo tipo di controller non ha necessità di avere i dati aggiornati in un tempo il più vicino possibile a quello reale, dato che non effettua un controllo diretto sul pilota ma dà solo indicazioni sulla strategia di gara, può quindi sopportare una eventuale latenza anche di qualche secondo. \\
 Supponiamo di dividere queste quattro entità in nodi separati, in grado di essere eseguiti su elaboratori differenti connessi fra di loro.
@@ -35,7 +35,8 @@ Oltretutto questa scelta aumenterebbe il carico di lavoro che grava sul core, ch
 Per questi motivi ai tre tipi di nodi presenti ne viene aggiunto un quarto, l’intermediario. \\
 Questa nuova entità (singola per tutto il simulatore) raccoglie gli eventi derivati dalla simulazione, e li elabora rendendoli facilmente fruibili per la rappresentazione grafica da parte dei monitor. In questo modo il carico di lavoro sul core viene alleggerito: dovrà comunicare gli eventi ad una sola entità. Viene anche alleggerito il carico di lavoro dei monitor, che dovranno limitarsi a fare un render grafico delle informazioni ottenute, senza essere obbligati ad avere conoscenza del funzionamento interno della simulazione.
 \\
-Con l'aggiunta di queste ulteriori entità il partizionamento adottato è il seguente:
+
+\newpage
 \begin{figure}[htbp]
 	\centering
 		\includegraphics[keepaspectratio = true, width = 400px] {Pictures/nodes}
@@ -44,7 +45,7 @@ Con l'aggiunta di queste ulteriori entità il partizionamento adottato è il seg
 	\label{fig:Struttura}
 \end{figure}
 
-Come si evince dall'immagine, l'architettura del simulatore è stata divisa in quattro parti:
+Come si evince dall'immagine \ref{fig:Struttura}, l'architettura del simulatore è stata divisa in quattro parti:
 \begin{itemize}
  \item \textbf{Core}: esegue la simulazione vera e propria, calcolando i tempi, le velocità e tutto ciò che è necessario per lo svolgimento della gara
  \item \textbf{Broker}: riceve gli eventi riguardanti lo svolgimento della gara, li elabora, e li distribuisce agli elementi che ne permettono la visualizzazione ed il controllo da parte dell’utente
@@ -89,13 +90,13 @@ L’impegno del core dal punto di vista della comunicazione non è limitato unic
 \section{Comunicazione dell’intermediario}
 
 L’intermediario deve poter comunicare su due fronti: ricevere gli eventi dal core, e inviare le informazioni elaborate al monitor ed al controller.
-La comunicazione con il core è già stata trattata precedentemente: come spiegato ogni evento viene ricevuto nel modo più rapido possibile.
+La comunicazione con il core è già stata trattata precedentemente, e come spiegato ogni evento viene ricevuto nel modo più rapido possibile.
 Dopo aver elaborato le informazioni, bisogna simistarle alle entità monitor e controller, ma la scelta del tipo di comunicazione non è banale.
 Ci sono infatti diversi requisiti da soddisfare, in quanto l’intermediario è in possesso di due tipi di informazioni: quelle più generali, che servono a tutti, e quelle più dettagliate, che vengono comunicate su richiesta.
-Le tipologie di invio analizzate sono principalmente due, pull e publish subscribe. Nel primo caso le informazioni devono essere recuperate esplicitamente, richiedendole all’intermediario, nel secondo ogni informazioni viene spedita a tutte le entità interessate (che hanno fatto il subscribe).
+Le tipologie di invio analizzate sono principalmente due, pull e publish subscribe. Nel primo caso le informazioni devono essere recuperate esplicitamente, richiedendole all’intermediario, nel secondo vengono spedite a tutte le entità interessate (che hanno fatto il subscribe).
 Ambedue le soluzioni hanno pro e contro, infatti utilizzare il pull implicherebbe una frequenza di aggiornamenti dettata dai monitor, e non dall’arrivo di nuove informazioni, mentre l’utilizzo del publish subscribe comporta l'invio delle informazioni con una cadenza dettata esclusivamente dal produttore.
 Entrambe sono utili in determinate circostanze e quindi è stato deciso di adottarle entrambe, utilizzando una per sopperire agli svantaggi dell’altra, e viceversa.\\
-Per questo motivo le informazioni dell’intermediario sono state divise in due categorie, quelle che sono necessarie a tutti e quelle che vengono distribuite su richiesta. Per le prime è stato disposto un sistema di publish subscribe che le invia, appena sono disponibili, a tutte le entità registrate per quelle specifiche informazioni; per le seconde viene utilizzato un sistema di pull, creando una risorsa che contiene queste informazioni, e lasciando l’onere di recuperarle all’entità interessata.
+Per questo motivo le informazioni dell’intermediario sono state divise in due categorie, quelle che sono necessarie a tutti e quelle che vengono distribuite su richiesta. Per le prime è stato disposto un sistema di publish subscribe che le invia, appena sono disponibili, a tutte le entità registrate per quegli specifici eventi; per le seconde viene utilizzato un sistema di pull, creando una risorsa che contiene queste informazioni, e lasciando l’onere di recuperarle all’entità interessata.
 
 %----------------------------------------------------------------------------------------
 %	SECTION 5
