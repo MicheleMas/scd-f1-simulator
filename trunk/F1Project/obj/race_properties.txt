@@ -1,2 +1,2 @@
 #carNumber lapNumber
-20 53
+20 15

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2013.9.26)  3 DEC 2013 11:53
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2013.9.26)  3 DEC 2013 13:16
 entering extended mode
  %&-line parsing enabled.
 **main.tex
@@ -671,6 +671,21 @@ LaTeX Info: Redefining \cite on input line 694.
 )
 Package hyperref Info: Option `colorlinks' set `true' on input line 35.
 
+(/var/lib/texmf/tex/generic/babel/babel.sty
+Package: babel 2008/07/06 v3.8l The Babel package
+
+(/usr/share/texmf-texlive/tex/generic/babel/italian.ldf
+Language: italian 2008/03/14 v1.2t Italian support from the babel system
+
+(/usr/share/texmf-texlive/tex/generic/babel/babel.def
+File: babel.def 2008/07/06 v3.8l Babel common definitions
+\babel@savecnt=\count135
+\U@D=\dimen148
+)
+Package babel Info: Making " an active character on input line 94.
+Now handling font encoding LGR ...
+... no UTF-8 mapping file for font encoding LGR
+))
 (/usr/share/texmf-texlive/tex/latex/tocbibind/tocbibind.sty
 Package: tocbibind 2009/09/04 v1.5i extra ToC listings
 
@@ -699,11 +714,18 @@ LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 41.
 LaTeX Font Info:    ... okay on input line 41.
 LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 41.
 LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for LGR/cmr/m/n on input line 41.
+LaTeX Font Info:    Try loading font information for LGR+cmr on input line 41.
+ (/usr/share/texmf-texlive/tex/latex/cbfonts/lgrcmr.fd
+File: lgrcmr.fd 2008/01/04 v1.0 Greek Computer Modern
+)
+LaTeX Font Info:    ... okay on input line 41.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: hyperref package is loaded.
 Package caption Info: listings package is loaded.
 Package caption Info: longtable package is loaded.
- (/usr/share/texmf-texlive/tex/latex/caption/ltcaption.sty
+
+(/usr/share/texmf-texlive/tex/latex/caption/ltcaption.sty
 Package: ltcaption 2008/03/28 v1.2 longtable captions (AR)
 )
 Package caption Info: rotating package is loaded.
@@ -712,18 +734,18 @@ Package caption Info: End \AtBeginDocument code.
 
 (/usr/share/texmf-texlive/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count135
-\scratchdimen=\dimen148
+\scratchcounter=\count136
+\scratchdimen=\dimen149
 \scratchbox=\box35
-\nofMPsegments=\count136
-\nofMParguments=\count137
+\nofMPsegments=\count137
+\nofMParguments=\count138
 \everyMPshowfont=\toks33
-\MPscratchCnt=\count138
-\MPscratchDim=\dimen149
-\MPnumerator=\count139
+\MPscratchCnt=\count139
+\MPscratchDim=\dimen150
+\MPnumerator=\count140
 \everyMPtoPDFconversion=\toks34
 )
-\c@lstlisting=\count140
+\c@lstlisting=\count141
  (/usr/share/texmf-texlive/tex/latex/graphics/color.sty
 Package: color 2005/11/14 v1.0j Standard LaTeX Color (DPC)
 
@@ -740,7 +762,7 @@ Package: nameref 2007/05/29 v2.31 Cross-referencing by name of section
 (/usr/share/texmf-texlive/tex/latex/oberdiek/refcount.sty
 Package: refcount 2008/08/11 v3.1 Data extraction from references (HO)
 )
-\c@section@level=\count141
+\c@section@level=\count142
 )
 LaTeX Info: Redefining \ref on input line 41.
 LaTeX Info: Redefining \pageref on input line 41.
@@ -780,7 +802,7 @@ File: umsb.fd 2009/06/22 v3.00 AMS symbols B
 
 
 ] (./Chapters/Chapter1.tex
-Chapter 1.
+Capitolo 1.
 ------------------------------------------------------------------------------
  1 Introduzione
 ------------------------------------------------------------------------------
@@ -795,26 +817,14 @@ LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
 
 
 ]
-Chapter 2.
+Capitolo 2.
 ------------------------------------------------------------------------------
  2 Problematiche
 ------------------------------------------------------------------------------
-
-Overfull \hbox (18.82407pt too wide) in paragraph at lines 7--8
-\OT1/cmr/m/n/10.95 In questo capi-tolo ver-ranno dis-cusse le prob-lem-atiche e
-v-i-den-zi-ate nel corso dell'analisi
- []
-
 [2
 
-] [3] [4]) (./Chapters/Chapter3.tex
-Overfull \hbox (16.36034pt too wide) in paragraph at lines 88--1
-\OT1/cmr/m/n/10.95 Bisogna in-oltre sta-bilire quale pro-to-collo di co-mu-ni-c
-azione uti-liz-zare per l'interazione
- []
-
-[5]
-Chapter 3.
+] [3] [4]) (./Chapters/Chapter3.tex [5]
+Capitolo 3.
 ------------------------------------------------------------------------------
  3 Analisi della soluzione
 ------------------------------------------------------------------------------
@@ -826,7 +836,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 24--1
  []
 
 [7]
-Chapter 4.
+Capitolo 4.
 ------------------------------------------------------------------------------
  4 Analisi della concorrenza
 ------------------------------------------------------------------------------
@@ -837,26 +847,14 @@ Underfull \hbox (badness 10000) in paragraph at lines 24--29
 
 [8
 
-]
-Overfull \hbox (6.80945pt too wide) in paragraph at lines 43--48
-\OT1/cmr/m/n/10.95 Come ac-cen-nato prece-den-te-mente le pos-si-bilit^^Ra sono
- due: pre-ven-zione o risoluzione
- []
-
-[9]) (./Chapters/Chapter5.tex [10] [11]
-Chapter 5.
+] [9]) (./Chapters/Chapter5.tex [10] [11]
+Capitolo 5.
 ------------------------------------------------------------------------------
  5 Analisi della distribuzione
 ------------------------------------------------------------------------------
 [12
 
 ]
-Overfull \hbox (6.35326pt too wide) in paragraph at lines 28--29
-[]\OT1/cmr/m/n/10.95 circuito e mac-chine sono fun-zional-mente ac-cop-pi-ate, 
-l'uno ne-ces-sita dell'altro
- []
-
-
 Underfull \hbox (badness 10000) in paragraph at lines 31--38
 
  []
@@ -874,26 +872,8 @@ Overfull \hbox (1.9129pt too wide) in paragraph at lines 42--44
  [] 
  []
 
-
-Overfull \hbox (1.42572pt too wide) in paragraph at lines 66--67
-[]\OT1/cmr/m/n/10.95 Utilizzare una li-bre-ria per lo scam-bio di mes-saggi (ne
-l caso speci-fico YAMI4) 
- []
-
-[14 <./Pictures/nodes.png>] [15]
-Overfull \hbox (25.24202pt too wide) in paragraph at lines 107--110
-\OT1/cmr/m/n/10.95 Come detto prece-den-te-mente il mon-i-tor deve rice-vere i 
-dati elab-o-rati dall'intermediario
- []
-
-[16]
-Overfull \hbox (8.93872pt too wide) in paragraph at lines 117--123
-\OT1/cmr/m/n/10.95 giun-tivi rispetto a quelli della gara ver-ranno reper-iti t
-ramite pull dall'intermediario.
- []
-
-) (./Chapters/Chapter6.tex [17] [18]
-Chapter 6.
+[14 <./Pictures/nodes.png>] [15] [16]) (./Chapters/Chapter6.tex [17] [18]
+Capitolo 6.
 ------------------------------------------------------------------------------
  6 Soluzione proposta
 ------------------------------------------------------------------------------
@@ -907,13 +887,8 @@ Overfull \hbox (1.9129pt too wide) in paragraph at lines 26--28
  [] 
  []
 
-[20 <./Pictures/schema.png>] [21]
-Overfull \hbox (9.39499pt too wide) in paragraph at lines 51--56
-\OT1/cmr/m/n/10.95 Ogni vet-tura che parte-cipa alla gara ^^Re un'entit^^Ra at-
-tiva sep-a-rata, dotata di parametri
- []
-
-[22] [23] <Pictures/SchemaOverview.png, id=412, 927.465pt x 352.31625pt>
+[20 <./Pictures/schema.png>] [21] [22] [23]
+<Pictures/SchemaOverview.png, id=412, 927.465pt x 352.31625pt>
 File: Pictures/SchemaOverview.png Graphic file (type png)
 
 <use Pictures/SchemaOverview.png>
@@ -928,8 +903,8 @@ Overfull \hbox (1.9129pt too wide) in paragraph at lines 88--90
 
 
 Overfull \hbox (5.22781pt too wide) in paragraph at lines 85--93
-\OT1/cmr/m/n/10.95 Verr^^Ra ora de-scritta l'implementazione in modo det-taglia
-to, per ogni package$\OML/cmm/m/it/10.95 =$\OT1/cmr/m/n/10.95 classe
+\OT1/cmr/m/n/10.95 Verr^^Ra ora de-scrit-ta l'im-ple-men-ta-zio-ne in mo-do det
+-ta-glia-to, per ogni package$\OML/cmm/m/it/10.95 =$\OT1/cmr/m/n/10.95 classe
  []
 
 [24] [25 <./Pictures/SchemaOverview.png>] [26]
@@ -963,7 +938,7 @@ Package caption Warning: The option `hypcap=true' will be ignored for this
 See the caption package documentation for explanation.
 
 [32] [33 <./Pictures/brokerSnapshot.png>]
-<Pictures/monitor.png, id=464, 963.6pt x 652.4375pt>
+<Pictures/monitor.png, id=464, 1104.125pt x 652.4375pt>
 File: Pictures/monitor.png Graphic file (type png)
 
 <use Pictures/monitor.png>
@@ -971,14 +946,8 @@ Overfull \hbox (1.9129pt too wide) in paragraph at lines 215--217
  [] 
  []
 
-
-Overfull \hbox (9.69908pt too wide) in paragraph at lines 221--238
-\OT1/cmr/m/n/10.95 Una volta ot-tenuti tutti i dati sui seg-menti, un oggetto d
-i tipo Drawer (Drawer.java)
- []
-
-[34] [35 <./Pictures/monitor.png>] [36]
-<Pictures/controller.png, id=478, 301.125pt x 401.5pt>
+[34 <./Pictures/monitor.png (PNG copy)>] [35] [36]
+<Pictures/controller.png, id=477, 301.125pt x 401.5pt>
 File: Pictures/controller.png Graphic file (type png)
 
 <use Pictures/controller.png>
@@ -986,40 +955,22 @@ Overfull \hbox (1.9129pt too wide) in paragraph at lines 243--245
  [] 
  []
 
-
-Overfull \hbox (13.15645pt too wide) in paragraph at lines 249--259
-\OT1/cmr/m/n/10.95 con-sid-er-azione dopo un breve tempo di at-tesa. L'idea all
-a base dell'implementazione
- []
-
-[37] [38 <./Pictures/controller.png>]
-Overfull \hbox (0.98474pt too wide) in paragraph at lines 295--297
-\OT1/cmr/m/n/10.95 Gli eventi so-prac-i-tati, ven-gono tradotti dall'intermedia
-rio in uno snap-shot, ovvero
- []
-
-[39]) (./Chapters/Chapter7.tex [40]
-Chapter 7.
+[37 <./Pictures/controller.png>] [38] [39]) (./Chapters/Chapter7.tex [40]
+Capitolo 7.
 ------------------------------------------------------------------------------
  7 Copertura dei requisiti
 ------------------------------------------------------------------------------
-
-Overfull \hbox (4.01117pt too wide) in paragraph at lines 12--13
-\OT1/cmr/m/n/10.95 al-meno della pista e della cor-sia di ri-forn-i-mento, cias
--cuna della quali soggette
- []
-
 ) (./Chapters/Chapter8.tex [41
 
 ] [42]
-Chapter 8.
+Capitolo 8.
 ------------------------------------------------------------------------------
  8 Conoscenze apprese
 ------------------------------------------------------------------------------
 ) (./Chapters/Chapter9.tex [43
 
 ] [44]
-Chapter 9.
+Capitolo 9.
 ------------------------------------------------------------------------------
  9 Configurazione ed utilizzo
 ------------------------------------------------------------------------------
@@ -1027,17 +978,17 @@ Chapter 9.
 
 ]) [46]
 ------------------------------------------------------------------------------
- Bibliography
+ Bibliografia
 ------------------------------------------------------------------------------
 (./main.aux) ) 
 Here is how much of TeX's memory you used:
- 10412 strings out of 493848
- 142290 string characters out of 1152823
- 231197 words of memory out of 3000000
- 13351 multiletter control sequences out of 15000+50000
+ 10789 strings out of 493848
+ 147779 string characters out of 1152823
+ 244321 words of memory out of 3000000
+ 13711 multiletter control sequences out of 15000+50000
  12614 words of font info for 46 fonts, out of 3000000 for 9000
  714 hyphenation exceptions out of 8191
- 48i,12n,45p,1303b,395s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 48i,12n,45p,1303b,482s stack positions out of 5000i,500n,10000p,200000b,50000s
 </usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmbx10.p
 fb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/sh
 are/texmf-texlive/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texmf-
@@ -1048,9 +999,9 @@ lic/amsfonts/cm/cmr12.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts
 b></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/shar
 e/texmf-texlive/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texmf-tex
 live/fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on main.pdf (50 pages, 507635 bytes).
+Output written on main.pdf (50 pages, 524618 bytes).
 PDF statistics:
- 585 PDF objects out of 1000 (max. 8388607)
+ 584 PDF objects out of 1000 (max. 8388607)
  113 named destinations out of 1000 (max. 500000)
  457 words of extra memory for PDF output out of 10000 (max. 10000000)
 
