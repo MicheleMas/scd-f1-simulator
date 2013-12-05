@@ -93,7 +93,7 @@ L’intermediario deve poter comunicare su due fronti: ricevere gli eventi dal c
 La comunicazione con il core è già stata trattata precedentemente, e come spiegato ogni evento viene ricevuto nel modo più rapido possibile.
 Dopo aver elaborato le informazioni, bisogna simistarle alle entità monitor e controller, ma la scelta del tipo di comunicazione non è banale.
 Ci sono infatti diversi requisiti da soddisfare, in quanto l’intermediario è in possesso di due tipi di informazioni: quelle più generali, che servono a tutti, e quelle più dettagliate, che vengono comunicate su richiesta.
-Le tipologie di invio analizzate sono principalmente due, pull e push. Nel primo caso le informazioni devono essere recuperate esplicitamente, richiedendole all’intermediario, nel secondo vengono spedite a tutte le entità interessate (che hanno fatto il subscribe). %TODO ho aggiunto le ultime due parole, mi sembrava giusto dirlo
+Le tipologie di invio analizzate sono principalmente due, pull e push. Nel primo caso le informazioni devono essere recuperate esplicitamente, richiedendole all’intermediario, nel secondo vengono spedite a tutte le entità che ne hanno fatto richiesta durante il setup (secondo il modello publish subscribe). %TODO ho aggiunto le ultime due parole, mi sembrava giusto dirlo
 
 %TODO Ambedue le soluzioni hanno pro e contro, infatti utilizzare il pull implicherebbe una frequenza di aggiornamenti dettata dai monitor, e non dall’arrivo di nuove informazioni, mentre l’utilizzo del publish subscribe comporta l'invio delle informazioni con una cadenza dettata esclusivamente dal produttore.
 L'utilizzo del pull implica una frequenza di aggiornamenti dettata da chi richiede la risorsa, in questo caso il monitor. Utilizzare questa tipologia di comunicazione porterebbe a richiedere informazioni anche quando non ne sono state prodotte di nuove rispetto alla richiesta precedente. Nel push al contrario la cadenza di invio è dettata dal produttore.
@@ -101,7 +101,7 @@ L'utilizzo del pull implica una frequenza di aggiornamenti dettata da chi richie
 %TODO Entrambe sono utili in determinate circostanze e quindi è stato deciso di adottarle entrambe, utilizzando una per sopperire agli svantaggi dell’altra, e viceversa.\\
 Entrambe sono utili in determinate circostanze e quindi è stato deciso di adottarle entrambe.\\
 
-Per questo motivo le informazioni dell’intermediario sono state divise in due categorie, quelle che sono necessarie a tutti e quelle che vengono distribuite su richiesta. Per le prime è stato disposto un sistema di publish subscribe che le invia, appena sono disponibili, a tutte le entità registrate per quegli specifici eventi; per le seconde viene utilizzato un sistema di pull, creando una risorsa che contiene queste informazioni, e lasciando l’onere di recuperarle all’entità interessata.
+Per questo motivo le informazioni dell’intermediario sono state divise in due categorie, quelle che sono necessarie a tutti e quelle che vengono distribuite su richiesta. Per le prime è stato disposto un sistema di push basato sul modello publish subscribe che permette alle entità interessate di ricevere i dati appena disponibili; per le seconde viene utilizzato un sistema di pull, creando una risorsa che contiene queste informazioni, e lasciando l’onere di recuperarle all’entità interessata.
 
 %----------------------------------------------------------------------------------------
 %	SECTION 5
