@@ -1,3 +1,4 @@
+\select@language {italian}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
@@ -5,13 +6,13 @@
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {5.1}{\ignorespaces Struttura}}{14}{figure.caption.24}
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {6.1}{\ignorespaces Componenti}}{20}{figure.caption.34}
-\contentsline {figure}{\numberline {6.2}{\ignorespaces Componenti}}{25}{figure.caption.43}
-\contentsline {figure}{\numberline {6.3}{\ignorespaces Flowchart: procedure enterSegment.\relax }}{27}{figure.46}
-\contentsline {figure}{\numberline {6.4}{\ignorespaces Flowchart: ciclo di vita di car.\relax }}{29}{figure.48}
-\contentsline {figure}{\numberline {6.5}{\ignorespaces Flowchart: costruzione dello snapshot.\relax }}{33}{figure.52}
-\contentsline {figure}{\numberline {6.6}{\ignorespaces Monitor}}{34}{figure.caption.54}
-\contentsline {figure}{\numberline {6.7}{\ignorespaces Controller}}{37}{figure.caption.56}
+\contentsline {figure}{\numberline {6.1}{\ignorespaces Componenti}}{21}{figure.caption.34}
+\contentsline {figure}{\numberline {6.2}{\ignorespaces Componenti}}{26}{figure.caption.43}
+\contentsline {figure}{\numberline {6.3}{\ignorespaces Flowchart: procedure enterSegment.\relax }}{28}{figure.46}
+\contentsline {figure}{\numberline {6.4}{\ignorespaces Flowchart: ciclo di vita di car.\relax }}{30}{figure.48}
+\contentsline {figure}{\numberline {6.5}{\ignorespaces Flowchart: costruzione dello snapshot.\relax }}{34}{figure.52}
+\contentsline {figure}{\numberline {6.6}{\ignorespaces Monitor}}{35}{figure.caption.54}
+\contentsline {figure}{\numberline {6.7}{\ignorespaces Controller}}{38}{figure.caption.56}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
