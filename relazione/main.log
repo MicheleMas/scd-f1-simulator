@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9) (preloaded format=pdflatex 2013.11.27)  6 DEC 2013 10:40
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9) (preloaded format=pdflatex 2013.11.27)  6 DEC 2013 11:04
 entering extended mode
 **main.tex
 (D:\virtualBox\scarica\scd\scd-f1-simulator\relazione\main.tex
@@ -914,16 +914,16 @@ Overfull \hbox (1.9129pt too wide) in paragraph at lines 42--44
  []
 
 [14 <D:/virtualBox/scarica/scd/scd-f1-simulator/relazione/Pictures/nodes.png>]
-[15] [16] [17])
+[15] [16])
 (D:\virtualBox\scarica\scd\scd-f1-simulator\relazione\Chapters/Chapter6.tex
-[18] [19]
+[17] [18]
 Capitolo 6.
 ------------------------------------------------------------------------------
  6 Soluzione proposta
 ------------------------------------------------------------------------------
-[20
+[19
 
-] <Pictures/schema.png, id=394, 634.37pt x 520.94624pt>
+] <Pictures/schema.png, id=390, 634.37pt x 520.94624pt>
 File: Pictures/schema.png Graphic file (type png)
 
 <use Pictures/schema.png>
@@ -934,8 +934,8 @@ Overfull \hbox (1.9129pt too wide) in paragraph at lines 26--28
  [] 
  []
 
-[21 <D:/virtualBox/scarica/scd/scd-f1-simulator/relazione/Pictures/schema.png>]
-[22] [23] [24] <Pictures/SchemaOverview.png, id=415, 927.465pt x 352.31625pt>
+[20 <D:/virtualBox/scarica/scd/scd-f1-simulator/relazione/Pictures/schema.png>]
+[21] [22] [23] <Pictures/SchemaOverview.png, id=411, 927.465pt x 352.31625pt>
 File: Pictures/SchemaOverview.png Graphic file (type png)
 
 <use Pictures/SchemaOverview.png>
@@ -957,9 +957,9 @@ Overfull \hbox (5.22781pt too wide) in paragraph at lines 85--93
 a-glia-to, per ogni package$\OML/cmm/m/it/10.95 =$\OT1/cmr/m/n/10.95 classe
  []
 
-[25] [26 <D:/virtualBox/scarica/scd/scd-f1-simulator/relazione/Pictures/SchemaO
-verview.png>] [27]
-<Pictures/enterSegment.png, id=430, 662.475pt x 1502.61375pt>
+[24] [25 <D:/virtualBox/scarica/scd/scd-f1-simulator/relazione/Pictures/SchemaO
+verview.png>] [26]
+<Pictures/enterSegment.png, id=425, 662.475pt x 1502.61375pt>
 File: Pictures/enterSegment.png Graphic file (type png)
 
 <use Pictures/enterSegment.png>
@@ -971,8 +971,8 @@ Package caption Warning: The option `hypcap=true' will be ignored for this
 (caption)                particular \caption on input line 118.
 See the caption package documentation for explanation.
 
-[28 <D:/virtualBox/scarica/scd/scd-f1-simulator/relazione/Pictures/enterSegment
-.png>] [29] <Pictures/car_p_ciclo.png, id=440, 389.455pt x 679.53876pt>
+[27 <D:/virtualBox/scarica/scd/scd-f1-simulator/relazione/Pictures/enterSegment
+.png>] [28] <Pictures/car_p_ciclo.png, id=436, 389.455pt x 679.53876pt>
 File: Pictures/car_p_ciclo.png Graphic file (type png)
 
 <use Pictures/car_p_ciclo.png>
@@ -984,8 +984,8 @@ Package caption Warning: The option `hypcap=true' will be ignored for this
 (caption)                particular \caption on input line 138.
 See the caption package documentation for explanation.
 
-[30 <D:/virtualBox/scarica/scd/scd-f1-simulator/relazione/Pictures/car_p_ciclo.
-png>] [31] [32] <Pictures/brokerSnapshot.png, id=456, 362.35374pt x 859.21pt>
+[29 <D:/virtualBox/scarica/scd/scd-f1-simulator/relazione/Pictures/car_p_ciclo.
+png>] [30] [31] <Pictures/brokerSnapshot.png, id=452, 362.35374pt x 859.21pt>
 File: Pictures/brokerSnapshot.png Graphic file (type png)
 
 <use Pictures/brokerSnapshot.png>
@@ -997,8 +997,8 @@ Package caption Warning: The option `hypcap=true' will be ignored for this
 (caption)                particular \caption on input line 199.
 See the caption package documentation for explanation.
 
-[33] [34 <D:/virtualBox/scarica/scd/scd-f1-simulator/relazione/Pictures/brokerS
-napshot.png>] <Pictures/monitor.png, id=467, 1104.125pt x 652.4375pt>
+[32] [33 <D:/virtualBox/scarica/scd/scd-f1-simulator/relazione/Pictures/brokerS
+napshot.png>] <Pictures/monitor.png, id=463, 1104.125pt x 652.4375pt>
 File: Pictures/monitor.png Graphic file (type png)
 
 <use Pictures/monitor.png>
@@ -1009,8 +1009,8 @@ Overfull \hbox (1.9129pt too wide) in paragraph at lines 215--217
  [] 
  []
 
-[35 <D:/virtualBox/scarica/scd/scd-f1-simulator/relazione/Pictures/monitor.png>
-] [36] [37] <Pictures/controller.png, id=480, 301.125pt x 401.5pt>
+[34 <D:/virtualBox/scarica/scd/scd-f1-simulator/relazione/Pictures/monitor.png>
+] [35] [36] <Pictures/controller.png, id=476, 301.125pt x 401.5pt>
 File: Pictures/controller.png Graphic file (type png)
 
 <use Pictures/controller.png>
@@ -1021,33 +1021,33 @@ Overfull \hbox (1.9129pt too wide) in paragraph at lines 243--245
  [] 
  []
 
-[38 <D:/virtualBox/scarica/scd/scd-f1-simulator/relazione/Pictures/controller.p
-ng>] [39] [40])
+[37 <D:/virtualBox/scarica/scd/scd-f1-simulator/relazione/Pictures/controller.p
+ng>] [38] [39])
 (D:\virtualBox\scarica\scd\scd-f1-simulator\relazione\Chapters/Chapter7.tex
-[41]
+[40]
 Capitolo 7.
 ------------------------------------------------------------------------------
  7 Copertura dei requisiti
 ------------------------------------------------------------------------------
 ) (D:\virtualBox\scarica\scd\scd-f1-simulator\relazione\Chapters/Chapter8.tex
-[42
+[41
 
-] [43]
+] [42]
 Capitolo 8.
 ------------------------------------------------------------------------------
  8 Conoscenze apprese
 ------------------------------------------------------------------------------
 ) (D:\virtualBox\scarica\scd\scd-f1-simulator\relazione\Chapters/Chapter9.tex
-[44
+[43
 
-] [45]
+] [44]
 Capitolo 9.
 ------------------------------------------------------------------------------
  9 Configurazione ed utilizzo
 ------------------------------------------------------------------------------
-[46
+[45
 
-]) [47]
+]) [46]
 ------------------------------------------------------------------------------
  Bibliografia
 ------------------------------------------------------------------------------
@@ -1065,8 +1065,8 @@ LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 189.
  ) 
 Here is how much of TeX's memory you used:
- 13787 strings out of 493921
- 196030 string characters out of 3146464
+ 13786 strings out of 493921
+ 196023 string characters out of 3146464
  277959 words of memory out of 3000000
  16734 multiletter control sequences out of 15000+200000
  12614 words of font info for 46 fonts, out of 3000000 for 9000
@@ -1083,9 +1083,9 @@ public/amsfonts/cm/cmsy10.pfb><G:/Program Files (x86)/MiKTeX/fonts/type1/public
 /amsfonts/cm/cmsy8.pfb><G:/Program Files (x86)/MiKTeX/fonts/type1/public/amsfon
 ts/cm/cmti10.pfb><G:/Program Files (x86)/MiKTeX/fonts/type1/public/amsfonts/cm/
 cmti12.pfb>
-Output written on main.pdf (51 pages, 513283 bytes).
+Output written on main.pdf (50 pages, 512679 bytes).
 PDF statistics:
- 587 PDF objects out of 1000 (max. 8388607)
- 113 named destinations out of 1000 (max. 500000)
+ 583 PDF objects out of 1000 (max. 8388607)
+ 112 named destinations out of 1000 (max. 500000)
  457 words of extra memory for PDF output out of 10000 (max. 10000000)
 
